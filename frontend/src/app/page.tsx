@@ -2,20 +2,19 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import { Navbar } from "./components/navbar/navbar";
-import { StyledMain } from "./styles";
-import { createGlobalStyle } from 'styled-components';
-
+import { DivView, SnapScrollContainer } from "./styles";
+import { createGlobalStyle } from "styled-components";
 
 export default function Home() {
   return (
     <>
-      <StyledMain>
+      <SnapScrollContainer>
         <Navbar />
-        <div>Summary</div>
-        <div>Statistics</div>
-        <div>Demo</div>
-        <div>Footer</div>
-      </StyledMain>
+        <DivView>Summary</DivView>
+        <DivView>Statistics</DivView>
+        <DivView>Demo</DivView>
+        <DivView>Footer</DivView>
+      </SnapScrollContainer>
     </>
   );
 }
