@@ -2,7 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { StyledNav, StyledUl, StyledLi } from "./styles";
+import { StyledNav, StyledUl, StyledLi, LogoText } from "./styles";
+
 interface NavigationProps {
   // Your props here
 }
@@ -19,7 +20,7 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
   return (
     <StyledNav>
       <StyledUl>
-        <StyledLi> EasyIP </StyledLi>
+        <StyledLi> <LogoText>EasyIP</LogoText> </StyledLi>
         {Object.entries(routes).map(([name, path]) => (
           <StyledLi key={name}>
             <Link href={path} passHref>
