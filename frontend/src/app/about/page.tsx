@@ -11,7 +11,7 @@ function index() {
       <DivView>
         <h1>What is EasyIP?</h1>
         <p>
-          EasyIP is a platform that makes researching intellectual property easy
+          EasyIP is a platform that makes researching intellectual property easy.
           by providing tools and resources to help you understand the process of
           protecting your intellectual property.
         </p>

@@ -20,7 +20,13 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
   return (
     <StyledNav>
       <StyledUl>
-        <StyledLi> <LogoText>EasyIP</LogoText> </StyledLi>
+        <StyledLi>
+          <LogoText>
+            <Link href={routes.home} passHref>
+              EasyIP
+            </Link>
+          </LogoText>
+        </StyledLi>
         {Object.entries(routes).map(([name, path]) => (
           <StyledLi key={name}>
             <Link href={path} passHref>

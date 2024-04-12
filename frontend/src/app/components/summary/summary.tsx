@@ -10,7 +10,7 @@ export const Summary: React.FC<SummaryProps> = (props) => {
   return (
     <>
       <h1>Welcome to EasyIP!</h1>
-      <p>We are here to make researching intellectual property easy.</p>
+      <p>We are here to make researching intellectual property seamless.</p>
     </>
   );
 };
