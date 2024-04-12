@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { Navbar } from "../components/navbar/navbar";
+import { SnapScrollContainer, DivView } from "../styles";
+import { Footer } from "../components/footer/footer";
 interface Error {
   message: string;
 }
@@ -24,8 +26,9 @@ function Index() {
     }
   };
   return (
-    <main>
+    <SnapScrollContainer>
       <Navbar />
+      <DivView>
       <div>Tool</div>
       <div>
         <input
@@ -41,8 +44,9 @@ function Index() {
         )}
         {error && <div>Error: {error}</div>}
       </div>
-    </main>
-  );
+      </DivView>
+      <Footer />
+    </SnapScrollContainer>  );
 }
 
 export default Index;

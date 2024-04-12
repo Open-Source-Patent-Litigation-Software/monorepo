@@ -11,6 +11,7 @@ export const StyledNav = styled.nav`
   justify-content: center;
   align-items: center;
   color: #ffffff; /* White */
+  background-color: #ffffff; /* Black */
 `;
 
 export const StyledUl = styled.ul`

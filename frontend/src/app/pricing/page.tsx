@@ -1,11 +1,17 @@
+"use client";
 import React from "react";
+import { SnapScrollContainer, DivView } from "../styles";
 import { Navbar } from "../components/navbar/navbar";
+import { Footer } from "../components/footer/footer";
 function index() {
   return (
-    <main>
+    <SnapScrollContainer>
       <Navbar />
-      <div>Pricing</div>
-    </main>
+      <DivView>
+        <div>Pricing</div>
+      </DivView>
+      <Footer />
+    </SnapScrollContainer>
   );
 }
 
