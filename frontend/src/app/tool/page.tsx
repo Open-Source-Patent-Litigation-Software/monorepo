@@ -35,7 +35,6 @@ function Index() {
       setData(null);
     }
   };
-
   return (
     <SnapScrollContainer>
       <Navbar />
