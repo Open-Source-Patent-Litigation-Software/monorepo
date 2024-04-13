@@ -1,0 +1,5 @@
+Todos:
+    Need to add tunable form parameters
+    Style the form
+    Build in analysis tools
+    Need to figure out how to rank similarity

@@ -27,7 +27,7 @@ function Index() {
       const data = await response.json();
       // console.log(patentQuery);
       console.log(data);
-      setData(data);
+      setData(data.searchQuery);
       setError("");
     } catch (e) {
       const error = e as Error;
@@ -48,14 +48,9 @@ function Index() {
             placeholder="Enter patent description"
           />
           <button onClick={fetchData}>Fetch Data</button>
-          {data && (
-            <div>
-              <pre>{JSON.stringify(data, null, 2)}</pre>
-            </div>
-          )}
           {error && <div>Error: {error}</div>}
         </div>
-        <div>{data}</div>
+        {data && <div>Data: {data}</div>}
       </DivView>
       <Footer />
     </SnapScrollContainer>
