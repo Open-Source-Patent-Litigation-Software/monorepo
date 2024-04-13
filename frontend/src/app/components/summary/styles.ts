@@ -26,16 +26,15 @@ const flyInFromRight = keyframes`
 
 
 export const Title = styled.p`
-    font-size: 5em;
-    color: #333;
-    text-align: center;
+    font-size: 7em;
+    000000    text-align: center;
     font-weight: bold;
     animation: ${flyInFromLeft} 1s ease-out forwards;
     `;
 
 export const Description = styled.p`
     font-size: 2.5em;
-    color: #333;
+    color: #000000;
     text-align: center;
     animation: ${flyInFromRight} 1s ease-out forwards;
     `;
@@ -44,7 +43,7 @@ export const SummaryDiv = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2%;
+    gap: 5%;
  // padding : top right bottom left
     margin: 0% 10% 10% 10%;
     `;

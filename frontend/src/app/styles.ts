@@ -6,11 +6,12 @@ export const SnapScrollContainer = styled.div`
   scroll-snap-type: y mandatory; /* Enable snap scrolling on the y-axis */
   /* Ensure it takes up the full width to prevent unexpected behavior */
   width: 100%;
-`;
+  background: rgb(34,0,255);
+  background: linear-gradient(180deg, rgba(34,0,255,0.05) 0%, rgba(255,255,255,1) 50%, rgba(34,0,255,0.05) 100%);   
+  `;
 
 export const DivView = styled.div`
   display: flex;
-  background-color: #f0f0f0; /* Light grey */
   flex-direction: column;
   align-items: center;
   justify-content: center;

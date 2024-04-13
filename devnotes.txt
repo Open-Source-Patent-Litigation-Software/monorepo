@@ -3,3 +3,5 @@ Todos:
     Style the form
     Build in analysis tools
     Need to figure out how to rank similarity
+
+    https://headlessui.com/react/dialog
