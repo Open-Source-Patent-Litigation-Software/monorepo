@@ -36,3 +36,7 @@ export const SearchButton = styled.button`
     color: #ddd; // Lighter text on hover
   }
 `;
+export const ColoredDiv = styled.div`
+  background: linear-gradient(180deg, rgba(34,0,255,0.05) 0%, rgba(255,255,255,1) 50%, rgba(34,0,255,0.05) 100%);   
+  min-height: 100vh; /* Minimum full viewport height */
+`;

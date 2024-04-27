@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css} from 'styled-components';
 
 export const fadeIn = keyframes`
   from {
@@ -78,18 +78,33 @@ export const Button = styled.button`
   cursor: pointer;
 `;
 
+export const WaitlistButton = styled(Button)`
+    background-color: white;
+    font-weight: bold;
+    color: black;
+    font-size: 2rem;
+    border: 2px solid black;
+    border-radius: 15px;
+    transition: background-color 0.3s ease, color 0.3s ease; // Add transitions for background and text color
+    &:hover {
+        background-color: blue;
+        color: white;
+        fadeIn: 0.3s;
+    }
+`;
+
 export const Form = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
 `;
 
-const Label = styled.label`
+export const Label = styled.label`
   margin-bottom: 5px;
   font-size: 16px;
 `;
 
-const Input = styled.input`
+export const Input = styled.input`
   padding: 8px;
   margin-bottom: 20px;
   border-radius: 5px;

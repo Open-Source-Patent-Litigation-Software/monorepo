@@ -26,14 +26,14 @@ const flyInFromRight = keyframes`
 
 
 export const Title = styled.p`
-    font-size: 7em;
+    font-size: 10em;
     000000    text-align: center;
     font-weight: bold;
     animation: ${flyInFromLeft} 1s ease-out forwards;
     `;
 
 export const Description = styled.p`
-    font-size: 2.5em;
+    font-size: 4em;
     color: #000000;
     text-align: center;
     animation: ${flyInFromRight} 1s ease-out forwards;

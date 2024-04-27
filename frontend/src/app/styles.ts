@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const SnapScrollContainer = styled.div`
-  height: 100vh; /* Full viewport height */
-  overflow-y: scroll; /* Enable vertical scrolling */
+
+overflow-y: scroll; /* Enable vertical scrolling */
   scroll-snap-type: y mandatory; /* Enable snap scrolling on the y-axis */
   /* Ensure it takes up the full width to prevent unexpected behavior */
   width: 100%;

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Navbar } from "../components/navbar/navbar";
 import { Footer } from "../components/footer/footer";
 import PatentList from "./components/patentList/patent";
-import { SearchContainer, SearchInput, SearchButton } from "./styles";
+import { SearchContainer, SearchInput, SearchButton, ColoredDiv } from "./styles";
 interface Error {
   message: string;
 }
@@ -35,7 +35,7 @@ function Index() {
     }
   };
   return (
-    <div>
+    <ColoredDiv>
       <Navbar />
       <SearchContainer>
         <h3>Search Patents</h3>
@@ -44,12 +44,12 @@ function Index() {
           onChange={(e) => setPatentQuery(e.target.value)}
           placeholder="Enter patent description!"
         />
-        <SearchButton onClick={fetchData}>Fetch Data</SearchButton>
+        <SearchButton onClick={fetchData}>Search</SearchButton>
         {error && <div>Error: {error}</div>}
       </SearchContainer>
       {data && <PatentList items={data} />}
       <Footer />
-    </div>
+    </ColoredDiv>
   );
 }
 
