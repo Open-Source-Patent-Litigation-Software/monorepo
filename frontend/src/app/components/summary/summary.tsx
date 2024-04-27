@@ -17,9 +17,7 @@ export const Summary: React.FC<SummaryProps> = (props) => {
           We are here to make researching intellectual property seamless.
         </Description>
       </SummaryDiv>
-      <Form>
         <WaitlistPopup />
-      </Form>
     </>
   );
 };
