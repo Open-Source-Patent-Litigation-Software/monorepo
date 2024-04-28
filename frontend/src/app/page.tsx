@@ -5,14 +5,14 @@ import { Footer } from "./components/footer/footer";
 import { Summary } from "./components/summary/summary";
 export default function Home() {
   return (
-    <SnapScrollContainer>
-      <Navbar />
-      <DivView>
-        <Summary />
-      </DivView>
-      <DivView>Statistics</DivView>
-      {/* <DivView>Demo</DivView> */}
+    <>
+      <SnapScrollContainer>
+        <Navbar />
+        <DivView>
+          <Summary />
+        </DivView>
+      </SnapScrollContainer>
       <Footer />
-    </SnapScrollContainer>
+    </>
   );
 }

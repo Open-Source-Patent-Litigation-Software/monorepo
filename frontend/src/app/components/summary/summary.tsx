@@ -1,7 +1,12 @@
 "use client";
 
 import React from "react";
-import { SummaryDiv, Title, Description, Form } from "./styles";
+import {
+  SummaryDiv,
+  Title,
+  InlineContainer,
+  BlueSwipe,
+} from "./styles";
 import WaitlistPopup from "./component/waitlist/waitlist";
 
 interface SummaryProps {
@@ -12,12 +17,14 @@ export const Summary: React.FC<SummaryProps> = (props) => {
   return (
     <>
       <SummaryDiv>
-        <Title>Welcome to EasyIP</Title>
-        <Description>
-          We are here to make researching intellectual property seamless.
-        </Description>
+        <InlineContainer>
+          <Title>
+            Welcome to <BlueSwipe>EasyIP</BlueSwipe>. The all in one solution to
+            IP research.
+          </Title>
+        </InlineContainer>
       </SummaryDiv>
-        <WaitlistPopup />
+      <WaitlistPopup />
     </>
   );
 };

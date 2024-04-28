@@ -15,6 +15,8 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 20px; // Spacing between each patent box
   margin: 5%;
+  margin-bottom: 0;
+  padding-bottom:5%;
   animation: ${fadeIn} 1s ease-out; // Apply the animation to the container
 `;
 

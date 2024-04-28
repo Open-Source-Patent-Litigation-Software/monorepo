@@ -1,4 +1,5 @@
 import styled, { keyframes } from 'styled-components';
+import { devices } from '@/app/sizes';
 
 // home styling
 const flyInFromLeft = keyframes`
@@ -23,34 +24,39 @@ const flyInFromRight = keyframes`
   }
 `;
 
-
-
 export const Title = styled.p`
-    font-size: 10em;
-    000000    text-align: center;
-    font-weight: bold;
-    animation: ${flyInFromLeft} 1s ease-out forwards;
-    `;
+  font-size: 6em; // Default font size for all screen sizes
+  text-align: center;
+  font-weight: bold;
+  animation: ${flyInFromLeft} 1s ease-out forwards;
+  margin: 0 1em 0 1em;
+  @media ${devices.tablet} {
+    font-size: 5.5em;
+  }
+  @media ${devices.laptop} {
+    font-size: 6.5em;
+  }
+  @media ${devices.laptopL} {
+    font-size: 6em;
+  }
+  @media ${devices.desktop} {
+    font-size: 8.5em;  }
+`;
 
-export const Description = styled.p`
-    font-size: 4em;
-    color: #000000;
-    text-align: center;
-    animation: ${flyInFromRight} 1s ease-out forwards;
-    `;
+export const BlueSwipe = styled.span`
+  color: blue;
+`;
 
 export const SummaryDiv = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5%;
- // padding : top right bottom left
-    margin: 0% 10% 10% 10%;
-    `;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5%;
+`;
 
-export const Form = styled.div`
-    justify-content: center;
-    align-items: center;
-    padding: 0% 10% 0% 10%;
-    animation: ${flyInFromRight} 1s ease-out forwards;
-    `;
+export const InlineContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;

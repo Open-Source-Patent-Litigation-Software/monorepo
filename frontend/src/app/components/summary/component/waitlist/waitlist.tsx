@@ -1,5 +1,5 @@
+// WaitlistPopup.jsx
 import React, { useState, useRef } from "react";
-import styled, { keyframes, css } from "styled-components";
 import {
   Button,
   Input,
@@ -27,7 +27,7 @@ const WaitlistPopup = () => {
     }
   };
 
-  const handleClose = (event) => {
+  const handleClose = (event: MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
       togglePopup();
     }
@@ -70,7 +70,7 @@ const WaitlistPopup = () => {
               />
               <Button type="submit">Submit</Button>
             </Form>
-            <Button onClick={togglePopup}>Close Popup</Button>
+            <Button onClick={togglePopup}>Close</Button>
           </Modal>
         </Overlay>
       )}

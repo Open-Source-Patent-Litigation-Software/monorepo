@@ -3,7 +3,12 @@ import React, { useState, useEffect } from "react";
 import { Navbar } from "../components/navbar/navbar";
 import { Footer } from "../components/footer/footer";
 import PatentList from "./components/patentList/patent";
-import { SearchContainer, SearchInput, SearchButton, ColoredDiv } from "./styles";
+import {
+  SearchContainer,
+  SearchInput,
+  SearchButton,
+  ColoredDiv,
+} from "./styles";
 interface Error {
   message: string;
 }
@@ -35,21 +40,42 @@ function Index() {
     }
   };
   return (
-    <ColoredDiv>
-      <Navbar />
-      <SearchContainer>
-        <h3>Search Patents</h3>
-        <SearchInput
-          type="text"
-          onChange={(e) => setPatentQuery(e.target.value)}
-          placeholder="Enter patent description!"
-        />
-        <SearchButton onClick={fetchData}>Search</SearchButton>
-        {error && <div>Error: {error}</div>}
-      </SearchContainer>
-      {data && <PatentList items={data} />}
+    <>
+      <ColoredDiv>
+        <Navbar />
+        <SearchContainer>
+          <h3>Search Patents</h3>
+          <SearchInput
+            type="text"
+            onChange={(e) => setPatentQuery(e.target.value)}
+            placeholder="Enter patent description!"
+          />
+          <SearchButton onClick={fetchData}>Search</SearchButton>
+          {error && <div>Error: {error}</div>}
+        </SearchContainer>
+        {(() => {
+          if (data) {
+            return <PatentList items={data} />;
+          } else {
+            return (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                  fontSize: "1.5rem",
+                  fontWeight: "bold",
+                }}
+              >
+                Look up something cool!
+              </div>
+            );
+          }
+        })()}
+      </ColoredDiv>
       <Footer />
-    </ColoredDiv>
+    </>
   );
 }
 

@@ -1,4 +1,5 @@
-import styled, { keyframes, css} from 'styled-components';
+// styles.js
+import styled, { keyframes, css } from 'styled-components';
 
 export const fadeIn = keyframes`
   from {
@@ -27,7 +28,11 @@ export const scaleUp = keyframes`
   }
 `;
 
-export const Overlay = styled.div`
+interface OverlayProps {
+  out?: boolean;
+}
+
+export const Overlay = styled.div<OverlayProps>`
   position: fixed;
   top: 0;
   left: 0;
@@ -61,7 +66,7 @@ export const Modal = styled.div`
   animation: ${(props) =>
     props.out
       ? css`
-          ${fadeOut} 0.3s
+          ${fadeOut} 0.3s forwards
         `
       : css`
           ${fadeIn} 0.3s, ${scaleUp} 0.3s
@@ -79,18 +84,20 @@ export const Button = styled.button`
 `;
 
 export const WaitlistButton = styled(Button)`
-    background-color: white;
-    font-weight: bold;
-    color: black;
-    font-size: 2rem;
-    border: 2px solid black;
-    border-radius: 15px;
-    transition: background-color 0.3s ease, color 0.3s ease; // Add transitions for background and text color
-    &:hover {
-        background-color: blue;
-        color: white;
-        fadeIn: 0.3s;
-    }
+  background-color: white;
+  margin: 5% 0% 0% 0%;
+  font-weight: bold;
+  color: black;
+  font-size: 2rem;
+  border: 2px solid black;
+  border-radius: 15px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  &:hover {
+    background-color: blue;
+    color: white;
+    fadeIn: 0.3s;
+  }
 `;
 
 export const Form = styled.form`
