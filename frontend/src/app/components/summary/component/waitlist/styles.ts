@@ -53,7 +53,11 @@ export const Overlay = styled.div<OverlayProps>`
         `};
 `;
 
-export const Modal = styled.div`
+interface ModalProps {
+  out?: boolean;
+}
+
+export const Modal = styled.div<ModalProps>`
   background-color: white;
   padding: 30px;
   border-radius: 10px;
