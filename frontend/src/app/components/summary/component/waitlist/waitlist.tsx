@@ -14,6 +14,7 @@ const WaitlistPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
+  const apiUrl = process.env.NEXT_PUBLIC_DEV_BACKEND;
 
   const togglePopup = () => {
     setIsAnimating(true);
@@ -30,6 +31,26 @@ const WaitlistPopup = () => {
   const handleClose = (event: React.MouseEvent<HTMLDivElement>) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
       togglePopup();
+    }
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const email = event.currentTarget.email.value;
+    const phoneNumber = event.currentTarget.phone.value;
+    try {
+      const response = await fetch(`${apiUrl}/ops/addToWaitlist`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, phoneNumber }),
+      });
+      const data = await response.json();
+      console.log(data);
+      event.currentTarget.reset();
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 
@@ -50,7 +71,7 @@ const WaitlistPopup = () => {
                 &#x2716; {/* Close icon */}
               </button>
             </h1>
-            <Form>
+            <Form onSubmit={handleSubmit}>
               <Label htmlFor="email">Email:</Label>
               <Input
                 type="email"
