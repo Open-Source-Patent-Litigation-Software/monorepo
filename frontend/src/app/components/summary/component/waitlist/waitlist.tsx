@@ -28,7 +28,7 @@ const WaitlistPopup = () => {
   };
 
   const handleClose = (event: MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(event.target)) {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
       togglePopup();
     }
   };
