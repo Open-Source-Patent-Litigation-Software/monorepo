@@ -13,7 +13,7 @@ import {
 const WaitlistPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const modalRef = useRef(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const togglePopup = () => {
     setIsAnimating(true);
