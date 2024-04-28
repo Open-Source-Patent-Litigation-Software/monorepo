@@ -1,15 +1,18 @@
-import Image from "next/image";
-import styles from "./page.module.css";
-import { Navbar } from "./components/navbar";
+"use client";
+import { Navbar } from "./components/navbar/navbar";
+import { DivView, SnapScrollContainer } from "./styles";
+import { Footer } from "./components/footer/footer";
+import { Summary } from "./components/summary/summary";
 export default function Home() {
   return (
-    <main>
-      <div>NavBar</div>
-      <Navbar />
-      <div>Summary</div>
-      <div>Statistics</div>
-      <div>Demo</div>
-      <div>Footer</div>
-    </main>
+    <>
+      <SnapScrollContainer>
+        <Navbar />
+        <DivView>
+          <Summary />
+        </DivView>
+      </SnapScrollContainer>
+      <Footer />
+    </>
   );
 }

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@headlessui/react": "^1.7.18",
+    "react-multi-carousel": "^2.8.5"
+  }
+}
