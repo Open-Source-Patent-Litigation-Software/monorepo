@@ -5,3 +5,6 @@ Todos:
     Need to figure out how to rank similarity
 
     https://headlessui.com/react/dialog
+
+UI:
+    colors: #1A4D2E #4F6F52 #E8DFCA #F5EFE6

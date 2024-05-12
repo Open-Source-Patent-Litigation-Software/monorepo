@@ -34,12 +34,7 @@ const StyledHr = styled.hr`
 `;
 
 const ViewContainer = styled.div`
-  background: linear-gradient(
-    180deg,
-    rgba(34, 0, 255, 0.05) 0%,
-    rgba(255, 255, 255, 1) 50%,
-    rgba(34, 0, 255, 0.05) 100%
-  );
+  background: white;
   padding: 5%;
   display: flex;
   flex-direction: column;
@@ -98,7 +93,7 @@ const CardFront = styled.div`
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  background-color: #f5f5f5;
+  background-color: white;
   border-radius: 25px;
   box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.8);
   display: flex;
@@ -116,7 +111,7 @@ const CardBack = styled.div`
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  background-color: #f5f5f5;
+  background-color: #ffffff;
   border-radius: 25px;
   box-shadow: 0px 0px 30px rgba(0, 0, 255, 0.8);
   display: flex;
