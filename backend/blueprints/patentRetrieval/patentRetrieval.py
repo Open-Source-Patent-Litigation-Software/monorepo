@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 import requests
 from settings import PQ_AI_KEY
-
+from utils.scraping import scrapeHTML
 
 patentRetrieval = Blueprint("patentRetrieval", __name__, template_folder="templates")
 
@@ -34,3 +34,11 @@ def patentRetrievalRoute():
         return jsonify({"message": "No results found."})
     print(results)
     return jsonify({"results": results})
+
+
+@patentRetrieval.route("/scrapeGooglePatents", methods=["GET"])
+def scrapeGooglePatents():
+    """Scrape Google Patents for a specific patent URL."""
+    googlePatentsURL = request.args.get("url")
+    htmlOutput = scrapeHTML(googlePatentsURL)
+    return jsonify({"description": htmlOutput}), 200 # 200 is the status code for success
