@@ -5,7 +5,7 @@ import {
   SummaryDiv,
   Title,
   InlineContainer,
-  BlueSwipe,
+  GreenText,
 } from "./styles";
 import WaitlistPopup from "./component/waitlist/waitlist";
 
@@ -19,7 +19,7 @@ export const Summary: React.FC<SummaryProps> = (props) => {
       <SummaryDiv>
         <InlineContainer>
           <Title>
-            Welcome to <BlueSwipe>EasyIP</BlueSwipe>. The all in one solution to
+            Welcome to <GreenText>EasyIP</GreenText>. The all in one solution to
             IP research.
           </Title>
         </InlineContainer>

@@ -43,8 +43,13 @@ export const Title = styled.p`
     font-size: 8.5em;  }
 `;
 
-export const BlueSwipe = styled.span`
-  color: blue;
+export const GreenText = styled.span`
+  color: #1A4D2E;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #4F6F52;
+  }
 `;
 
 export const SummaryDiv = styled.div`

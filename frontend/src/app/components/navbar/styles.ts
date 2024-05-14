@@ -2,16 +2,16 @@ import styled from 'styled-components';
 
 export const StyledNav = styled.nav`
   font-size: 18px;
+  position: -webkit-sticky; /* For Safari */
   position: sticky;
   top: 0;
   z-index: 999;
   height: 80px;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3); /* Increased shadow */
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #ffffff; /* White */
-  background-color: #ffffff; /* Black */
+  background-color: #1A4D2E; /* Dark green */
 `;
 
 export const StyledUl = styled.ul`
@@ -24,10 +24,13 @@ export const StyledLi = styled.li`
   margin: 0 1rem;
 
   a {
-    color: #000000; /* White */
+    color: #FFFFFF; /* White */
     text-decoration: none;
+    transition: font-weight 0.3s ease, color 0.3s ease, font-size 0.3s ease; /* Adding transition for font-size */
+    
     &:hover {
-      text-decoration: underline;
+      font-weight: bold;
+      font-size: 20px;
     }
   }
 `;

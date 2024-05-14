@@ -62,15 +62,7 @@ const WaitlistPopup = () => {
       {isOpen && (
         <Overlay out={!isOpen && isAnimating} onClick={handleClose}>
           <Modal ref={modalRef} out={!isOpen && isAnimating}>
-            <h1>
-              Join the Waitlist
-              <button
-                onClick={togglePopup}
-                style={{ fontSize: "24px", border: "none", background: "none" }}
-              >
-                &#x2716; {/* Close icon */}
-              </button>
-            </h1>
+            <h1>Join the Waitlist</h1>
             <Form onSubmit={handleSubmit}>
               <Label htmlFor="email">Email:</Label>
               <Input
