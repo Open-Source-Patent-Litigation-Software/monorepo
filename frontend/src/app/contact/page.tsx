@@ -1,9 +1,18 @@
 "use client";
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { SnapScrollContainer, DivView } from "../styles";
 import { Navbar } from "../components/navbar/navbar";
 import { Footer } from "../components/footer/footer";
+
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
 
 const FormContainer = styled.div`
   width: 60%;
@@ -13,7 +22,9 @@ const FormContainer = styled.div`
   margin-top: -5%;
   display: flex;
   flex-direction: column;
-  min-height: 70vh; /* Ensure minimum height */
+  min-height: 70vh;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+  animation: ${fadeIn} 0.5s ease-in;
 `;
 
 const Form = styled.form`
@@ -26,11 +37,12 @@ const FormTitle = styled.h1`
   text-align: center;
   color: #ffffff;
   margin-bottom: 10px;
+  font-size: 3rem;
 `;
 
 const FormDescription = styled.h3`
   text-align: center;
-  color: #ffffff;
+  color: #F5EFE6;
   margin-bottom: 10px;
 `;
 
@@ -121,7 +133,7 @@ const ContactForm = () => {
 
   return (
     <FormContainer>
-      <FormTitle>Contact Us</FormTitle>
+      <FormTitle>Contact The EasyIP Team</FormTitle>
       <FormDescription>We will contact you within 24 hours.</FormDescription>
       <HR />
       <Form onSubmit={handleSubmit}>

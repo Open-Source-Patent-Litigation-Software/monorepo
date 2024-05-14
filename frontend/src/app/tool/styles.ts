@@ -16,7 +16,6 @@ export const SearchContainer = styled.div`
 export const SearchInput = styled.input`
   padding: 10px 20px;
   border-radius: 20px; // Fully rounded ends
-  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1); // White shadow for depth
   width: 300px; // Specific width, adjust as needed
 `;
 
@@ -37,6 +36,6 @@ export const SearchButton = styled.button`
   }
 `;
 export const ColoredDiv = styled.div`
-  background: linear-gradient(180deg, rgba(34,0,255,0.05) 0%, rgba(255,255,255,1) 50%, rgba(34,0,255,0.05) 100%);   
+  background: #F5EFE6;
   min-height: 110vh; /* Minimum full viewport height */
 `;

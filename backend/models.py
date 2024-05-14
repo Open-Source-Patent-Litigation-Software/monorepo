@@ -70,7 +70,7 @@ class Case:
     def __init__(
         self,
         id,
-        pqaiID,
+        pqai_id,
         name,
         folder,
         description,
@@ -80,7 +80,7 @@ class Case:
         write_permissions=None,
     ):
         self.id = id
-        self.pqaiID = pqaiID
+        self.pqaiID = pqai_id
         self.name = name
         self.folder = folder
         self.description = description

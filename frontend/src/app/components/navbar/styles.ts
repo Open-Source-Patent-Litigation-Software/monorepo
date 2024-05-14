@@ -11,7 +11,7 @@ export const StyledNav = styled.nav`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #1A4D2E; /* Dark green */
+  background-color: #153C24; /* Dark green */
 `;
 
 export const StyledUl = styled.ul`
