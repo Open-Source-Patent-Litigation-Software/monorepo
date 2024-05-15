@@ -1,195 +1,205 @@
-CREATE TABLE "OrganizationPayment" (
-  "id" SERIAL PRIMARY KEY,
-  "organization_id" INT,
-  "payment_method" VARCHAR,
-  "payment_token" VARCHAR,
-  "expires_at" TIMESTAMP,
-  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE organization_payment (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  payment_method VARCHAR,
+  payment_token VARCHAR,
+  expires_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE "UserPayment" (
-  "id" SERIAL PRIMARY KEY,
-  "user_id" INT,
-  "payment_method" VARCHAR,
-  "payment_token" VARCHAR,
-  "expires_at" TIMESTAMP,
-  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE user_payment (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  payment_method VARCHAR,
+  payment_token VARCHAR,
+  expires_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE "Organization" (
-  "id" SERIAL PRIMARY KEY,
-  "name" VARCHAR,
-  "phone" VARCHAR,
-  "features" VARCHAR,
-  "payment_id" INT
+CREATE TABLE organization (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  name VARCHAR,
+  phone VARCHAR,
+  features VARCHAR,
+  payment_id UUID
 );
 
-CREATE TABLE "OrganizationOwner" (
-  "organization_id" INT,
-  "user_id" INT
+CREATE TABLE organization_owner (
+  organization_id UUID,
+  user_id UUID
 );
 
-CREATE TABLE "OrganizationAdmin" (
-  "organization_id" INT,
-  "user_id" INT
+CREATE TABLE waitlist (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  email VARCHAR(255),
+  phone_number VARCHAR(20)
 );
 
-CREATE TABLE "OrganizationUser" (
-  "organization_id" INT,
-  "user_id" INT
+CREATE TABLE organization_admin (
+  organization_id UUID,
+  user_id UUID
 );
 
-CREATE TABLE "User" (
-  "id" SERIAL PRIMARY KEY,
-  "first_name" VARCHAR,
-  "last_name" VARCHAR,
-  "email" VARCHAR,
-  "password" VARCHAR,
-  "phone" VARCHAR,
-  "organization_id" INT,
-  "payment_id" INT
+CREATE TABLE organization_user (
+  organization_id UUID,
+  user_id UUID
 );
 
-CREATE TABLE "Patent" (
-  "id" SERIAL PRIMARY KEY,
-  "pqai_id" VARCHAR,
-  "name" VARCHAR,
-  "folder_id" INT,
-  "description" VARCHAR,
-  "organization_id" INT,
-  "googlePatentsLink" VARCHAR
+CREATE TABLE reg_user (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  first_name VARCHAR,
+  last_name VARCHAR,
+  email VARCHAR,
+  password VARCHAR,
+  phone VARCHAR,
+  organization_id UUID,
+  payment_id UUID
 );
 
-CREATE TABLE "PatentReadPermission" (
-  "patent_id" INT,
-  "user_id" INT
+CREATE TABLE patent (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  pqai_id VARCHAR,
+  name VARCHAR,
+  folder_id UUID,
+  description VARCHAR,
+  organization_id UUID,
+  google_patents_link VARCHAR
 );
 
-CREATE TABLE "PatentWritePermission" (
-  "patent_id" INT,
-  "user_id" INT
+CREATE TABLE patent_read_permission (
+  patent_id UUID,
+  user_id UUID
 );
 
-CREATE TABLE "Folder" (
-  "id" SERIAL PRIMARY KEY,
-  "name" VARCHAR,
-  "description" VARCHAR,
-  "organization_id" INT,
-  "parent_folder_id" INT
+CREATE TABLE patent_write_permission (
+  patent_id UUID,
+  user_id UUID
 );
 
-CREATE TABLE "FolderUser" (
-  "folder_id" INT,
-  "user_id" INT
+CREATE TABLE folder (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  name VARCHAR,
+  description VARCHAR,
+  organization_id UUID,
+  parent_folder_id UUID
 );
 
-CREATE TABLE "FolderPatent" (
-  "folder_id" INT,
-  "patent_id" INT
+CREATE TABLE folder_user (
+  folder_id UUID,
+  user_id UUID
 );
 
-CREATE TABLE "FolderReadPermission" (
-  "folder_id" INT,
-  "user_id" INT
+CREATE TABLE folder_patent (
+  folder_id UUID,
+  patent_id UUID
 );
 
-CREATE TABLE "FolderWritePermission" (
-  "folder_id" INT,
-  "user_id" INT
+CREATE TABLE folder_read_permission (
+  folder_id UUID,
+  user_id UUID
 );
 
-CREATE TABLE "Search" (
-  "id" SERIAL PRIMARY KEY,
-  "user_id" INT,
-  "query" VARCHAR,
-  "time" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE folder_write_permission (
+  folder_id UUID,
+  user_id UUID
 );
 
-CREATE TABLE "Metric" (
-  "id" SERIAL PRIMARY KEY,
-  "search_id" INT,
-  "patent_id" INT,
-  "sentence" VARCHAR,
-  "match_percentage" INT
+CREATE TABLE search (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID,
+  query VARCHAR,
+  time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE "UserSearchCount" (
-  "user_id" INT PRIMARY KEY,
-  "search_count" INT
+CREATE TABLE metric (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  search_id UUID,
+  patent_id UUID,
+  sentence VARCHAR,
+  match_percentage INT
 );
 
-CREATE TABLE "SearchAnalytics" (
-  "id" SERIAL PRIMARY KEY,
-  "user_id" INT,
-  "search_id" INT,
-  "search_time" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE contact_queries (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  first_name VARCHAR,
+  last_name VARCHAR,
+  email VARCHAR,
+  message VARCHAR
+);
+
+CREATE TABLE user_search_count (
+  user_id UUID PRIMARY KEY,
+  search_count INT
+);
+
+CREATE TABLE search_analytics (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID,
+  search_id UUID,
+  search_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Adding foreign key constraints
-ALTER TABLE "OrganizationPayment" ADD FOREIGN KEY ("organization_id") REFERENCES "Organization" ("id");
+ALTER TABLE organization_payment ADD FOREIGN KEY (id) REFERENCES organization (id);
 
-ALTER TABLE "UserPayment" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
+ALTER TABLE user_payment ADD FOREIGN KEY (id) REFERENCES reg_user (id);
 
-ALTER TABLE "Organization" ADD FOREIGN KEY ("payment_id") REFERENCES "OrganizationPayment" ("id");
+ALTER TABLE organization_owner ADD FOREIGN KEY (organization_id) REFERENCES organization (id);
 
-ALTER TABLE "OrganizationOwner" ADD FOREIGN KEY ("organization_id") REFERENCES "Organization" ("id");
+ALTER TABLE organization_owner ADD FOREIGN KEY (user_id) REFERENCES reg_user (id);
 
-ALTER TABLE "OrganizationOwner" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
+ALTER TABLE organization_admin ADD FOREIGN KEY (organization_id) REFERENCES organization (id);
 
-ALTER TABLE "OrganizationAdmin" ADD FOREIGN KEY ("organization_id") REFERENCES "Organization" ("id");
+ALTER TABLE organization_admin ADD FOREIGN KEY (user_id) REFERENCES reg_user (id);
 
-ALTER TABLE "OrganizationAdmin" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
+ALTER TABLE organization_user ADD FOREIGN KEY (organization_id) REFERENCES organization (id);
 
-ALTER TABLE "OrganizationUser" ADD FOREIGN KEY ("organization_id") REFERENCES "Organization" ("id");
+ALTER TABLE organization_user ADD FOREIGN KEY (user_id) REFERENCES reg_user (id);
 
-ALTER TABLE "OrganizationUser" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
+ALTER TABLE reg_user ADD FOREIGN KEY (organization_id) REFERENCES organization (id);
 
-ALTER TABLE "User" ADD FOREIGN KEY ("organization_id") REFERENCES "Organization" ("id");
+ALTER TABLE patent ADD FOREIGN KEY (folder_id) REFERENCES folder (id);
 
-ALTER TABLE "User" ADD FOREIGN KEY ("payment_id") REFERENCES "UserPayment" ("id");
+ALTER TABLE patent ADD FOREIGN KEY (organization_id) REFERENCES organization (id);
 
-ALTER TABLE "Patent" ADD FOREIGN KEY ("folder_id") REFERENCES "Folder" ("id");
+ALTER TABLE patent_read_permission ADD FOREIGN KEY (patent_id) REFERENCES patent (id);
 
-ALTER TABLE "Patent" ADD FOREIGN KEY ("organization_id") REFERENCES "Organization" ("id");
+ALTER TABLE patent_read_permission ADD FOREIGN KEY (user_id) REFERENCES reg_user (id);
 
-ALTER TABLE "PatentReadPermission" ADD FOREIGN KEY ("patent_id") REFERENCES "Patent" ("id");
+ALTER TABLE patent_write_permission ADD FOREIGN KEY (patent_id) REFERENCES patent (id);
 
-ALTER TABLE "PatentReadPermission" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
+ALTER TABLE patent_write_permission ADD FOREIGN KEY (user_id) REFERENCES reg_user (id);
 
-ALTER TABLE "PatentWritePermission" ADD FOREIGN KEY ("patent_id") REFERENCES "Patent" ("id");
+ALTER TABLE folder ADD FOREIGN KEY (organization_id) REFERENCES organization (id);
 
-ALTER TABLE "PatentWritePermission" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
+ALTER TABLE folder ADD FOREIGN KEY (parent_folder_id) REFERENCES folder (id);
 
-ALTER TABLE "Folder" ADD FOREIGN KEY ("organization_id") REFERENCES "Organization" ("id");
+ALTER TABLE folder_user ADD FOREIGN KEY (folder_id) REFERENCES folder (id);
 
-ALTER TABLE "Folder" ADD FOREIGN KEY ("parent_folder_id") REFERENCES "Folder" ("id");
+ALTER TABLE folder_user ADD FOREIGN KEY (user_id) REFERENCES reg_user (id);
 
-ALTER TABLE "FolderUser" ADD FOREIGN KEY ("folder_id") REFERENCES "Folder" ("id");
+ALTER TABLE folder_patent ADD FOREIGN KEY (folder_id) REFERENCES folder (id);
 
-ALTER TABLE "FolderUser" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
+ALTER TABLE folder_patent ADD FOREIGN KEY (patent_id) REFERENCES patent (id);
 
-ALTER TABLE "FolderPatent" ADD FOREIGN KEY ("folder_id") REFERENCES "Folder" ("id");
+ALTER TABLE folder_read_permission ADD FOREIGN KEY (folder_id) REFERENCES folder (id);
 
-ALTER TABLE "FolderPatent" ADD FOREIGN KEY ("patent_id") REFERENCES "Patent" ("id");
+ALTER TABLE folder_read_permission ADD FOREIGN KEY (user_id) REFERENCES reg_user (id);
 
-ALTER TABLE "FolderReadPermission" ADD FOREIGN KEY ("folder_id") REFERENCES "Folder" ("id");
+ALTER TABLE folder_write_permission ADD FOREIGN KEY (folder_id) REFERENCES folder (id);
 
-ALTER TABLE "FolderReadPermission" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
+ALTER TABLE folder_write_permission ADD FOREIGN KEY (user_id) REFERENCES reg_user (id);
 
-ALTER TABLE "FolderWritePermission" ADD FOREIGN KEY ("folder_id") REFERENCES "Folder" ("id");
+ALTER TABLE search ADD FOREIGN KEY (user_id) REFERENCES reg_user (id);
 
-ALTER TABLE "FolderWritePermission" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
+ALTER TABLE metric ADD FOREIGN KEY (search_id) REFERENCES search (id);
 
-ALTER TABLE "Search" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
+ALTER TABLE metric ADD FOREIGN KEY (patent_id) REFERENCES patent (id);
 
-ALTER TABLE "Metric" ADD FOREIGN KEY ("search_id") REFERENCES "Search" ("id");
+ALTER TABLE user_search_count ADD FOREIGN KEY (user_id) REFERENCES reg_user (id);
 
-ALTER TABLE "Metric" ADD FOREIGN KEY ("patent_id") REFERENCES "Patent" ("id");
+ALTER TABLE search_analytics ADD FOREIGN KEY (user_id) REFERENCES reg_user (id);
 
-ALTER TABLE "UserSearchCount" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
-
-ALTER TABLE "SearchAnalytics" ADD FOREIGN KEY ("user_id") REFERENCES "User" ("id");
-
-ALTER TABLE "SearchAnalytics" ADD FOREIGN KEY ("search_id") REFERENCES "Search" ("id");
+ALTER TABLE search_analytics ADD FOREIGN KEY (search_id) REFERENCES search (id);
