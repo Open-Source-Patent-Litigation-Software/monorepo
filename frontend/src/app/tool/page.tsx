@@ -68,7 +68,7 @@ function Index() {
                   fontWeight: "bold",
                 }}
               >
-                Look up something cool!
+                Example Query: "A device that brews coffee."
               </div>
             );
           }

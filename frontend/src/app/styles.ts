@@ -6,7 +6,7 @@ export const SnapScrollContainer = styled.div`
   /* Ensure it takes up the full width to prevent unexpected behavior */
   width: 100%;
   background: rgb(34,0,255);
-  background: linear-gradient(180deg, rgba(34,0,255,0.05) 0%, rgba(255,255,255,1) 50%, rgba(34,0,255,0.05) 100%);   
+  background: #E8DFCA;   
 `;
 
 export const DivView = styled.div`

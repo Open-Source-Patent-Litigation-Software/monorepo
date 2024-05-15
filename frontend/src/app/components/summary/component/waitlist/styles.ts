@@ -80,25 +80,24 @@ export const Modal = styled.div<ModalProps>`
 export const Button = styled.button`
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: blue;
+  background-color: #1A4D2E;
   color: white;
   border: none;
-  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   cursor: pointer;
 `;
 
 export const WaitlistButton = styled(Button)`
-  background-color: white;
+  background-color: #1A4D2E;
   margin: 5% 0% 0% 0%;
   font-weight: bold;
-  color: black;
+  color: white;
   font-size: 2rem;
-  border: 2px solid black;
-  border-radius: 15px;
   transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 10px;
 
   &:hover {
-    background-color: blue;
+    background-color: #4F6F52;
     color: white;
     fadeIn: 0.3s;
   }
