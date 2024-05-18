@@ -26,22 +26,23 @@ def postToList(email: str, phoneNumber: str):
             "email": email,
             "phoneNumber": phoneNumber,
         }
+        cur.close()
+        conn.close()
         return jsonify(dataResponse), 200
 
     except psycopg2.Error as e:
         # Handle specific psycopg2 errors
         conn.rollback()  # Rollback the transaction if an error occurs
+        cur.close()
+        conn.close()
         return jsonify({"error": f"Database error: {str(e)}"}), 500
 
     except Exception as e:
         # Handle any other unexpected errors
         conn.rollback()  # Rollback the transaction if an error occurs
-        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
-
-    finally:
-        # Close the cursor and connection
         cur.close()
         conn.close()
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 
 def postContactQuery(firstName: str, lastName: str, email: str, message: str):
@@ -52,10 +53,9 @@ def postContactQuery(firstName: str, lastName: str, email: str, message: str):
 
         # Define the INSERT query with placeholders
         query = """
-        INSERT INTO contact_queries (first_name, last_name, email, message) 
-        VALUES (%s, %s, %s, %s)
+        INSERT INTO contact_query (first_name, last_name, email, message)
+        VALUES (%s, %s, %s, %s);
         """
-
         # Define the values to be inserted
         values = (firstName, lastName, email, message)
 
@@ -72,19 +72,22 @@ def postContactQuery(firstName: str, lastName: str, email: str, message: str):
             "email": email,
             "message": message,
         }
+
+        cur.close()
+        conn.close()
+
         return jsonify(dataResponse), 200
 
     except psycopg2.Error as e:
         # Handle specific psycopg2 errors
         conn.rollback()  # Rollback the transaction if an error occurs
+        cur.close()
+        conn.close()
         return jsonify({"error": f"Database error: {str(e)}"}), 500
 
     except Exception as e:
         # Handle any other unexpected errors
         conn.rollback()  # Rollback the transaction if an error occurs
-        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
-
-    finally:
-        # Close the cursor and connection
         cur.close()
         conn.close()
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
