@@ -126,7 +126,7 @@ function Index() {
   useFadeIn();
 
   return (
-    <>
+    <div>
       <Navbar />
       <Container>
         <Section bgColor="#f5efe6" fullHeight>
@@ -195,7 +195,7 @@ function Index() {
         </Section>
       </Container>
       <Footer />
-    </>
+    </div>
   );
 }
 

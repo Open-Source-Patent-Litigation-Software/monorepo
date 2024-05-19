@@ -2,10 +2,11 @@ import styled from 'styled-components';
 
 export const StyledNav = styled.nav`
   font-size: 18px;
-  position: -webkit-sticky; /* For Safari */
-  position: sticky;
+  position: fixed;
+  overflow: hidden;
   top: 0;
-  z-index: 999;
+  z-index: 1000;
+  width: 100%;
   height: 80px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
   display: flex;
@@ -15,7 +16,7 @@ export const StyledNav = styled.nav`
   padding: 0 20px;
 `;
 
-export const LoginLink = styled.a`
+export const LoginLink = styled.p`
   color: white;
   background-color: #4f6f52;
   text-decoration: none;
@@ -24,6 +25,11 @@ export const LoginLink = styled.a`
   &:hover {
     font-weight: bold;
     font-size: 25px;
+  }
+  a {
+    color: #FFFFFF;
+    text-decoration: none;
+
   }
 `;
 

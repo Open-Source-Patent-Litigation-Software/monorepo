@@ -10,7 +10,7 @@ interface NavigationProps {
 export const Navbar: React.FC<NavigationProps> = (props) => {
   const routes = {
     about: "/about",
-    pricing: "/pricing", 
+    // pricing: "/pricing",
     contact: "/contact",
     tool: "/tool",
   };
@@ -18,9 +18,7 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
   return (
     <StyledNav>
       <LogoText>
-        <Link href="/">
-          EasyIP
-        </Link>
+        <Link href="/">EasyIP</Link>
       </LogoText>
       <StyledUl>
         {Object.entries(routes).map(([name, path]) => (
@@ -31,7 +29,7 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
           </StyledLi>
         ))}
       </StyledUl>
-      <LoginLink href="/signin">Sign In</LoginLink>
+      <LoginLink><Link href="/signin">Sign In</Link></LoginLink>
     </StyledNav>
   );
 };

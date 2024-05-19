@@ -1,24 +1,25 @@
 "use client";
 import React from "react";
 import PropTypes from "prop-types";
-import SignInForm from "./utils/form/form";
+import SignUpForm from "./utils/form/SignUpForm";
 import { Navbar } from "../components/navbar/navbar";
 import { DivView } from "../styles";
 import { Footer } from "../components/footer/footer";
+
 interface props {}
 
-function Index(props: props) {
+function SignUpPage(props: props) {
   return (
     <div>
       <Navbar />
-      <DivView paddingTop="200px">
-        <SignInForm />
+      <DivView paddingTop="250px">
+        <SignUpForm />
       </DivView>
       <Footer />
     </div>
   );
 }
 
-Index.propTypes = {};
+SignUpPage.propTypes = {};
 
-export default Index;
+export default SignUpPage;

@@ -5,9 +5,11 @@ import { Footer } from "../components/footer/footer";
 import PatentList from "./components/patentList/patent";
 import {
   SearchContainer,
-  SearchInput,
-  SearchButton,
   ColoredDiv,
+  SearchTextArea,
+  SearchButton,
+  SearchBarTitle,
+  AnimationContainer,
 } from "./styles";
 interface Error {
   message: string;
@@ -43,36 +45,37 @@ function Index() {
     <>
       <ColoredDiv>
         <Navbar />
-        <SearchContainer>
-          <h3>Search Patents</h3>
-          <SearchInput
-            type="text"
-            onChange={(e) => setPatentQuery(e.target.value)}
-            placeholder="Enter patent description!"
-          />
-          <SearchButton onClick={fetchData}>Search</SearchButton>
-          {error && <div>Error: {error}</div>}
-        </SearchContainer>
-        {(() => {
-          if (data) {
-            return <PatentList items={data} />;
-          } else {
-            return (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                  fontSize: "1.5rem",
-                  fontWeight: "bold",
-                }}
-              >
-                Example Query: "A device that brews coffee."
-              </div>
-            );
-          }
-        })()}
+        <AnimationContainer>
+          <SearchContainer>
+            <SearchBarTitle>Search Patents</SearchBarTitle>
+            <SearchTextArea
+              onChange={(e) => setPatentQuery(e.target.value)}
+              placeholder="Enter patent description!"
+            />
+            <SearchButton onClick={fetchData}>Search</SearchButton>
+            {error && <div>Error: {error}</div>}
+          </SearchContainer>
+          {(() => {
+            if (data) {
+              return <PatentList items={data} />;
+            } else {
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                    fontSize: "1.5rem",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Example Query: "A device that brews coffee."
+                </div>
+              );
+            }
+          })()}
+        </AnimationContainer>
       </ColoredDiv>
       <Footer />
     </>
