@@ -10,3 +10,13 @@ Todos:
 UI:
     colors: #153C24  #1A4D2E #4F6F52 #E8DFCA #F5EFE6 #FFFFFF #000000	
     colors: dd-green d-green l-green d-beige l-beige white   black
+
+
+tech stack
+____________________________
+frontend - nextJS, react, typescript
+styling - StyledComponents -> PandaCSS
+backend - flask -> fastAPI, python
+database - neon, postgreSQL -> + sqlModel
+llms - langchain
+distributed systems - redis, aws, docker

@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request, session
 import bcrypt
 
 operations = Blueprint("operations", __name__, template_folder="templates")
-from database.posts import postToList, postContactQuery, registerUser
+from database.posts import postToList, postContactQuery, registerUser, signInUser
 
 # USE session['key'] TO EXTRACT REDIS CONNECTION
 
@@ -49,15 +49,15 @@ def signup():
         "utf-8"
     )
     # def registerUser(firstName: str, lastName: str, email: str, phone: str, password: str):
-    registerUser(
+    response = registerUser(
         data.get("firstName"),
         data.get("lastName"),
         data.get("email"),
         data.get("phone"),
         hashed_password,
     )
-
-    return jsonify({"message": "Sign up for the waitlist!"}), 200
+    # Maybe return loggin session???
+    return response
 
 
 @operations.route("/signin", methods=["POST"])
@@ -65,5 +65,8 @@ def signin():
     data = request.get_json()
     if data is None:
         return jsonify({"error": "No JSON data provided"}), 400
-    print(session["hello"])
-    return jsonify({"message": "Sign in to your account!"}), 200
+    email = data.get("email")
+    password = data.get("password")
+    print(email, password)
+    response = signInUser(email, password)
+    return response
