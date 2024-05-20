@@ -1,6 +1,7 @@
 import psycopg2
 from settings import NEON_CONNECTION_STRING
 from flask import jsonify
+from flask_bcrypt import Bcrypt
 
 
 def postToList(email: str, phoneNumber: str):
@@ -91,3 +92,10 @@ def postContactQuery(firstName: str, lastName: str, email: str, message: str):
         cur.close()
         conn.close()
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
+
+"""{'firstName': 'dev', 'lastName': 'kunjadia', 'email': 'devk@umich.edu', 'phone': '7343866841', 'password': 'd'}"""
+
+
+def registerUser(firstName: str, lastName: str, email: str, phone: str, password: str):
+    pass

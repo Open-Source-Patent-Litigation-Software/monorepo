@@ -129,7 +129,7 @@ const SignUpLink = styled.span`
     padding-left: 20px;
     transition: color 0.3s ease, font-size 0.3s ease;
     &:hover {
-      color: #FFFFFF;
+      color: #ffffff;
       font-size: 2.1rem;
     }
   }
@@ -155,7 +155,6 @@ const SignInForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
     fetch(`${apiUrl}/ops/signin`, {
       method: "POST",
       headers: {
@@ -166,6 +165,7 @@ const SignInForm = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
+        // Show success modal here, might have to place a next redirect here to the dashboard
         setIsSubmitted(true);
         setFormData({
           email: "",

@@ -144,6 +144,7 @@ const SignUpForm = () => {
     firstName: "",
     lastName: "",
     email: "",
+    phone: "",
     password: "",
   });
 
@@ -175,6 +176,7 @@ const SignUpForm = () => {
           firstName: "",
           lastName: "",
           email: "",
+          phone: "",
           password: "",
         });
       })
@@ -224,6 +226,17 @@ const SignUpForm = () => {
               id="email"
               name="email"
               value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label htmlFor="phone">Phone Number:</Label>
+            <Input
+              type="tel"
+              id="phone"
+              name="phone"
+              value={formData.phone}
               onChange={handleChange}
               required
             />

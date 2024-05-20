@@ -12,7 +12,7 @@ function SignUpPage(props: props) {
   return (
     <div>
       <Navbar />
-      <DivView paddingTop="250px">
+      <DivView paddingTop="300px">
         <SignUpForm />
       </DivView>
       <Footer />
