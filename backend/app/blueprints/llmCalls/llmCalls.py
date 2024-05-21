@@ -1,6 +1,6 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify
 from langchain_openai import OpenAI
-from settings import OPEN_AI_KEY
+from app.settings import OPEN_AI_KEY
 
 llmCalls = Blueprint("llmCalls", __name__, template_folder="templates")
 

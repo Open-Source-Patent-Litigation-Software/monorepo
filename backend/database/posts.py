@@ -1,8 +1,10 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from settings import NEON_CONNECTION_STRING
-from flask import jsonify
-import bcrypt
+from app.settings import NEON_CONNECTION_STRING
+from flask import jsonify, session
+from app.extensions import bcrypt
+
+
 def postToList(email: str, phoneNumber: str):
     try:
         # Establish a connection
@@ -93,11 +95,7 @@ def postContactQuery(firstName: str, lastName: str, email: str, message: str):
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 
-"""{'firstName': 'dev', 'lastName': 'kunjadia', 'email': 'devk@umich.edu', 'phone': '7343866841', 'password': 'd'}"""
-
-
 def registerUser(firstName: str, lastName: str, email: str, phone: str, password: str):
-    print(firstName, lastName, email, phone, password)
     try:
         # Establish a connection
         conn = psycopg2.connect(NEON_CONNECTION_STRING)
@@ -109,7 +107,9 @@ def registerUser(firstName: str, lastName: str, email: str, phone: str, password
         VALUES (%s, %s, %s, %s, %s);
         """
         # Define the values to be inserted
-        values = (email, firstName, lastName, phone, password)
+        hashedPassword = bcrypt.generate_password_hash(password).decode("utf-8")
+
+        values = (email, firstName, lastName, phone, hashedPassword)
 
         # Execute the query with the provided values
         cur.execute(query, values)
@@ -152,28 +152,33 @@ def signInUser(email: str, password: str):
         cur = conn.cursor(cursor_factory=RealDictCursor)
 
         # Define the INSERT query with placeholders
-        print("email:", email)
         query = """
         SELECT * FROM reg_user WHERE email = %s;
         """
         # Define the values to be inserted
         values = (email,)
-        print("here")
 
         # Execute the query with the provided values
         cur.execute(query, values)
         # Fetch the result
         result = cur.fetchone()
         passwordHash = result.get("password")
-        
-        print(bcrypt.check_password_hash(passwordHash, password))  
 
         if result == None:
             return jsonify({"error": "User not found"}), 404
 
+        if not bcrypt.check_password_hash(passwordHash, password):
+            return jsonify({"error": "Invalid credentials"}), 401
+
+        session["user_id"] = result.get("id")
+        session["email"] = result.get("email")
 
         dataResponse = {
             "request": "success",
+            "firstName": result.get("first_name"),
+            "lastName": result.get("last_name"),
+            "email": result.get("email"),
+            "phone": result.get("phone"),
         }
 
         cur.close()

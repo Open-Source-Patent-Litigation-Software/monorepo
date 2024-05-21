@@ -1,18 +1,12 @@
 from flask import Blueprint, jsonify, request, session
-import bcrypt
-
-operations = Blueprint("operations", __name__, template_folder="templates")
 from database.posts import postToList, postContactQuery, registerUser, signInUser
 
-# USE session['key'] TO EXTRACT REDIS CONNECTION
-
+operations = Blueprint("operations", __name__, template_folder="templates")
 
 @operations.route("/addToWaitlist", methods=["POST"])
 def addToWaitlist():
     """Add user to waitlist."""
-
     data = request.get_json()  # Extract Email + Phone Number from JSON
-
     if data is None:
         return jsonify({"error": "No JSON data provided"}), 400
 
@@ -24,7 +18,7 @@ def addToWaitlist():
 
 @operations.route("/contact", methods=["POST"])
 def handleContactQuery():
-    """Add user to waitlist."""
+    """Handle contact query."""
     data = request.get_json()
     if data is None:
         return jsonify({"error": "No Contact Form JSON data provided"}), 400
@@ -33,9 +27,7 @@ def handleContactQuery():
     lastName = data["lastName"]
     email = data["email"]
     message = data["message"]
-
     response = postContactQuery(firstName, lastName, email, message)
-    print(response)
     return response
 
 
@@ -44,19 +36,15 @@ def signup():
     data = request.get_json()
     if data is None:
         return jsonify({"error": "No JSON data provided"}), 400
-    password = data.get("password")
-    hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode(
-        "utf-8"
-    )
-    # def registerUser(firstName: str, lastName: str, email: str, phone: str, password: str):
+
     response = registerUser(
         data.get("firstName"),
         data.get("lastName"),
         data.get("email"),
         data.get("phone"),
-        hashed_password,
+        data.get("password"),
     )
-    # Maybe return loggin session???
+
     return response
 
 
@@ -67,6 +55,19 @@ def signin():
         return jsonify({"error": "No JSON data provided"}), 400
     email = data.get("email")
     password = data.get("password")
-    print(email, password)
     response = signInUser(email, password)
     return response
+
+@operations.route("/signout", methods=["GET"])
+def signout():
+    session.clear()
+    return jsonify({"message": "Successfully signed out"})
+
+@operations.route("/@me", methods=["GET"])
+def me():
+    if "user_id" in session:
+        return jsonify({
+            "user_id": session["user_id"],
+            "email": session["email"]
+        })
+    return jsonify({"error": "Not signed in"}), 401

@@ -1,22 +1,33 @@
-Todos:
-    Need to add tunable form parameters
-    Style the form
-    Build in analysis tools -> radial graphs
-    Need to figure out how to rank similarity
-    Prior Art Export System
-    Case -> Patents
-    https://headlessui.com/react/dialog
-
-UI:
-    colors: #153C24  #1A4D2E #4F6F52 #E8DFCA #F5EFE6 #FFFFFF #000000	
-    colors: dd-green d-green l-green d-beige l-beige white   black
-
-
 tech stack
-____________________________
+---------------------------------------------------------------------
 frontend - nextJS, react, typescript
 styling - StyledComponents -> PandaCSS
 backend - flask -> fastAPI, python
 database - neon, postgreSQL -> + sqlModel
 llms - langchain
 distributed systems - redis, aws, docker
+
+UI
+---------------------------------------------------------------------
+    colors: #153C24  #1A4D2E #4F6F52 #E8DFCA #F5EFE6 #FFFFFF #000000	
+    colors: dd-green d-green l-green d-beige l-beige white   black
+
+
+important commands
+---------------------------------------------------------------------
+flask:
+         gunicorn --reload -b 127.0.0.1:8000 run:app // manually set port and host
+    or   python3 run.py --debug // inherits the port and host in .env
+nextjs:
+        npm run dev
+redis:
+        redis-cli ping // test if redis server is on
+        brew services start redis // start redis server
+        brew services restart redis // restart redis server
+        brew services stop redis // kill redis server
+
+steps to run code (commands above)
+---------------------------------------------------------------------
+1. Start Redis server
+2. Start Flask server
+3. Start Backend
