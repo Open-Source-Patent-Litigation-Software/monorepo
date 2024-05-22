@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 import requests
 from app.settings import PQ_AI_KEY
-from app.utils.scraping import scrapeHTML
+from utils.scraping import scrapeHTML
 
 patentRetrieval = Blueprint("patentRetrieval", __name__, template_folder="templates")
 
