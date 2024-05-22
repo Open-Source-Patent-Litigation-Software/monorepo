@@ -3,7 +3,9 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 import json
 from flask import jsonify
+
 OPEN_AI_KEY = "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"
+
 
 def extractTheMetrics(searchQuery: str = "", model: str = "gpt-4"):
     """Extract 8 metrics from a given search query."""
@@ -32,15 +34,15 @@ def extractTheMetrics(searchQuery: str = "", model: str = "gpt-4"):
     beans or from pods. To prevent spilling, there is a metal or plastic grate at the bottom.
     There is an electric screen to control it and alert the user once it's done.
 
-    The functions you can extract from this are:
-    Brews hot beverage.
-    Dispenses milk.
-    Can use coffee pods.
-    Can use coffee beans.
-    Has refillable water reservoir.
-    Has grate to prevent spillage.
-    Has electric screen for use.
-    Alerts user when done.
+        The functions you can extract from this are:
+        Brews hot beverage.
+        Dispenses milk.
+        Can use coffee pods.
+        Can use coffee beans.
+        Has refillable water reservoir.
+        Has grate to prevent spillage.
+        Has electric screen for use.
+        Alerts user when done.
 
     I want you to output this as a list of strings. So for this example it should look like this:
     
@@ -64,19 +66,20 @@ def extractTheMetrics(searchQuery: str = "", model: str = "gpt-4"):
     """
 
     # Create a ChatPromptTemplate object
-    prompt = ChatPromptTemplate.from_messages([
-        SystemMessage(content="You are a helpful assistant."),
-        HumanMessage(content=metricTemplate)
-    ])
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            SystemMessage(content="You are a helpful assistant."),
+            HumanMessage(content=metricTemplate),
+        ]
+    )
 
     # Combine the prompt with the model
     chain = prompt | llm
 
     # Extract and return the metrics
-    result = chain.invoke({
-        "searchQuery": searchQuery
-    })
+    result = chain.invoke({"searchQuery": searchQuery})
     return result.content  # Return the content of the AIMessage object
+
 
 def parseOutput(content):
     try:
