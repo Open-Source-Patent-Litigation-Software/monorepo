@@ -15,7 +15,7 @@ def extractTheMetrics(searchQuery: str = "", model: str = "gpt-4"):
 
     # Define the template for the prompt
     metricTemplate = f"""
-    Your job is to take a search query and extract 6-8 functions from it, which are then put into this format.
+    Your job is to take a search query and extract 8 functions from it, which are then put into this format.
         
         [
             "Function 1",
@@ -57,10 +57,10 @@ def extractTheMetrics(searchQuery: str = "", model: str = "gpt-4"):
             "Alerts user when done."
         ]
 
-    Now, given the search query below, you must extract 6-8 functions from it.
+    Now, given the search query below, you must extract 8  functions from it.
     It is very important that you extract exactly 6-8 functions accurately and in the correct format.
     Do not make up anything that is not in the search query.
-    I NEED EXACTY 6-8 FUNCTIONS. NO MORE, NO LESS.
+    I NEED EXACTY 8  FUNCTIONS. NO MORE, NO LESS.
     
     {searchQuery}
     """
@@ -79,17 +79,3 @@ def extractTheMetrics(searchQuery: str = "", model: str = "gpt-4"):
     # Extract and return the metrics
     result = chain.invoke({"searchQuery": searchQuery})
     return result.content  # Return the content of the AIMessage object
-
-
-def parseOutput(content):
-    try:
-        # Strip the outer quotes and any leading/trailing whitespace
-        content = content.strip().strip("'").strip('"')
-
-        # Load the string as a JSON object
-        parsed_content = json.loads(content)
-
-        return parsed_content
-    except json.JSONDecodeError as e:
-        print("Failed to parse content:", e)
-        return None

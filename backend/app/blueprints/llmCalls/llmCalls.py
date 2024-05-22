@@ -1,25 +1,10 @@
 from flask import Blueprint, jsonify, request
+import json
 from langchain_openai import OpenAI
 from app.settings import OPEN_AI_KEY
-from utils.metrics import extractTheMetrics, parseOutput
+from utils.metrics import extractTheMetrics
 
 llmCalls = Blueprint("llmCalls", __name__, template_folder="templates")
-
-"""Creating an instance of theobt LLM class."""
-llm = OpenAI(api_key=OPEN_AI_KEY)
-
-
-@llmCalls.route("/analyze", methods=["GET"])
-def askQuestion():
-    """Route to ask a question to the LLM model."""
-    llm.invoke(
-        "What are some theories about the relationship between unemployment and inflation?"
-    )
-    for chunk in llm.stream(
-        "What are some theories about the relationship between unemployment and inflation?"
-    ):
-        print(chunk, end="", flush=True)
-    return jsonify({"message": "Ask question route is working!"})
 
 
 @llmCalls.route("/obtainMetrics", methods=["POST"])
@@ -31,9 +16,11 @@ def obtainMetrics():
     query = data.get("query")
     metrics = extractTheMetrics(searchQuery=query, model="gpt-3.5-turbo-0125")
 
-    # Guarantee that the metrics are parsed
-    # correctly and a sufficient
-    # number of metrics are returned.
+    def parseOutput(content):
+        content = content.strip().strip("'").strip('"')
+        parsed_content = json.loads(content)
+        return parsed_content
+
     parsedMetrics = []
     maxTries = 5
     numAttempts = 0
@@ -46,4 +33,14 @@ def obtainMetrics():
         returnObject[f"metric{index+1}"] = parsedMetrics[index]
 
     ### IMPLEMENT DATABASE CACHING OF QUERIES HERE ###
+
     return jsonify(returnObject), 200
+
+
+@llmCalls.route("/obtainPercentages", methods=["POST"])
+def obtainPercentages():
+    data = request.get_json()
+    if data is None:
+        return jsonify({"error": "No JSON data provided"}), 400
+    patent_id = data.get("patentID")
+    search_query = data.get("searchQuery")
