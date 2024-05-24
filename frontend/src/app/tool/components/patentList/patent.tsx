@@ -8,6 +8,7 @@ import {
   PatentLink,
   InventorList,
   InventorItem,
+  BoldedDetail,
 } from "./styles";
 
 interface PatentItem {
@@ -42,8 +43,16 @@ const PatentList: React.FC<PatentListProps> = ({ items }) => {
             {item.title} ({item.type})
           </BoxTitle>
           <Abstract>{item.abstract}</Abstract>
-          <Details>Owned by: {item.owner}</Details>
-          <Details>Publication Date: {item.publication_date}</Details>
+          <Details>
+            <BoldedDetail>Owned by:</BoldedDetail> {item.owner}
+          </Details>
+          <Details>
+            <BoldedDetail>Publication Date:</BoldedDetail>{" "}
+            {item.publication_date}
+          </Details>
+          <Details>
+            <BoldedDetail>Patent Number:</BoldedDetail> {item.publication_id}
+          </Details>
           <PatentLink
             href={item.www_link}
             target="_blank"

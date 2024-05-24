@@ -43,8 +43,8 @@ def create_app():
     app.config.from_pyfile("settings.py")
 
     # Register blueprints
-    app.register_blueprint(patentRetrieval, url_prefix="/patents")
     app.register_blueprint(llmCalls, url_prefix="/llm")
+    app.register_blueprint(patentRetrieval, url_prefix="/patents")
     app.register_blueprint(operations, url_prefix="/ops")
 
     # Initialize extensions with app
