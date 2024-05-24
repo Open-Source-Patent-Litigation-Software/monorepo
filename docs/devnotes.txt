@@ -16,15 +16,18 @@ UI
 important commands
 ---------------------------------------------------------------------
 flask:
-         gunicorn --reload -b 127.0.0.1:8000 run:app // manually set port and host
-    or   python3 run.py --debug // inherits the port and host in .env
+        $ gunicorn --reload -b 127.0.0.1:8000 run:app // manually set port and host
+    or  $ python3 run.py --debug // inherits the port and host in .env
 nextjs:
-        npm run dev
+        npm install // 
+        npm install styled-components
+        npm run dev // run the dev server
 redis:
-        redis-cli ping // test if redis server is on
-        brew services start redis // start redis server
-        brew services restart redis // restart redis server
-        brew services stop redis // kill redis server
+       $ brew install redis // to install redis
+       $ redis-cli ping // test if redis server is on
+       $ brew services start redis // start redis server
+       $ brew services restart redis // restart redis server
+       $ brew services stop redis // kill redis server
 
 steps to run code (commands above)
 ---------------------------------------------------------------------
