@@ -1,7 +1,15 @@
 from flask import Blueprint, jsonify, request, session
-from database.posts import postToList, postContactQuery, registerUser, signInUser
+from database.posts import (
+    postToList,
+    postContactQuery,
+    registerUser,
+    signInUser,
+    postOrganization,
+)
+from flask import jsonify, session
 
 operations = Blueprint("operations", __name__, template_folder="templates")
+
 
 @operations.route("/addToWaitlist", methods=["POST"])
 def addToWaitlist():
@@ -58,16 +66,32 @@ def signin():
     response = signInUser(email, password)
     return response
 
+
 @operations.route("/signout", methods=["GET"])
 def signout():
     session.clear()
     return jsonify({"message": "Successfully signed out"})
 
+
 @operations.route("/@me", methods=["GET"])
 def me():
     if "user_id" in session:
-        return jsonify({
-            "user_id": session["user_id"],
-            "email": session["email"]
-        })
+        return jsonify({"user_id": session["user_id"], "email": session["email"]})
     return jsonify({"error": "Not signed in"}), 401
+
+
+@operations.route("/createOrganization", methods=["POST"])
+def createOrganization():
+    data = request.get_json()
+    if data is None:
+        return jsonify({"error": "No JSON data provided"}), 400
+
+    # Extract data from JSON
+    name = data.get("name")
+    phone = data.get("phone")
+    features = data.get("features")
+
+    print(name, phone, features)
+    response = postOrganization(name, phone, features)
+
+    return response

@@ -1,10 +1,10 @@
 tech stack
 ---------------------------------------------------------------------
-frontend - nextJS, react, typescript
+frontend - nextJS, react, typescript, zuzstand // client side -> // server side (type of next components need to change for speed)
 styling - StyledComponents -> PandaCSS
-backend - flask -> fastAPI, python
+backend - flask -> fastAPI
 database - neon, postgreSQL -> + sqlModel
-llms - langchain
+llms - langchain, openAI gpt-3.5
 distributed systems - redis, aws, docker
 
 UI
@@ -30,4 +30,11 @@ steps to run code (commands above)
 ---------------------------------------------------------------------
 1. Start Redis server
 2. Start Flask server
-3. Start Backend
+3. Start React Server
+
+Alec's onboarding:
+1. Add him to github
+2. Share keys and access to neon
+3. Explain to him current structure of code base, mainly backend routing
+4. Explain general timelines
+5. Assign work

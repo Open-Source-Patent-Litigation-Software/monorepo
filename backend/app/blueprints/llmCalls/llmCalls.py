@@ -14,23 +14,13 @@ def obtainMetrics():
     if data is None:
         return jsonify({"error": "No JSON data provided"}), 400
     query = data.get("query")
-    metrics = extractTheMetrics(searchQuery=query, model="gpt-3.5-turbo-0125")
-
-    def parseOutput(content):
-        content = content.strip().strip("'").strip('"')
-        parsed_content = json.loads(content)
-        return parsed_content
-
-    parsedMetrics = []
-    maxTries = 5
-    numAttempts = 0
-    while len(parsedMetrics) > 8 or len(parsedMetrics) < 6 and numAttempts < maxTries:
-        numAttempts += 1
-        parsedMetrics = parseOutput(metrics)
-
+    metrics = extractTheMetrics(searchQuery=query, model="gpt-3.5-turbo-0125")["functions"]
+    
+    print(metrics)
+    
     returnObject = {}
-    for index in range(len(parsedMetrics)):
-        returnObject[f"metric{index+1}"] = parsedMetrics[index]
+    for index in range(len(metrics)):
+        returnObject[f"metric{index+1}"] = metrics[index]
 
     ### IMPLEMENT DATABASE CACHING OF QUERIES HERE ###
 
