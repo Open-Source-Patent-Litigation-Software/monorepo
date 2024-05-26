@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 
 // Define the fade-in animation using keyframes
 const fadeIn = keyframes`
@@ -60,4 +60,10 @@ export const InventorList = styled.ul`
 
 export const InventorItem = styled.li`
   color: #333;
+`;
+
+export const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
