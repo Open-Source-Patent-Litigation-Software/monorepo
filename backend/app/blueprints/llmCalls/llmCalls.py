@@ -40,5 +40,5 @@ def extractSpecificPatentMetrics():
         patentURL=data.get("patentURL"),
         metrics=data.get("metrics_str"),
     )
-
-    return jsonify(response), 200
+    print(response)
+    return response

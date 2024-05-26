@@ -22,11 +22,13 @@ def create_app():
 
     # Load configuration from environment variables
     app.config["SESSION_TYPE"] = "redis"
-    app.config['SESSION_PERMANENT'] = False
-    app.config['SESSION_USE_SIGNER'] = True
-    app.config['SESSION_REDIS'] = Redis(host='localhost', port=6379)
-    app.config['SESSION_KEY_PREFIX'] = 'flask-session:'
-    app.secret_key = os.getenv("SECRET_KEY")  # Ensure you set a secret key in your .env file
+    app.config["SESSION_PERMANENT"] = False
+    app.config["SESSION_USE_SIGNER"] = True
+    app.config["SESSION_REDIS"] = Redis(host="localhost", port=6379)
+    app.config["SESSION_KEY_PREFIX"] = "flask-session:"
+    app.secret_key = os.getenv(
+        "SECRET_KEY"
+    )  # Ensure you set a secret key in your .env file
 
     # Initialize Flask-Session
     server_session = Session(app)
@@ -35,7 +37,7 @@ def create_app():
     # CORS configuration - replace with the actual frontend URL
     if os.getenv("FLASK_ENV") == "development":
         print("Running in development mode. CORS is enabled for all origins.")
-        CORS(app, resources={r"/*": {"origins": "*"}})
+        CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
     else:
         CORS(app, origins=[os.getenv("FRONTEND_URL")])
 

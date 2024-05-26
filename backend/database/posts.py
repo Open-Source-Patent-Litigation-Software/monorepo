@@ -173,7 +173,58 @@ def signInUser(email: str, password: str):
             return jsonify({"error": "Invalid credentials"}), 401
 
         session["user_id"] = result.get("id")
-        session["email"] = result.get("email")
+
+        dataResponse = {
+            "request": "success",
+            "firstName": result.get("first_name"),
+            "lastName": result.get("last_name"),
+            "email": result.get("email"),
+            "phone": result.get("phone"),
+        }
+
+        cur.close()
+        conn.close()
+
+        return jsonify(dataResponse), 200
+
+    except psycopg2.Error as e:
+        # Handle specific psycopg2 errors
+        if conn:
+            conn.rollback()  # Rollback the transaction if an error occurs
+        return jsonify({"error": f"Database error: {str(e)}"}), 500
+
+    except Exception as e:
+        # Handle any other unexpected errors
+        if conn:
+            conn.rollback()  # Rollback the transaction if an error occurs
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
+
+def retrieveUserInfo():
+    """Retrive User Info"""
+    try:
+        id = session["user_id"]
+        print(id)
+        # Establish a connection
+        conn = psycopg2.connect(NEON_CONNECTION_STRING)
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+
+        # Define the SELECT query with placeholders
+        query = "SELECT * FROM reg_user WHERE id = %s;"
+        values = (id,)
+
+        # Execute the query with the provided values
+        cur.execute(query, values)
+        # Fetch the result
+        result = cur.fetchone()
+
+        if result is None:
+            return jsonify({"error": "User not found"}), 404
 
         dataResponse = {
             "request": "success",

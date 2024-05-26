@@ -153,13 +153,14 @@ const SignInForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     fetch(`${apiUrl}/ops/signin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: 'include',
       body: JSON.stringify(formData),
     })
       .then((response) => response.json())
