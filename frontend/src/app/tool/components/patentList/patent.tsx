@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import LoadingButton from "./analyzeButton";
 import styled from 'styled-components';
 import { ChartData } from "chart.js";
+import RadarChart from "./radarchart";
 
 import {
   PatentBox,
@@ -61,32 +62,6 @@ interface PatentListProps {
   search: string;
 }
 
-interface Dataset {
-  label: string;
-  data: number[];
-  backgroundColor: string;
-  borderColor: string;
-  borderWidth: number;
-}
-
-interface DataState {
-  labels: string[];
-  datasets: Dataset[];
-}
-
-const initialData: DataState = {
-  labels: [],
-  datasets: [
-    {
-      label: '',
-      data: [],
-      backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      borderColor: 'rgba(255, 99, 132, 1)',
-      borderWidth: 1,
-    },
-  ],
-};
-
 function concatenateWithComma(list: string[]): string {
   return list.join(', ');
 }
@@ -98,7 +73,22 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
   const [backendUrl, setBackendUrl] = useState(
     process.env.NEXT_PUBLIC_DEV_BACKEND
   );
-  const [data, setData] = useState<DataState>(initialData);
+  const [data, setData] = useState({
+    labels: ['Running', 'Swimming', 'Eating', 'Cycling'],
+    datasets: [
+      {
+        label: 'My First Dataset',
+        data: [20, 10, 4, 2],
+        fill: true,
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgb(255, 99, 132)',
+        pointBackgroundColor: 'rgb(255, 99, 132)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgb(255, 99, 132)',
+      },
+    ],
+  });
 
   const fetchData = async () => {
     setLoading(true);
@@ -125,36 +115,31 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
       }
       const metricsData = await metricsResponse.json();
 
-      const newDataSet: Dataset = {
-        label: "% similar",
-        data: Object.values(metricsData),
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 1,
-      };
-      const newData: DataState = {
-        labels: Object.keys(metricsData),
+      console.log(Object.keys(metricsData["data"][0]["data"]));
+      console.log(Object.values(metricsData["data"][0]["data"]));
+
+      setData({
+        labels: Object.keys(metricsData["data"][0]["data"]),
         datasets: [
-          newDataSet,
-        ]
-      };
-      console.log(newData)
-      setData(newData);
+          {
+            label: '% similar',
+            data: Object.values(metricsData["data"][0]["data"]),
+            fill: true,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgb(54, 162, 235)',
+            pointBackgroundColor: 'rgb(54, 162, 235)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgb(54, 162, 235)',
+          },
+        ],
+      });
       setIsAnalyzed(true);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const convertToChartData = (data: DataState): ChartData<'radar', number[], string> => {
-    return {
-      labels: data.labels,
-      datasets: data.datasets.map((dataset) => ({
-        ...dataset,
-      })),
-    };
   };
 
   return (
@@ -190,7 +175,8 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
       <Wrapper>
         {isAnalyzed ? 
           <ChartContainer>
-            <Radar data={convertToChartData(data)} options={{ responsive: true, maintainAspectRatio: false }} />
+            <Radar data={data}/>
+            {/* <RadarChart></RadarChart> */}
           </ChartContainer>
          : 
           <LoadingButton loading={loading} handleClick={fetchData}>
