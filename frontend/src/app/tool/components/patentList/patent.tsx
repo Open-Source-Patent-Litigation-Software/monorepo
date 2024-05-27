@@ -1,6 +1,9 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
+import LoadingButton from "./analyzeButton";
+import styled from 'styled-components';
+
 import {
-  Container,
   PatentBox,
   BoxTitle,
   Abstract,
@@ -9,7 +12,29 @@ import {
   InventorList,
   InventorItem,
   BoldedDetail,
+  Wrapper,
+  ChartContainer,
 } from "./styles";
+
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Radar } from 'react-chartjs-2';
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
 
 interface PatentItem {
   abstract: string;
@@ -30,47 +55,80 @@ interface PatentItem {
 }
 
 interface PatentListProps {
-  items: PatentItem[];
+  item: PatentItem;
 }
 
+export const data = {
+  labels: ['Thing 1', 'Thing 2', 'Thing 3', 'Thing 4', 'Thing 5', 'Thing 6'],
+  datasets: [
+    {
+      label: '# of Votes',
+      data: [2, 9, 3, 5, 2, 3],
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      borderColor: 'rgba(255, 99, 132, 1)',
+      borderWidth: 1,
+    },
+  ],
+};
+
 // PatentList component definition
-const PatentList: React.FC<PatentListProps> = ({ items }) => {
+const Patent: React.FC<PatentListProps> = ({ item }) => {
+  const [isAnalyzed, setIsAnalyzed] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const fetchData = async () => {
+    setLoading(true);
+    await new Promise(r => setTimeout(r, 2000));
+    try {
+      setIsAnalyzed(true);
+    } catch {
+      // Handle the Error
+    }
+  };
+
   return (
-    <Container>
-      {items.map((item) => (
-        <PatentBox key={item.id}>
-          <BoxTitle>
-            {item.title} ({item.type})
-          </BoxTitle>
-          <Abstract>{item.abstract}</Abstract>
-          <Details>
-            <BoldedDetail>Owned by:</BoldedDetail> {item.owner}
-          </Details>
-          <Details>
-            <BoldedDetail>Publication Date:</BoldedDetail>{" "}
-            {item.publication_date}
-          </Details>
-          <Details>
-            <BoldedDetail>Patent Number:</BoldedDetail> {item.publication_id}
-          </Details>
-          <PatentLink
-            href={item.www_link}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Google Patents Link
-          </PatentLink>
-          {item.inventors && (
-            <InventorList>
-              {item.inventors.map((inventor) => (
-                <InventorItem key={inventor}>{inventor}</InventorItem>
-              ))}
-            </InventorList>
-          )}
-        </PatentBox>
-      ))}
-    </Container>
+    <PatentBox key={item.id}>
+      <BoxTitle>
+        {item.title} ({item.type})
+      </BoxTitle>
+      <Abstract>{item.abstract}</Abstract>
+      <Details>
+        <BoldedDetail>Owned by:</BoldedDetail> {item.owner}
+      </Details>
+      <Details>
+        <BoldedDetail>Publication Date:</BoldedDetail>{" "}
+        {item.publication_date}
+      </Details>
+      <Details>
+        <BoldedDetail>Patent Number:</BoldedDetail> {item.publication_id}
+      </Details>
+      <PatentLink
+        href={item.www_link}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Google Patents Link
+      </PatentLink>
+      {item.inventors && (
+        <InventorList>
+          {item.inventors.map((inventor) => (
+            <InventorItem key={inventor}>{inventor}</InventorItem>
+          ))}
+        </InventorList>
+      )}
+      <Wrapper>
+        {isAnalyzed ? 
+          <ChartContainer>
+            <Radar data={data} />
+          </ChartContainer>
+         : 
+          <LoadingButton loading={loading} handleClick={fetchData}>
+            Analyze
+          </LoadingButton>
+         }
+      </Wrapper>
+    </PatentBox>
   );
 };
 
-export default PatentList;
+export default Patent;
