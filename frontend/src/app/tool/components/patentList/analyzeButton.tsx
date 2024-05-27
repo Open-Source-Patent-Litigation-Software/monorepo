@@ -1,5 +1,5 @@
 // components/LoadingButton.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
 const spin = keyframes`
@@ -15,12 +15,19 @@ const Button = styled.button<{ loading: boolean }>`
   font-size: 16px;
   border: none;
   border-radius: 5px;
-  background-color: #0070f3;
+  background-color: #1A4D2E;
   color: white;
   cursor: pointer;
   opacity: ${({ loading }) => (loading ? 0.7 : 1)};
   pointer-events: ${({ loading }) => (loading ? 'none' : 'auto')};
   position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease, scale 0.3s;
+  &:hover {
+    background-color: #4F6F52;
+    color: white;
+    fadeIn: 0.3s;
+    scale: 105%;
+  }
 `;
 
 const Spinner = styled.div`

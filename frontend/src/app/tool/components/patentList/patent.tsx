@@ -46,6 +46,17 @@ type RadarChartData = {
 
 // PatentList component definition
 const Patent: React.FC<PatentListProps> = ({ item }) => {
+  // const exampleRadarChartData: RadarChartData = {
+  //   data: [
+  //     {
+  //       data: {
+  //       },
+  //       meta: { color: 'blue' }
+  //     }
+  //   ],
+  //   captions: {
+  //   }
+  // };
   const exampleRadarChartData: RadarChartData = {
     data: [
       {
@@ -72,10 +83,23 @@ const Patent: React.FC<PatentListProps> = ({ item }) => {
   const [graphItems, setGraphItems] = useState<RadarChartData>(exampleRadarChartData);
 
   const fetchData = async () => {
-    console.log("TEST");
     setLoading(true);
     await new Promise(r => setTimeout(r, 2000));
-    setIsAnalyzed(true);
+    try {
+      // const response = await fetch('https://api.example.com/data'); // TODO: fill in with Dev
+      // if (!response.ok) {
+      //   throw new Error('Network response was not ok');
+      // }
+      // const result = await response.json();
+      // const transformedData = transformData(result);
+      // setGraphItems(transformedData);
+      setIsAnalyzed(true);
+    }
+    catch {
+      // Handle the Error
+
+    }
+    
   };
 
   return (
@@ -114,6 +138,7 @@ const Patent: React.FC<PatentListProps> = ({ item }) => {
             captions={graphItems?.captions}
             data={graphItems?.data}
             size={450}
+
           />
          : 
           <LoadingButton loading={loading} handleClick={fetchData}>
