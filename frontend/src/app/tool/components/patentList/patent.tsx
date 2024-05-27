@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import LoadingButton from "./analyzeButton";
 import styled from 'styled-components';
+import { ChartData } from "chart.js";
 
 import {
   PatentBox,
@@ -56,14 +57,29 @@ interface PatentItem {
 
 interface PatentListProps {
   item: PatentItem;
+  searchMetrics: string[];
+  search: string;
 }
 
-export const data = {
-  labels: ['Thing 1', 'Thing 2', 'Thing 3', 'Thing 4', 'Thing 5', 'Thing 6'],
+interface Dataset {
+  label: string;
+  data: number[];
+  backgroundColor: string;
+  borderColor: string;
+  borderWidth: number;
+}
+
+interface DataState {
+  labels: string[];
+  datasets: Dataset[];
+}
+
+const initialData: DataState = {
+  labels: [],
   datasets: [
     {
-      label: '# of Votes',
-      data: [2, 9, 3, 5, 2, 3],
+      label: '',
+      data: [],
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
       borderColor: 'rgba(255, 99, 132, 1)',
       borderWidth: 1,
@@ -71,19 +87,74 @@ export const data = {
   ],
 };
 
+function concatenateWithComma(list: string[]): string {
+  return list.join(', ');
+}
+
 // PatentList component definition
-const Patent: React.FC<PatentListProps> = ({ item }) => {
+const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
   const [isAnalyzed, setIsAnalyzed] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [backendUrl, setBackendUrl] = useState(
+    process.env.NEXT_PUBLIC_DEV_BACKEND
+  );
+  const [data, setData] = useState<DataState>(initialData);
 
   const fetchData = async () => {
     setLoading(true);
-    await new Promise(r => setTimeout(r, 2000));
     try {
+      const concatMetrics = concatenateWithComma(searchMetrics);
+      const formattedSearch = {
+        search: search,
+        user: "user",
+        patentURL: item.www_link,
+        metrics_str: concatMetrics
+      };
+
+      const metricsURL = new URL(`${backendUrl}/llm/extractSpecificPatentMetrics`);
+      const metricsResponse = await fetch(metricsURL.toString(), {
+        method: 'POST', // HTTP method
+        headers: {
+          'Content-Type': 'application/json', // Specify content type as JSON
+        },
+        body: JSON.stringify(formattedSearch), // Convert data to JSON string
+      });
+
+      if (!metricsResponse.ok) {
+        throw new Error(`HTTP error! status: ${metricsResponse.status}`);
+      }
+      const metricsData = await metricsResponse.json();
+
+      const newDataSet: Dataset = {
+        label: "% similar",
+        data: Object.values(metricsData),
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1,
+      };
+      const newData: DataState = {
+        labels: Object.keys(metricsData),
+        datasets: [
+          newDataSet,
+        ]
+      };
+      console.log(newData)
+      setData(newData);
       setIsAnalyzed(true);
-    } catch {
-      // Handle the Error
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const convertToChartData = (data: DataState): ChartData<'radar', number[], string> => {
+    return {
+      labels: data.labels,
+      datasets: data.datasets.map((dataset) => ({
+        ...dataset,
+      })),
+    };
   };
 
   return (
@@ -119,7 +190,7 @@ const Patent: React.FC<PatentListProps> = ({ item }) => {
       <Wrapper>
         {isAnalyzed ? 
           <ChartContainer>
-            <Radar data={data} />
+            <Radar data={convertToChartData(data)} options={{ responsive: true, maintainAspectRatio: false }} />
           </ChartContainer>
          : 
           <LoadingButton loading={loading} handleClick={fetchData}>

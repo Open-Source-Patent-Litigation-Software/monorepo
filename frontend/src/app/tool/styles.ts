@@ -59,3 +59,18 @@ export const ColoredDiv = styled.div`
 export const AnimationContainer = styled.div`
   animation: ${fadeIn} 1s;
 `;
+
+export const MetricsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px; // Spacing between each patent box
+  margin: 5%;
+  margin-bottom: 0;
+  padding-bottom:5%;
+  animation: ${fadeIn} 1s ease-out; // Apply the animation to the container
+`;
+
+export const MetricsTitleContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;

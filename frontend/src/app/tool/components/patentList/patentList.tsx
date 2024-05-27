@@ -24,14 +24,16 @@ interface PatentItem {
 
 interface PatentListProps {
   items: PatentItem[];
+  metrics: string[];
+  search: string;
 }
 
 // PatentList component definition
-const PatentList: React.FC<PatentListProps> = ({ items }) => {
+const PatentList: React.FC<PatentListProps> = ({ items, metrics, search }) => {
   return (
     <Container>
       {items.map((item) => (
-        <Patent item={item}/>
+        <Patent item={item} searchMetrics={metrics} search={search}/>
       ))}
     </Container>
   );
