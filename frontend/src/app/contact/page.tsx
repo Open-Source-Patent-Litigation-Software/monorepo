@@ -27,7 +27,7 @@ const FormContainer = styled.div`
   animation: ${fadeIn} 0.5s ease-in;
 `;
 
-const Form = styled.form`
+const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -42,7 +42,7 @@ const FormTitle = styled.h1`
 
 const FormDescription = styled.h3`
   text-align: center;
-  color: #F5EFE6;
+  color: #f5efe6;
   margin-bottom: 10px;
 `;
 
@@ -50,24 +50,30 @@ const HR = styled.hr`
   margin-bottom: 10px;
 `;
 
-const FormGroup = styled.div`
-  margin-bottom: 15px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-`;
-
 const FormGroupInline = styled.div`
   margin-bottom: 15px;
   padding: 10px;
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
 `;
 
 const InlineField = styled.div`
   display: flex;
   flex-direction: column;
   width: 48%;
+  @media (max-width: 600px) {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 15px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Label = styled.label`
@@ -109,13 +115,49 @@ const Button = styled.button`
   }
 `;
 
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ModalContent = styled.div`
+  background: #fff;
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+
+  h2 {
+    margin-bottom: 20px; /* Add margin to increase space below the heading */
+  }
+
+  p {
+    margin-bottom: 30px; /* Add margin to increase space below the paragraph */
+  }
+
+  button {
+    width: 100%;
+  }
+`;
+
 const ContactForm = () => {
+  const apiUrl = process.env.NEXT_PUBLIC_DEV_BACKEND;
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     message: "",
   });
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -128,63 +170,100 @@ const ContactForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Data:", formData);
-    // You can add further form processing here (e.g., sending data to a server)
+    fetch(`${apiUrl}/ops/contact`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        setIsSubmitted(true);
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          message: "",
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("There was an error submitting your form. Please try again.");
+      });
+  };
+
+  const closeModal = () => {
+    setIsSubmitted(false);
   };
 
   return (
-    <FormContainer>
-      <FormTitle>Contact The EasyIP Team</FormTitle>
-      <FormDescription>We will contact you within 24 hours.</FormDescription>
-      <HR />
-      <Form onSubmit={handleSubmit}>
-        <FormGroupInline>
-          <InlineField>
-            <Label htmlFor="firstName">First Name:</Label>
+    <>
+      <FormContainer>
+        <FormTitle>Contact The EasyIP Team</FormTitle>
+        <FormDescription>We will contact you within 24 hours.</FormDescription>
+        <HR />
+        <StyledForm onSubmit={handleSubmit}>
+          <FormGroupInline>
+            <InlineField>
+              <Label htmlFor="firstName">First Name:</Label>
+              <Input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+              />
+            </InlineField>
+            <InlineField>
+              <Label htmlFor="lastName">Last Name:</Label>
+              <Input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+              />
+            </InlineField>
+          </FormGroupInline>
+          <FormGroup>
+            <Label htmlFor="email">Email:</Label>
             <Input
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               required
             />
-          </InlineField>
-          <InlineField>
-            <Label htmlFor="lastName">Last Name:</Label>
-            <Input
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
+          </FormGroup>
+          <FormGroup>
+            <Label htmlFor="message">Message:</Label>
+            <Textarea
+              id="message"
+              name="message"
+              value={formData.message}
               onChange={handleChange}
               required
-            />
-          </InlineField>
-        </FormGroupInline>
-        <FormGroup>
-          <Label htmlFor="email">Email:</Label>
-          <Input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="message">Message:</Label>
-          <Textarea
-            id="message"
-            name="message"
-            value={formData.message}
-            onChange={handleChange}
-            required
-          ></Textarea>
-        </FormGroup>
-        <Button type="submit">Submit</Button>
-      </Form>
-    </FormContainer>
+            ></Textarea>
+          </FormGroup>
+          <Button type="submit">Submit</Button>
+        </StyledForm>
+      </FormContainer>
+
+      {isSubmitted && (
+        <ModalOverlay>
+          <ModalContent>
+            <h2>Form Submitted</h2>
+            <p>Thank you for contacting us! We will get back to you shortly.</p>
+            <Button onClick={closeModal}>Close</Button>
+          </ModalContent>
+        </ModalOverlay>
+      )}
+    </>
   );
 };
 

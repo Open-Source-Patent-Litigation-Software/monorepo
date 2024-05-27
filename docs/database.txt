@@ -42,17 +42,25 @@ CREATE TABLE organization (
   FOREIGN KEY (payment_id) REFERENCES organization_payment(id)
 );
 
+-- Create organization_user table
+CREATE TABLE organization_user (
+  organization_id UUID NOT NULL,
+  user_id UUID NOT NULL,
+  PRIMARY KEY (organization_id, user_id),
+  FOREIGN KEY (organization_id) REFERENCES organization(id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES reg_user(id) ON DELETE CASCADE
+);
+
 -- Create folder table
 CREATE TABLE folder (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   name VARCHAR NOT NULL,
   description VARCHAR,
-  organization_id UUID,
+  organization_id UUID NOT NULL,
+  user_id UUID NOT NULL,
   parent_folder_id UUID,
-  owning_user UUID NOT NULL,
-  FOREIGN KEY (organization_id) REFERENCES organization(id) ON DELETE CASCADE,
-  FOREIGN KEY (parent_folder_id) REFERENCES folder(id) ON DELETE CASCADE,
-  FOREIGN KEY (owning_user) REFERENCES reg_user(id) ON DELETE CASCADE
+  FOREIGN KEY (organization_id, user_id) REFERENCES organization_user(organization_id, user_id) ON DELETE CASCADE,
+  FOREIGN KEY (parent_folder_id) REFERENCES folder(id) ON DELETE CASCADE
 );
 
 -- Create waitlist table
@@ -80,15 +88,6 @@ CREATE TABLE organization_admin (
   FOREIGN KEY (user_id) REFERENCES reg_user(id) ON DELETE CASCADE
 );
 
--- Create organization_user table
-CREATE TABLE organization_user (
-  organization_id UUID NOT NULL,
-  user_id UUID NOT NULL,
-  PRIMARY KEY (organization_id, user_id),
-  FOREIGN KEY (organization_id) REFERENCES organization(id) ON DELETE CASCADE,
-  FOREIGN KEY (user_id) REFERENCES reg_user(id) ON DELETE CASCADE
-);
-
 -- Create patent table
 CREATE TABLE patent (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -96,86 +95,43 @@ CREATE TABLE patent (
   name VARCHAR NOT NULL,
   folder_id UUID,
   description VARCHAR,
-  organization_id UUID,
+  organization_id UUID NOT NULL,
+  user_id UUID NOT NULL,
   google_patents_link VARCHAR,
-  owning_user UUID NOT NULL,
   FOREIGN KEY (folder_id) REFERENCES folder(id) ON DELETE CASCADE,
-  FOREIGN KEY (organization_id) REFERENCES organization(id) ON DELETE CASCADE,
-  FOREIGN KEY (owning_user) REFERENCES reg_user(id) ON DELETE CASCADE
-);
-
--- Create patent_read_permission table
-CREATE TABLE patent_read_permission (
-  patent_id UUID NOT NULL,
-  user_id UUID NOT NULL,
-  PRIMARY KEY (patent_id, user_id),
-  FOREIGN KEY (patent_id) REFERENCES patent(id) ON DELETE CASCADE,
-  FOREIGN KEY (user_id) REFERENCES reg_user(id) ON DELETE CASCADE
-);
-
--- Create patent_write_permission table
-CREATE TABLE patent_write_permission (
-  patent_id UUID NOT NULL,
-  user_id UUID NOT NULL,
-  PRIMARY KEY (patent_id, user_id),
-  FOREIGN KEY (patent_id) REFERENCES patent(id) ON DELETE CASCADE,
-  FOREIGN KEY (user_id) REFERENCES reg_user(id) ON DELETE CASCADE
-);
-
--- Create folder_user table
-CREATE TABLE folder_user (
-  folder_id UUID NOT NULL,
-  user_id UUID NOT NULL,
-  PRIMARY KEY (folder_id, user_id),
-  FOREIGN KEY (folder_id) REFERENCES folder(id) ON DELETE CASCADE,
-  FOREIGN KEY (user_id) REFERENCES reg_user(id) ON DELETE CASCADE
-);
-
--- Create folder_patent table
-CREATE TABLE folder_patent (
-  folder_id UUID NOT NULL,
-  patent_id UUID NOT NULL,
-  PRIMARY KEY (folder_id, patent_id),
-  FOREIGN KEY (folder_id) REFERENCES folder(id) ON DELETE CASCADE,
-  FOREIGN KEY (patent_id) REFERENCES patent(id) ON DELETE CASCADE
-);
-
--- Create folder_read_permission table
-CREATE TABLE folder_read_permission (
-  folder_id UUID NOT NULL,
-  user_id UUID NOT NULL,
-  PRIMARY KEY (folder_id, user_id),
-  FOREIGN KEY (folder_id) REFERENCES folder(id) ON DELETE CASCADE,
-  FOREIGN KEY (user_id) REFERENCES reg_user(id) ON DELETE CASCADE
-);
-
--- Create folder_write_permission table
-CREATE TABLE folder_write_permission (
-  folder_id UUID NOT NULL,
-  user_id UUID NOT NULL,
-  PRIMARY KEY (folder_id, user_id),
-  FOREIGN KEY (folder_id) REFERENCES folder(id) ON DELETE CASCADE,
-  FOREIGN KEY (user_id) REFERENCES reg_user(id) ON DELETE CASCADE
+  FOREIGN KEY (organization_id, user_id) REFERENCES organization_user(organization_id, user_id) ON DELETE CASCADE
 );
 
 -- Create search table
 CREATE TABLE search (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  organization_id UUID NOT NULL,
   user_id UUID NOT NULL,
   query VARCHAR NOT NULL,
   time TIMESTAMP DEFAULT NOW() NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES reg_user(id) ON DELETE CASCADE
+  FOREIGN KEY (organization_id, user_id) REFERENCES organization_user(organization_id, user_id) ON DELETE CASCADE
 );
 
 -- Create metric table
 CREATE TABLE metric (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   search_id UUID NOT NULL,
+  metric_description VARCHAR NOT NULL,
+  FOREIGN KEY (search_id) REFERENCES search(id) ON DELETE CASCADE
+);
+
+-- Create specific_patent_metric table
+CREATE TABLE specific_patent_metric (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  search_id UUID NOT NULL,
   patent_id UUID NOT NULL,
-  sentence VARCHAR NOT NULL,
-  match_percentage INT NOT NULL,
+  metric_id UUID NOT NULL,
+  percentage INT NOT NULL,
+  information VARCHAR,
   FOREIGN KEY (search_id) REFERENCES search(id) ON DELETE CASCADE,
-  FOREIGN KEY (patent_id) REFERENCES patent(id) ON DELETE CASCADE
+  FOREIGN KEY (patent_id) REFERENCES patent(id) ON DELETE CASCADE,
+  FOREIGN KEY (metric_id) REFERENCES metric(id) ON DELETE CASCADE,
+  UNIQUE (search_id, patent_id, metric_id)
 );
 
 -- Create contact_query table
@@ -187,35 +143,36 @@ CREATE TABLE contact_query (
   message VARCHAR NOT NULL
 );
 
--- Create user_search_count table
-CREATE TABLE user_search_count (
-  user_id UUID PRIMARY KEY,
+-- Create organization_user_search_count table
+CREATE TABLE organization_user_search_count (
+  organization_id UUID NOT NULL,
+  user_id UUID NOT NULL,
   search_count INT NOT NULL DEFAULT 0,
-  FOREIGN KEY (user_id) REFERENCES reg_user(id) ON DELETE CASCADE
+  PRIMARY KEY (organization_id, user_id),
+  FOREIGN KEY (organization_id) REFERENCES organization(id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES reg_user(id) ON DELETE CASCADE,
+  FOREIGN KEY (organization_id, user_id) REFERENCES organization_user(organization_id, user_id)
 );
 
 -- Create user_organization_search_count table
 CREATE TABLE user_organization_search_count (
-  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-  user_id UUID NOT NULL,
   organization_id UUID NOT NULL,
+  user_id UUID NOT NULL,
   search_count INT NOT NULL DEFAULT 0,
   timespan_start TIMESTAMP NOT NULL,
   timespan_end TIMESTAMP NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES reg_user(id) ON DELETE CASCADE,
-  FOREIGN KEY (organization_id) REFERENCES organization(id) ON DELETE CASCADE,
-  UNIQUE (user_id, organization_id, timespan_start, timespan_end)
+  PRIMARY KEY (organization_id, user_id, timespan_start, timespan_end),
+  FOREIGN KEY (organization_id, user_id) REFERENCES organization_user(organization_id, user_id)
 );
 
 -- Create search_analytics table
 CREATE TABLE search_analytics (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-  user_id UUID NOT NULL,
   organization_id UUID NOT NULL,
+  user_id UUID NOT NULL,
   search_id UUID NOT NULL,
   search_time TIMESTAMP DEFAULT NOW() NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES reg_user(id) ON DELETE CASCADE,
-  FOREIGN KEY (organization_id) REFERENCES organization(id) ON DELETE CASCADE,
+  FOREIGN KEY (organization_id, user_id) REFERENCES organization_user(organization_id, user_id) ON DELETE CASCADE,
   FOREIGN KEY (search_id) REFERENCES search(id) ON DELETE CASCADE
 );
 
@@ -223,12 +180,11 @@ CREATE TABLE search_analytics (
 CREATE INDEX idx_organization_payment_id ON organization(payment_id);
 CREATE INDEX idx_reg_user_payment_id ON reg_user(payment_id);
 CREATE INDEX idx_patent_folder_id ON patent(folder_id);
-CREATE INDEX idx_patent_organization_id ON patent(organization_id);
-CREATE INDEX idx_folder_organization_id ON folder(organization_id);
 CREATE INDEX idx_folder_parent_folder_id ON folder(parent_folder_id);
-CREATE INDEX idx_search_user_id ON search(user_id);
+CREATE INDEX idx_search_organization_id_user_id ON search(organization_id, user_id);
 CREATE INDEX idx_metric_search_id ON metric(search_id);
-CREATE INDEX idx_metric_patent_id ON metric(patent_id);
-CREATE INDEX idx_search_analytics_user_id ON search_analytics(user_id);
-CREATE INDEX idx_search_analytics_organization_id ON search_analytics(organization_id);
+CREATE INDEX idx_specific_patent_metric_search_id ON specific_patent_metric(search_id);
+CREATE INDEX idx_specific_patent_metric_patent_id ON specific_patent_metric(patent_id);
+CREATE INDEX idx_specific_patent_metric_metric_id ON specific_patent_metric(metric_id);
+CREATE INDEX idx_search_analytics_organization_id_user_id ON search_analytics(organization_id, user_id);
 CREATE INDEX idx_search_analytics_search_id ON search_analytics(search_id);

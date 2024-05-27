@@ -1,6 +1,11 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
+import LoadingButton from "./analyzeButton";
+import styled from 'styled-components';
+import { ChartData } from "chart.js";
+import RadarChart from "./radarchart";
+
 import {
-  Container,
   PatentBox,
   BoxTitle,
   Abstract,
@@ -8,7 +13,30 @@ import {
   PatentLink,
   InventorList,
   InventorItem,
+  BoldedDetail,
+  Wrapper,
+  ChartContainer,
 } from "./styles";
+
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Radar } from 'react-chartjs-2';
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
 
 interface PatentItem {
   abstract: string;
@@ -29,39 +57,135 @@ interface PatentItem {
 }
 
 interface PatentListProps {
-  items: PatentItem[];
+  item: PatentItem;
+  searchMetrics: string[];
+  search: string;
+}
+
+function concatenateWithComma(list: string[]): string {
+  return list.join(', ');
 }
 
 // PatentList component definition
-const PatentList: React.FC<PatentListProps> = ({ items }) => {
+const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
+  const [isAnalyzed, setIsAnalyzed] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [backendUrl, setBackendUrl] = useState(
+    process.env.NEXT_PUBLIC_DEV_BACKEND
+  );
+  const [data, setData] = useState({
+    labels: ['Running', 'Swimming', 'Eating', 'Cycling'],
+    datasets: [
+      {
+        label: 'My First Dataset',
+        data: [20, 10, 4, 2],
+        fill: true,
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgb(255, 99, 132)',
+        pointBackgroundColor: 'rgb(255, 99, 132)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgb(255, 99, 132)',
+      },
+    ],
+  });
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const concatMetrics = concatenateWithComma(searchMetrics);
+      const formattedSearch = {
+        search: search,
+        user: "user",
+        patentURL: item.www_link,
+        metrics_str: concatMetrics
+      };
+
+      const metricsURL = new URL(`${backendUrl}/llm/extractSpecificPatentMetrics`);
+      const metricsResponse = await fetch(metricsURL.toString(), {
+        method: 'POST', // HTTP method
+        headers: {
+          'Content-Type': 'application/json', // Specify content type as JSON
+        },
+        body: JSON.stringify(formattedSearch), // Convert data to JSON string
+      });
+
+      if (!metricsResponse.ok) {
+        throw new Error(`HTTP error! status: ${metricsResponse.status}`);
+      }
+      const metricsData = await metricsResponse.json();
+
+      console.log(Object.keys(metricsData["data"][0]["data"]));
+      console.log(Object.values(metricsData["data"][0]["data"]));
+
+      setData({
+        labels: Object.keys(metricsData["data"][0]["data"]),
+        datasets: [
+          {
+            label: '% similar',
+            data: Object.values(metricsData["data"][0]["data"]),
+            fill: true,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgb(54, 162, 235)',
+            pointBackgroundColor: 'rgb(54, 162, 235)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgb(54, 162, 235)',
+          },
+        ],
+      });
+      setIsAnalyzed(true);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <Container>
-      {items.map((item) => (
-        <PatentBox key={item.id}>
-          <BoxTitle>
-            {item.title} ({item.type})
-          </BoxTitle>
-          <Abstract>{item.abstract}</Abstract>
-          <Details>Owned by: {item.owner}</Details>
-          <Details>Publication Date: {item.publication_date}</Details>
-          <PatentLink
-            href={item.www_link}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Google Patents Link
-          </PatentLink>
-          {item.inventors && (
-            <InventorList>
-              {item.inventors.map((inventor) => (
-                <InventorItem key={inventor}>{inventor}</InventorItem>
-              ))}
-            </InventorList>
-          )}
-        </PatentBox>
-      ))}
-    </Container>
+    <PatentBox key={item.id}>
+      <BoxTitle>
+        {item.title} ({item.type})
+      </BoxTitle>
+      <Abstract>{item.abstract}</Abstract>
+      <Details>
+        <BoldedDetail>Owned by:</BoldedDetail> {item.owner}
+      </Details>
+      <Details>
+        <BoldedDetail>Publication Date:</BoldedDetail>{" "}
+        {item.publication_date}
+      </Details>
+      <Details>
+        <BoldedDetail>Patent Number:</BoldedDetail> {item.publication_id}
+      </Details>
+      <PatentLink
+        href={item.www_link}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Google Patents Link
+      </PatentLink>
+      {item.inventors && (
+        <InventorList>
+          {item.inventors.map((inventor) => (
+            <InventorItem key={inventor}>{inventor}</InventorItem>
+          ))}
+        </InventorList>
+      )}
+      <Wrapper>
+        {isAnalyzed ? 
+          <ChartContainer>
+            <Radar data={data}/>
+            {/* <RadarChart></RadarChart> */}
+          </ChartContainer>
+         : 
+          <LoadingButton loading={loading} handleClick={fetchData}>
+            Analyze
+          </LoadingButton>
+         }
+      </Wrapper>
+    </PatentBox>
   );
 };
 
-export default PatentList;
+export default Patent;

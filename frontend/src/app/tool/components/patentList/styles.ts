@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 
 // Define the fade-in animation using keyframes
 const fadeIn = keyframes`
@@ -19,7 +19,6 @@ export const Container = styled.div`
   padding-bottom:5%;
   animation: ${fadeIn} 1s ease-out; // Apply the animation to the container
 `;
-
 export const PatentBox = styled.div`
   background-color: white;
   border-radius: 10px;
@@ -41,6 +40,9 @@ export const Abstract = styled.p`
 export const Details = styled.p`
   color: #333;
 `;
+export const BoldedDetail = styled.span`
+  font-weight: bold;
+`
 
 export const PatentLink = styled.a`
   color: #0077cc; // Link color
@@ -58,4 +60,16 @@ export const InventorList = styled.ul`
 
 export const InventorItem = styled.li`
   color: #333;
+`;
+
+export const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const ChartContainer = styled.div`
+  width: 450px;
+  height: 450px;
+  margin: 0 auto;
 `;
