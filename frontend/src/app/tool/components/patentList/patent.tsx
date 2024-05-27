@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import LoadingButton from "./analyzeButton";
 import styled from 'styled-components';
+import { ChartData } from "chart.js";
+import RadarChart from "./radarchart";
 
 import {
   PatentBox,
@@ -56,33 +58,87 @@ interface PatentItem {
 
 interface PatentListProps {
   item: PatentItem;
+  searchMetrics: string[];
+  search: string;
 }
 
-export const data = {
-  labels: ['Thing 1', 'Thing 2', 'Thing 3', 'Thing 4', 'Thing 5', 'Thing 6'],
-  datasets: [
-    {
-      label: '# of Votes',
-      data: [2, 9, 3, 5, 2, 3],
-      backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      borderColor: 'rgba(255, 99, 132, 1)',
-      borderWidth: 1,
-    },
-  ],
-};
+function concatenateWithComma(list: string[]): string {
+  return list.join(', ');
+}
 
 // PatentList component definition
-const Patent: React.FC<PatentListProps> = ({ item }) => {
+const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
   const [isAnalyzed, setIsAnalyzed] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [backendUrl, setBackendUrl] = useState(
+    process.env.NEXT_PUBLIC_DEV_BACKEND
+  );
+  const [data, setData] = useState({
+    labels: ['Running', 'Swimming', 'Eating', 'Cycling'],
+    datasets: [
+      {
+        label: 'My First Dataset',
+        data: [20, 10, 4, 2],
+        fill: true,
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgb(255, 99, 132)',
+        pointBackgroundColor: 'rgb(255, 99, 132)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgb(255, 99, 132)',
+      },
+    ],
+  });
 
   const fetchData = async () => {
     setLoading(true);
-    await new Promise(r => setTimeout(r, 2000));
     try {
+      const concatMetrics = concatenateWithComma(searchMetrics);
+      const formattedSearch = {
+        search: search,
+        user: "user",
+        patentURL: item.www_link,
+        metrics_str: concatMetrics
+      };
+
+      const metricsURL = new URL(`${backendUrl}/llm/extractSpecificPatentMetrics`);
+      const metricsResponse = await fetch(metricsURL.toString(), {
+        method: 'POST', // HTTP method
+        headers: {
+          'Content-Type': 'application/json', // Specify content type as JSON
+        },
+        body: JSON.stringify(formattedSearch), // Convert data to JSON string
+      });
+
+      if (!metricsResponse.ok) {
+        throw new Error(`HTTP error! status: ${metricsResponse.status}`);
+      }
+      const metricsData = await metricsResponse.json();
+
+      console.log(Object.keys(metricsData["data"][0]["data"]));
+      console.log(Object.values(metricsData["data"][0]["data"]));
+
+      setData({
+        labels: Object.keys(metricsData["data"][0]["data"]),
+        datasets: [
+          {
+            label: '% similar',
+            data: Object.values(metricsData["data"][0]["data"]),
+            fill: true,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgb(54, 162, 235)',
+            pointBackgroundColor: 'rgb(54, 162, 235)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgb(54, 162, 235)',
+          },
+        ],
+      });
       setIsAnalyzed(true);
-    } catch {
-      // Handle the Error
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -119,7 +175,8 @@ const Patent: React.FC<PatentListProps> = ({ item }) => {
       <Wrapper>
         {isAnalyzed ? 
           <ChartContainer>
-            <Radar data={data} />
+            <Radar data={data}/>
+            {/* <RadarChart></RadarChart> */}
           </ChartContainer>
          : 
           <LoadingButton loading={loading} handleClick={fetchData}>
