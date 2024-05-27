@@ -67,3 +67,9 @@ export const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+export const ChartContainer = styled.div`
+  width: 450px;
+  height: 450px;
+  margin: 0 auto;
+`;

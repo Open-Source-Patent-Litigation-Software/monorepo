@@ -1,8 +1,8 @@
 "use client";
-import React from "react";
-import { useState } from "react";
-import RadarChart, {ChartData} from "react-svg-radar-chart";
-import LoadingButton from "./analyzeButton"
+import React, { useState } from "react";
+import LoadingButton from "./analyzeButton";
+import styled from 'styled-components';
+
 import {
   PatentBox,
   BoxTitle,
@@ -13,7 +13,28 @@ import {
   InventorItem,
   BoldedDetail,
   Wrapper,
+  ChartContainer,
 } from "./styles";
+
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Radar } from 'react-chartjs-2';
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
 
 interface PatentItem {
   abstract: string;
@@ -37,69 +58,32 @@ interface PatentListProps {
   item: PatentItem;
 }
 
-type RadarChartData = {
-  data: ChartData[];
-  captions: {
-    [key: string]: string
-  }
+export const data = {
+  labels: ['Thing 1', 'Thing 2', 'Thing 3', 'Thing 4', 'Thing 5', 'Thing 6'],
+  datasets: [
+    {
+      label: '# of Votes',
+      data: [2, 9, 3, 5, 2, 3],
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      borderColor: 'rgba(255, 99, 132, 1)',
+      borderWidth: 1,
+    },
+  ],
 };
 
 // PatentList component definition
 const Patent: React.FC<PatentListProps> = ({ item }) => {
-  // const exampleRadarChartData: RadarChartData = {
-  //   data: [
-  //     {
-  //       data: {
-  //       },
-  //       meta: { color: 'blue' }
-  //     }
-  //   ],
-  //   captions: {
-  //   }
-  // };
-  const exampleRadarChartData: RadarChartData = {
-    data: [
-      {
-        data: {
-          battery: 0.7,
-          design: 0.8,
-          useful: 0.9,
-          speed: 0.67,
-          weight: 0.8
-        },
-        meta: { color: 'blue' }
-      }
-    ],
-    captions: {
-      battery: 'Battery Life',
-      design: 'Design',
-      useful: 'Usefulness',
-      speed: 'Speed',
-      weight: 'Weight'
-    }
-  };
   const [isAnalyzed, setIsAnalyzed] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [graphItems, setGraphItems] = useState<RadarChartData>(exampleRadarChartData);
 
   const fetchData = async () => {
     setLoading(true);
     await new Promise(r => setTimeout(r, 2000));
     try {
-      // const response = await fetch('https://api.example.com/data'); // TODO: fill in with Dev
-      // if (!response.ok) {
-      //   throw new Error('Network response was not ok');
-      // }
-      // const result = await response.json();
-      // const transformedData = transformData(result);
-      // setGraphItems(transformedData);
       setIsAnalyzed(true);
-    }
-    catch {
+    } catch {
       // Handle the Error
-
     }
-    
   };
 
   return (
@@ -134,12 +118,9 @@ const Patent: React.FC<PatentListProps> = ({ item }) => {
       )}
       <Wrapper>
         {isAnalyzed ? 
-          <RadarChart
-            captions={graphItems?.captions}
-            data={graphItems?.data}
-            size={450}
-
-          />
+          <ChartContainer>
+            <Radar data={data} />
+          </ChartContainer>
          : 
           <LoadingButton loading={loading} handleClick={fetchData}>
             Analyze

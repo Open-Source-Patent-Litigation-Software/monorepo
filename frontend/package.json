@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "@carbon/charts-react": "^1.16.1",
+    "chart.js": "^4.4.3",
     "d3": "^7.9.0",
     "d3-cloud": "^1.2.7",
     "d3-sankey": "^0.12.3",
     "next": "14.1.4",
     "react": "^18",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
     "react-svg-radar-chart": "^1.4.0",
     "styled-components": "^6.1.8"
