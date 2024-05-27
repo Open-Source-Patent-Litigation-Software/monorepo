@@ -1,16 +1,48 @@
-from typing import List
-from langchain.output_parsers import PydanticOutputParser
-from langchain_core.prompts import PromptTemplate
-from langchain_core.pydantic_v1 import BaseModel, Field, validator
-from langchain_openai import ChatOpenAI
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_core.prompts import ChatPromptTemplate
-from dotenv import load_dotenv
 import os
 import json
+from typing import List, Dict, Union
+from dotenv import load_dotenv
+from flask import jsonify
+import requests
+from bs4 import BeautifulSoup
+from langchain_core.pydantic_v1 import BaseModel, Field, validator
+from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.prompts import ChatPromptTemplate
+from langchain.output_parsers import PydanticOutputParser
+from langchain_openai import ChatOpenAI
 
 load_dotenv()
 OPEN_AI_KEY = os.environ.get("OPEN_AI_KEY")
+
+
+def scrapeClaims(url, headers=None):
+    """Scrapes claims 1-N from a given patent URL on Google Patents."""
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
+    except requests.RequestException as e:
+        print(f"Request failed: {e}")
+        return None
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    claim_dependent_sections = soup.find_all(class_="claim")
+
+    seen = set()  # Using a set for seen items
+    newClaims = []
+
+    # Extracting the claims from the patent
+    for section in claim_dependent_sections:
+        claim_text_sections = [
+            claim_text.get_text(strip=True)
+            for claim_text in section.find_all(class_="claim-text")
+        ]
+
+        for item in claim_text_sections:
+            if item not in seen:
+                seen.add(item)
+                newClaims.append(item)
+
+    return newClaims  # Returning the list of claims
 
 
 # Define the desired data structure using Pydantic
@@ -27,7 +59,9 @@ class MetricExtraction(BaseModel):
 
 
 # Define the function to extract metrics
-def extractTheMetrics(searchQuery: str = "", model: str = "gpt-4") -> MetricExtraction:
+def extractTheMetrics(
+    searchQuery: str = "", model: str = "gpt-3.5-turbo"
+) -> MetricExtraction:
     """Extract 8 metrics from a given search query."""
 
     # Initialize the ChatOpenAI client with the provided API key and model
@@ -116,14 +150,147 @@ def extractTheMetrics(searchQuery: str = "", model: str = "gpt-4") -> MetricExtr
     return dict(parsed_result)  # Return the validated and parsed result as a dictionary
 
 
-""" Example usage
->>> search_query = "A coffee maker that dispenses both milk and coffee. The coffee can be made either from beans or from pods. To prevent spilling, there is a metal or plastic grate at the bottom. There is an electric screen to control it and alert the user once it's done."
->>> metrics = extractTheMetrics(search_query)
->>> print(metrics["functions"])
->>> print: ['Brews hot beverage.', 'Dispenses milk.', 'Can use coffee pods.', 'Can use coffee beans.', 'Prevents spilling with a grate.', 'Has a metal or plastic grate at the bottom.', 'Has an electric screen for control.', 'Alerts user when coffee is done.']
-"""
+class PercentExtraction(BaseModel):
+    data: Dict[str, float]
+    meta: Dict[str, str]
+
+    @validator("data")
+    def check_data(cls, v):
+        if len(v) != 8:
+            raise ValueError("The data object must have exactly 8 key-value pairs.")
+        for key, value in v.items():
+            if not isinstance(value, (int, float)):
+                raise ValueError("Each value in the data object must be a number.")
+        return v
+
+    @validator("meta")
+    def check_meta(cls, v):
+        if "color" not in v or not isinstance(v["color"], str):
+            raise ValueError(
+                "The 'meta' field must contain a 'color' key with a string value."
+            )
+        return v
 
 
-def patentAndSearchMetricsExtractions():
-    # Extract the metrics from the search and the query
-    return
+def extractSpecificPercentages(
+    search: str,
+    user: str,
+    patentURL: str,
+    metrics: str,
+    model: str = "gpt-3.5-turbo",
+) -> Dict:
+    claims = scrapeClaims(patentURL)
+    metricsList = [metric.strip() for metric in metrics.split(",")]
+    if not claims:
+        raise ValueError("No claims found or failed to scrape.")
+
+    claims_text = "\n".join(claims)
+
+    percentageTemplate = f"""
+    Your job is to take a search query and its associated metrics (aka functions) and extract the percentage of each metric using a patent's claims section.
+
+    So I will give you a query and its metrics, and you will need to extract the percentage of each metric in the patent claims.
+
+    The flow will look like this:
+    I give you a search query and the 8 functions extracted from it. For example, this is a query and its functions:
+    
+        query = "A coffee maker that dispenses both milk and coffee. The coffee can be made either from
+        beans or from pods. To prevent spilling, there is a metal or plastic grate at the bottom.
+        There is an electric screen to control it and alert the user once it's done."
+        
+        functions = 
+            [
+                "Brews hot beverage.",
+                "Dispenses milk.",
+                "Can use coffee pods.",
+                "Can use coffee beans.",
+                "Has refillable water reservoir.",
+                "Has grate to prevent spillage.",
+                "Has electric screen for use.",
+                "Alerts user when done."
+            ]
+
+    Now for this query above many patents will appear as results for what this client is looking for.
+
+    Here is an example of such a patent's claims section which we will use to extract percentages.
+    You will need to extract the percentage of each function from the search using information from the claims section for the patent.
+
+    The claims section of one of the example patents looks like this:
+    claims section:
+        1. A coffee dispenser system, comprising: a coffee brewer unit; a container; a coffee supply channel disposed between the coffee brewer unit and the container to provide a fluid connection between the coffee brewer unit and the container for receiving and holding coffee from the coffee brewer unit; and an outlet channel for coffee which is connected to the container, wherein the coffee supply channel and the outlet channel for coffee both connect to the container at a bottom side of the container, wherein the coffee supply channel that connects to the container extends upwardly inside the container up to a highest level, wherein at said highest level an air relief chamber is provided to release air from the coffee transported through the coffee supply channel, and that from the air relief chamber a coffee mix channel extends downwardly to above and near to the bottom of the container.
+        2. The coffee dispenser system of claim 1, wherein the container comprises heat insulating properties.
+        3. The coffee dispenser system of claim 1, wherein the container comprises a thermos bottle provided with a screw connection to a bottom plate that closes off the thermos bottle.
+        4. The coffee dispenser system of claim 1, wherein the container does not comprise heating facilities.
+        5. The coffee dispenser system of claim 1, wherein the container is provided with an air vent channel which determines a maximum possible level of coffee in the container.
+        6. The coffee dispenser system of claim 1, wherein the dispenser system further comprises a sensor system for measuring a level of coffee in the container.
+        7. The coffee dispenser system of claim 6, wherein the sensor system connects to a control system that drives the coffee brewer unit so as to maintain the level of coffee in the container between a predefined minimum and maximum level.
+    
+    In this case, the output should be in the following JSON format:
+    ```json
+    {{
+      "data": {{
+        "Brews hot beverage.": 0.9,
+        "Dispenses milk.": 0.5,
+        "Can use coffee pods.": 0.3,
+        "Can use coffee beans.": 0.4,
+        "Has refillable water reservoir.": 0.8,
+        "Has grate to prevent spillage.": 0.2,
+        "Has electric screen for use.": 0.3,
+        "Alerts user when done.": 0.6
+      }},
+      "meta": {{
+        "color": "blue"
+      }}
+    }}
+    ```
+
+    Now that you understand the flow, I will give you the search query, the user, and the patent ID. You will need to extract the percentage of each function in the claims section.
+    Search Query: {search}
+    Metrics: {metrics}
+    Claims Section: {claims_text}
+
+    Try to make the percentages reasonably accurate. Just estimate it. If it is a related topic, but not directly mentioned, give a lower percentage, somewhere like 0.1-0.3. If it is directly mentioned, give a higher percentage.
+    Output the result in the exact JSON format as shown above, with the metrics represented as the actual function names, and their percentages filled in accordingly. Do not include any extra text or explanation, just the JSON.
+    """
+
+    # Initialize the ChatOpenAI client with the provided API key and model
+    llm = ChatOpenAI(model=model, temperature=1, api_key=OPEN_AI_KEY)
+
+    # Create a ChatPromptTemplate object
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            SystemMessage(content="You are a helpful assistant."),
+            HumanMessage(content=percentageTemplate),
+        ]
+    )
+
+    # Combine the prompt with the model
+    chain = prompt | llm
+
+    # Set up a parser to ensure the output conforms to the Pydantic model
+    parser = PydanticOutputParser(pydantic_object=PercentExtraction)
+
+    # Extract and return the percentages
+    result = chain.invoke({"searchQuery": search})
+
+    try:
+        # Parse the JSON output
+        parsed_result = parser.parse(result.content)
+    except Exception as e:
+        raise ValueError(f"Failed to parse JSON from completion: {e}")
+
+    # Convert the parsed result to a dictionary
+    result_dict = parsed_result.dict()
+
+    # Create the desired output format
+    output = {
+        "data": [
+            {
+                "data": {metric: result_dict["data"][metric] for metric in metricsList},
+                "meta": result_dict["meta"]
+            }
+        ]
+    }
+
+    # Return the result as a Flask JSON object
+    return jsonify(output)

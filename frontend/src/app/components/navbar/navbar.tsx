@@ -10,7 +10,6 @@ interface NavigationProps {
 export const Navbar: React.FC<NavigationProps> = (props) => {
   const routes = {
     about: "/about",
-    // pricing: "/pricing",
     contact: "/contact",
     tool: "/tool",
   };

@@ -5,6 +5,7 @@ from database.posts import (
     registerUser,
     signInUser,
     postOrganization,
+    retrieveUserInfo
 )
 from flask import jsonify, session
 
@@ -58,6 +59,7 @@ def signup():
 
 @operations.route("/signin", methods=["POST"])
 def signin():
+    print("/signin called")
     data = request.get_json()
     if data is None:
         return jsonify({"error": "No JSON data provided"}), 400
@@ -75,9 +77,9 @@ def signout():
 
 @operations.route("/@me", methods=["GET"])
 def me():
-    if "user_id" in session:
-        return jsonify({"user_id": session["user_id"], "email": session["email"]})
-    return jsonify({"error": "Not signed in"}), 401
+    print("/@me called")
+    response = retrieveUserInfo()
+    return response
 
 
 @operations.route("/createOrganization", methods=["POST"])
