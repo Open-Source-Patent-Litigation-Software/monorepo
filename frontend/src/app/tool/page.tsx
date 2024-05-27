@@ -105,7 +105,7 @@ function Index() {
       console.log(searchData);
 
       const formattedSearch = {
-        query: JSON.stringify(patentQuery), // Convert the data to a JSON string and wrap it in "query"
+        query: patentQuery, // Convert the data to a JSON string and wrap it in "query"
       };
 
       // This part gets the metrics
