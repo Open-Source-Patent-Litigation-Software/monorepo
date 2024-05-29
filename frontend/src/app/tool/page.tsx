@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Navbar } from "../components/navbar/navbar";
 import { Footer } from "../components/footer/footer";
+import Metrics from "./components/metrics/metrics";
 import PatentList from "./components/patentList/patentList";
 import styled from 'styled-components';
 
@@ -19,46 +20,6 @@ interface Error {
   message: string;
 }
 
-const Container = styled.div`
-  padding: 20px;
-`;
-
-const Title = styled.h1`
-  font-size: 24px;
-`;
-
-const List = styled.ul`
-  list-style-type: none;
-  padding: 0;
-`;
-
-const ListItem = styled.li`
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-`;
-
-const ItemText = styled.span`
-  margin-right: 10px;
-`;
-
-const ItemInput = styled.input`
-  margin-right: 10px;
-`;
-
-const Button = styled.button`
-  margin-right: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-`;
-
-const AddButton = styled.button`
-  margin-top: 10px;
-  padding: 5px 10px;
-  cursor: pointer;
-`;
-
-
 function Index() {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
@@ -68,10 +29,11 @@ function Index() {
   );
   const [metrics, setMetrics] = useState<string[]>([]);
   const [isEditing, setIsEditing] = useState<boolean[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const addMetric = (metric: string) => {
-    setMetrics([...metrics, metric]);
-    setIsEditing([...isEditing, false]);
+  const addMetric = () => {
+    if(metrics.length >= 10) return;
+    setMetrics([...metrics, '']);
   };
 
   const removeMetric = (index: number) => {
@@ -85,11 +47,7 @@ function Index() {
     setMetrics(newMetrics);
   };
 
-  const toggleEditMode = (index: number) => {
-    const newEditing = [...isEditing];
-    newEditing[index] = !newEditing[index];
-    setIsEditing(newEditing);
-  };
+  const
 
   const fetchData = async () => {
     try {
@@ -151,37 +109,7 @@ function Index() {
             if (data) {
               return (
                 <>
-                  <MetricsContainer>
-                    <MetricsTitleContainer>
-                      We have identified 8 key features
-                    </MetricsTitleContainer>
-                    <MetricsTitleContainer>
-                      
-                    </MetricsTitleContainer>
-                    <Container>
-                      <Title>List of Metrics</Title>
-                      <List>
-                        {metrics.map((metric, index) => (
-                          <ListItem key={index}>
-                            {isEditing[index] ? (
-                              <ItemInput
-                                type="text"
-                                value={metric}
-                                onChange={(e) => editMetric(index, e.target.value)}
-                              />
-                            ) : (
-                              <ItemText>{metric}</ItemText>
-                            )}
-                            <Button onClick={() => toggleEditMode(index)}>
-                              {isEditing[index] ? 'Save' : 'Edit'}
-                            </Button>
-                            <Button onClick={() => removeMetric(index)}>Remove</Button>
-                          </ListItem>
-                        ))}
-                      </List>
-                      <AddButton onClick={() => addMetric('New Metric')}>Add Metric</AddButton>
-                    </Container>
-                  </MetricsContainer>
+                  <Metrics metrics={metrics} addMetric={addMetric} editMetric={editMetric} removeMetric={removeMetric}/>
                   <PatentList items={data} metrics={metrics} search={patentQuery}/>
                 </>
                 
