@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { Navbar } from "../components/navbar/navbar";
-import { Footer } from "../components/footer/footer";
+import { Navbar } from "../_components/navbar/navbar";
+import { Footer } from "../_components/footer/footer";
 import Metrics from "./components/metrics/metrics";
 import PatentList from "./components/patentList/patentList";
 import SearchText from "./components/search/searchText";
