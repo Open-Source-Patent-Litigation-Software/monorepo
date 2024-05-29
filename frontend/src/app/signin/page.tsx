@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 import PropTypes from "prop-types";
-import SignInForm from "./utils/form/form";
-import { Navbar } from "../components/navbar/navbar";
+import SignInForm from "./_utils/form/SignInForm";
+import { Navbar } from "../_components/navbar/navbar";
 import { DivView } from "../styles";
-import { Footer } from "../components/footer/footer";
+import { Footer } from "../_components/footer/footer";
 interface props {}
 
 function Index(props: props) {
