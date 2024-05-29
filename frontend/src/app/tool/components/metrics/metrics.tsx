@@ -1,4 +1,4 @@
-import { Container, Row, Metric, Button, AddButton, TextArea, RemoveButton } from './style';
+import { Container, Row, Metric, AddButton, TextArea, RemoveButton } from './style';
 
 interface MetricProps {
     metrics: string[];
@@ -18,7 +18,7 @@ const Metrics: React.FC<MetricProps> = ({ metrics, addMetric, removeMetric, edit
                         value={metric}
                         onChange={(e) => editMetric(index, e.target.value)}
                         />
-                        <RemoveButton onClick={() => removeMetric(index + half)}>✕</RemoveButton>
+                        <RemoveButton onClick={() => removeMetric(index)}>✕</RemoveButton>
                     </Metric>
                 ))}
             </Row>
@@ -27,7 +27,7 @@ const Metrics: React.FC<MetricProps> = ({ metrics, addMetric, removeMetric, edit
                     <Metric key={index + half}>
                         <TextArea
                         value={metric}
-                        onChange={(e) => editMetric(index, e.target.value)}
+                        onChange={(e) => editMetric(index + half, e.target.value)}
                         />
                         <RemoveButton onClick={() => removeMetric(index + half)}>✕</RemoveButton>
                     </Metric>
