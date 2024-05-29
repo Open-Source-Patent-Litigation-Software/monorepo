@@ -1,6 +1,6 @@
 import os
 import json
-from typing import List, Dict, Union
+from typing import List, Dict, Union, Tuple
 from dotenv import load_dotenv
 from flask import jsonify
 import requests
@@ -152,23 +152,14 @@ def extractTheMetrics(
 
 class PercentExtraction(BaseModel):
     data: Dict[str, float]
-    meta: Dict[str, str]
 
     @validator("data")
     def check_data(cls, v):
-        if len(v) != 8:
-            raise ValueError("The data object must have exactly 8 key-value pairs.")
+        if len(v) < 6 or len(v) > 10:
+            raise ValueError("The data object must have between 6-10 key-value pairs.")
         for key, value in v.items():
             if not isinstance(value, (int, float)):
                 raise ValueError("Each value in the data object must be a number.")
-        return v
-
-    @validator("meta")
-    def check_meta(cls, v):
-        if "color" not in v or not isinstance(v["color"], str):
-            raise ValueError(
-                "The 'meta' field must contain a 'color' key with a string value."
-            )
         return v
 
 
@@ -180,7 +171,7 @@ def extractSpecificPercentages(
     model: str = "gpt-3.5-turbo",
 ) -> Dict:
     claims = scrapeClaims(patentURL)
-    metricsList = [metric.strip() for metric in metrics.split(",")]
+    metricsList = [metric.strip() for metric in metrics.split('\0')]
     if not claims:
         raise ValueError("No claims found or failed to scrape.")
 
@@ -238,9 +229,6 @@ def extractSpecificPercentages(
         "Has electric screen for use.": 0.3,
         "Alerts user when done.": 0.6
       }},
-      "meta": {{
-        "color": "blue"
-      }}
     }}
     ```
 
@@ -284,12 +272,7 @@ def extractSpecificPercentages(
 
     # Create the desired output format
     output = {
-        "data": [
-            {
-                "data": {metric: result_dict["data"][metric] for metric in metricsList},
-                "meta": result_dict["meta"]
-            }
-        ]
+        "data": {metric: result_dict["data"][metric] for metric in metricsList},
     }
 
     # Return the result as a Flask JSON object
