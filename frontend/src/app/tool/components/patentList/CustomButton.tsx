@@ -40,13 +40,13 @@ const Spinner = styled.div`
   position: absolute;
 `;
 
-interface LoadingButtonProps {
+interface CustomButtonProps {
   children: React.ReactNode;
   loading: boolean;
-  handleClick: React.MouseEventHandler<HTMLButtonElement>;
+  handleClick: () => void;
 }
 
-const LoadingButton: React.FC<LoadingButtonProps> = ({ children, loading, handleClick }) => {
+const CustomButton: React.FC<CustomButtonProps> = ({ children, loading, handleClick }) => {
   return (
     <Button onClick={handleClick} loading={loading}>
       {loading ? <Spinner /> : children}
@@ -54,4 +54,4 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({ children, loading, handle
   );
 };
 
-export default LoadingButton;
+export default CustomButton;

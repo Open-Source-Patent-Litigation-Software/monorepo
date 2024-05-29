@@ -1,4 +1,5 @@
 import { Container, Row, Metric, Button, AddButton, TextArea, RemoveButton } from './style';
+
 interface MetricProps {
     metrics: string[];
     addMetric: () => void;

@@ -1,9 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import LoadingButton from "./analyzeButton";
-import styled from 'styled-components';
-import { ChartData } from "chart.js";
-import RadarChart from "./radarchart";
+import CustomButton from "./CustomButton";
 
 import {
   PatentBox,
@@ -179,9 +176,9 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
             {/* <RadarChart></RadarChart> */}
           </ChartContainer>
          : 
-          <LoadingButton loading={loading} handleClick={fetchData}>
+          <CustomButton loading={loading} handleClick={fetchData}>
             Analyze
-          </LoadingButton>
+          </CustomButton>
          }
       </Wrapper>
     </PatentBox>
