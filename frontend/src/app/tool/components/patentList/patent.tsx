@@ -1,9 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import LoadingButton from "./analyzeButton";
-import styled from 'styled-components';
-import { ChartData } from "chart.js";
-import RadarChart from "./radarchart";
+import CustomButton from "./CustomButton";
 
 import {
   PatentBox,
@@ -110,13 +107,14 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
         body: JSON.stringify(formattedSearch), // Convert data to JSON string
       });
 
+      console.log(formattedSearch);
+      console.log(metricsURL);
+      // console.log()
+
       if (!metricsResponse.ok) {
         throw new Error(`HTTP error! status: ${metricsResponse.status}`);
       }
       const metricsData = await metricsResponse.json();
-
-      console.log(Object.keys(metricsData["data"][0]["data"]));
-      console.log(Object.values(metricsData["data"][0]["data"]));
 
       setData({
         labels: Object.keys(metricsData["data"][0]["data"]),
@@ -179,9 +177,9 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
             {/* <RadarChart></RadarChart> */}
           </ChartContainer>
          : 
-          <LoadingButton loading={loading} handleClick={fetchData}>
+          <CustomButton loading={loading} handleClick={fetchData}>
             Analyze
-          </LoadingButton>
+          </CustomButton>
          }
       </Wrapper>
     </PatentBox>
