@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 interface UserState {
   email: string;
@@ -9,10 +9,10 @@ interface UserState {
 }
 
 const useUserStore = create<UserState>()((set) => ({
-  email: '',
-  firstName: '',
-  lastName: '',
-  phone: '',
+  email: "",
+  firstName: "",
+  lastName: "",
+  phone: "",
   setAll: (user) =>
     set((state) => ({
       ...state,
