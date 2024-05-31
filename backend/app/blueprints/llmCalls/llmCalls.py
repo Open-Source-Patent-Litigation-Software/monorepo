@@ -51,3 +51,4 @@ def highlightText():
         return jsonify({"error": "No JSON data provided"}), 400
     
     
+    
