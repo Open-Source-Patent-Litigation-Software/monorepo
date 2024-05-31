@@ -1,6 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { Button } from "../summary/component/waitlist/styles";
+import styles from "./GenericModal.module.css";
 
 interface Props {
   message: string;
@@ -8,16 +7,23 @@ interface Props {
   closeButton: boolean;
   color?: string;
 }
+
 const GenericModal: React.FC<Props> = (props) => {
   return (
-    <div>
-      <div>{props.message}</div>
-      {props.redirect ? <p>{props.redirect}</p> : null}
-      {props.closeButton ? <button>Close</button> : null}
+    <div className={styles.modalOverlay}>
+      <div className={styles.modalContent}>
+        <div>{props.message}</div>
+        {props.redirect ? (
+          <p>
+            <a href={props.redirect}>{props.redirect}</a>
+          </p>
+        ) : null}
+        {props.closeButton ? (
+          <button className={styles.closeButton}>Close</button>
+        ) : null}
+      </div>
     </div>
   );
 };
-
-GenericModal.propTypes = {};
 
 export default GenericModal;

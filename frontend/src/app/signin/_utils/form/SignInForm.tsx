@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import Link from "next/link";
+import useUserStore from "@/app/_stores/useUserStore";
+import { navigate } from "./ToolRedirect";
 
 import {
   FormContainer,
@@ -20,6 +21,7 @@ import {
 
 const SignInForm = () => {
   const apiUrl = process.env.NEXT_PUBLIC_DEV_BACKEND;
+  const setAll = useUserStore((state) => state.setAll);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -28,7 +30,7 @@ const SignInForm = () => {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -36,7 +38,7 @@ const SignInForm = () => {
     });
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetch(`${apiUrl}/ops/signin`, {
       method: "POST",
@@ -49,12 +51,19 @@ const SignInForm = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
-        // Show success modal here, might have to place a next redirect here to the dashboard
-        setIsSubmitted(true);
+
+        setAll({
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phone: data.phone,
+        });
         setFormData({
           email: "",
           password: "",
         });
+        setIsSubmitted(true);
+        navigate();
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -98,16 +107,16 @@ const SignInForm = () => {
             />
           </FormGroup>
           <Button type="submit">Sign In</Button>
-          <NoAccount>
+          {/* <NoAccount>
             No Account?
             <SignUpLink>
               <Link href="/signup">Sign Up</Link>
             </SignUpLink>
-          </NoAccount>
+          </NoAccount> */}
         </StyledForm>
       </FormContainer>
 
-      {isSubmitted && (
+      {/* {isSubmitted && (
         <ModalOverlay>
           <ModalContent>
             <h2>Sign-In Successful</h2>
@@ -115,7 +124,7 @@ const SignInForm = () => {
             <Button onClick={closeModal}>Close</Button>
           </ModalContent>
         </ModalOverlay>
-      )}
+      )} */}
     </>
   );
 };

@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { SnapScrollContainer, DivView } from "../styles";
-import { Navbar } from "../components/navbar/navbar";
-import { Footer } from "../components/footer/footer";
+import { Navbar } from "../_components/navbar/navbar";
+import { Footer } from "../_components/footer/footer";
 
 const fadeIn = keyframes`
   0% {
