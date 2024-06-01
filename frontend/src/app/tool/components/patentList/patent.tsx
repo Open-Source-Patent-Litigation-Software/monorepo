@@ -60,7 +60,7 @@ interface PatentListProps {
 }
 
 function concatenateWithComma(list: string[]): string {
-  return list.join(', ');
+  return list.join('%_');
 }
 
 // PatentList component definition

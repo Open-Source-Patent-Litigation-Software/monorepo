@@ -68,16 +68,9 @@ def extractHighlightedSections(
     So I will give you the three sections and the metrics, and you will need to give me the senteces relevant to each metric by section and metric.
 
     The flow will look like this:
+    I give you a search query and the 8 functions extracted from it. For example, this is a query and its functions:
     I give you three sections - claims, abstract and description - and the 6-10 metrics. For example, these are the three sections and the metrics:
-    
-        claims = "A coffee maker that dispenses both milk and coffee. The coffee can be made either from
-        beans or from pods. To prevent spilling, there is a metal or plastic grate at the bottom.
-        There is an electric screen to control it and alert the user once it's done."
 
-        description = ""
-
-        abstract = ""
-        
         functions = 
             [
                 "Brews hot beverage.",
