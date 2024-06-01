@@ -30,3 +30,50 @@ def scrapeClaims(url, headers=None):
                 newClaims.append(item)
 
     return newClaims  # Returning the list of claims
+
+def scrapeAbstract(url, headers=None):
+    """Scrapes abstract from a given patent URL on Google Patents."""
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
+    except requests.RequestException as e:
+        print(f"Request failed: {e}")
+        return None
+    
+    soup = BeautifulSoup(response.text, "html.parser")
+    abstract_element = soup.find('abstract')
+
+    if abstract_element == None:
+        return ""
+
+    # Extract the text from the <abstract> element
+    abstract_text = abstract_element.get_text(separator=' ', strip=True)
+
+    return abstract_text
+
+def scrapeDescription(url, headers=None):
+    """Scrapes description from a given patent URL on Google Patents."""
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
+    except requests.RequestException as e:
+        print(f"Request failed: {e}")
+        return None
+    
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    description_element = soup.find_all(class_="description-paragraph")
+
+    if description_element == None:
+        return []
+    
+    descriptions = []
+
+    for description in description_element:
+        description_text = description.get_text(separator=' ', strip=True)
+        descriptions.append(description_text)
+
+    return descriptions
+
+scrapeAbstract("https://patents.google.com/patent/CN1640349B/en?q=(coffee+machine)&oq=coffee+machine")
+scrapeDescription("https://patents.google.com/patent/US8940340B2/en")

@@ -42,3 +42,13 @@ def extractSpecificPatentMetrics():
     )
     print(response)
     return response
+
+@llmCalls.route("/highlightText", methods=["POST"])
+def highlightText():
+    """Route to extract highlighted text based on metrics for a given patent."""
+    data = request.get_json()
+    if data is None:
+        return jsonify({"error": "No JSON data provided"}), 400
+    
+    
+    
