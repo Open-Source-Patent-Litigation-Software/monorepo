@@ -2,10 +2,10 @@
 import React, { useState } from "react";
 import { Navbar } from "../_components/navbar/navbar";
 import { Footer } from "../_components/footer/footer";
-import Metrics from "./components/metrics/metrics";
-import PatentList from "./components/patentList/patentList";
-import SearchText from "./components/search/searchText";
-import LoadingSpinner from "./components/search/loadingSpinner";
+import Metrics from "./_components/metrics/metrics";
+import PatentList from "./_components/patentList/patentList";
+import SearchText from "./_components/search/searchText";
+import LoadingSpinner from "./_components/search/loadingSpinner";
 import CheckSignedIn from "../_utils/checkSignedIn";
 import {
   SearchContainer,

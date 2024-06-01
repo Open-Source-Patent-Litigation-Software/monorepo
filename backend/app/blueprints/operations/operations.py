@@ -56,7 +56,6 @@ def signup():
 
     return response
 
-
 @operations.route("/signin", methods=["POST"])
 def signin():
     print("/signin called")

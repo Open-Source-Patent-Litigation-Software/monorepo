@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import CustomButton from "./CustomButton";
-
+import Citations from "../citations/Citations";
+import { mockData } from "../citations/mockData";
 import {
   PatentBox,
   BoxTitle,
@@ -23,8 +24,8 @@ import {
   Filler,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Radar } from 'react-chartjs-2';
+} from "chart.js";
+import { Radar } from "react-chartjs-2";
 
 ChartJS.register(
   RadialLinearScale,
@@ -60,7 +61,7 @@ interface PatentListProps {
 }
 
 function concatenateWithComma(list: string[]): string {
-  return list.join(', ');
+  return list.join(", ");
 }
 
 // PatentList component definition
@@ -71,18 +72,18 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
     process.env.NEXT_PUBLIC_DEV_BACKEND
   );
   const [data, setData] = useState({
-    labels: ['Running', 'Swimming', 'Eating', 'Cycling'],
+    labels: ["Running", "Swimming", "Eating", "Cycling"],
     datasets: [
       {
-        label: 'My First Dataset',
+        label: "My First Dataset",
         data: [20, 10, 4, 2],
         fill: true,
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgb(255, 99, 132)',
-        pointBackgroundColor: 'rgb(255, 99, 132)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgb(255, 99, 132)',
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgb(255, 99, 132)",
+        pointBackgroundColor: "rgb(255, 99, 132)",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgb(255, 99, 132)",
       },
     ],
   });
@@ -95,14 +96,16 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
         search: search,
         user: "user",
         patentURL: item.www_link,
-        metrics_str: concatMetrics
+        metrics_str: concatMetrics,
       };
 
-      const metricsURL = new URL(`${backendUrl}/llm/extractSpecificPatentMetrics`);
+      const metricsURL = new URL(
+        `${backendUrl}/llm/extractSpecificPatentMetrics`
+      );
       const metricsResponse = await fetch(metricsURL.toString(), {
-        method: 'POST', // HTTP method
+        method: "POST", // HTTP method
         headers: {
-          'Content-Type': 'application/json', // Specify content type as JSON
+          "Content-Type": "application/json", // Specify content type as JSON
         },
         body: JSON.stringify(formattedSearch), // Convert data to JSON string
       });
@@ -120,21 +123,21 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
         labels: Object.keys(metricsData["data"][0]["data"]),
         datasets: [
           {
-            label: '% similar',
+            label: "% similar",
             data: Object.values(metricsData["data"][0]["data"]),
             fill: true,
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgb(54, 162, 235)',
-            pointBackgroundColor: 'rgb(54, 162, 235)',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgb(54, 162, 235)',
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            borderColor: "rgb(54, 162, 235)",
+            pointBackgroundColor: "rgb(54, 162, 235)",
+            pointBorderColor: "#fff",
+            pointHoverBackgroundColor: "#fff",
+            pointHoverBorderColor: "rgb(54, 162, 235)",
           },
         ],
       });
       setIsAnalyzed(true);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
@@ -150,8 +153,7 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
         <BoldedDetail>Owned by:</BoldedDetail> {item.owner}
       </Details>
       <Details>
-        <BoldedDetail>Publication Date:</BoldedDetail>{" "}
-        {item.publication_date}
+        <BoldedDetail>Publication Date:</BoldedDetail> {item.publication_date}
       </Details>
       <Details>
         <BoldedDetail>Patent Number:</BoldedDetail> {item.publication_id}
@@ -171,16 +173,18 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
         </InventorList>
       )}
       <Wrapper>
-        {isAnalyzed ? 
-          <ChartContainer>
-            <Radar data={data}/>
-            {/* <RadarChart></RadarChart> */}
-          </ChartContainer>
-         : 
+        {isAnalyzed ? (
+          <>
+            <ChartContainer>
+              <Radar data={data} />
+            </ChartContainer>
+            <Citations data={mockData} />
+          </>
+        ) : (
           <CustomButton loading={loading} handleClick={fetchData}>
             Analyze
           </CustomButton>
-         }
+        )}
       </Wrapper>
     </PatentBox>
   );

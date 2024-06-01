@@ -1,7 +1,5 @@
 import React from "react";
-import {
-  Container,
-} from "./styles";
+import { Container } from "./styles";
 import Patent from "./patent";
 
 interface PatentItem {
@@ -33,7 +31,12 @@ const PatentList: React.FC<PatentListProps> = ({ items, metrics, search }) => {
   return (
     <Container>
       {items.map((item) => (
-        <Patent item={item} searchMetrics={metrics} search={search}/>
+        <Patent
+          key={item.id}
+          item={item}
+          searchMetrics={metrics}
+          search={search}
+        />
       ))}
     </Container>
   );
