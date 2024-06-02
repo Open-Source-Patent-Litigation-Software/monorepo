@@ -69,7 +69,7 @@ def extractCitations(
     
     The context should be surrounding text of the highlighted portion, 1-2 sentences before and after the highlighted portion. The highlighted portion should be included in the context. You should only add this if you feel that the relevant poriton needs this context to make sense.
 
-    So I will give you the three sections and the metrics, and you will need to give me the relevant sections for each metric in each section as described above.
+    So I will give you the three sections and the metrics, and you will need to give me the relevant sections for each metric in each section as described above. I want you to find at least 1 relevant section per metric.
 
     Each of the three sections - abstract, claims and description - will be strings with varying lengths. If one of these sections is empty, it is safe to ignore it.
 
@@ -132,7 +132,7 @@ def extractCitations(
                 {{
                     "paragraph": "The present invention relates to a coffee machine designed to optimize brewing efficiency and enhance the user experience. This innovative coffee machine features an integrated grinder and brewing system, allowing users to grind fresh coffee beans immediately before brewing. The machine includes an intuitive touch screen interface for easy operation, programmable settings for customizing brew strength and volume, and a built-in milk frother for creating various coffee beverages such as lattes and cappuccinos.",
                     "highlight": "The present invention relates to a coffee machine designed to optimize brewing efficiency and enhance the user experience. This innovative coffee machine features an integrated grinder and brewing system, allowing users to grind fresh coffee beans immediately before brewing."
-                }},
+                }}
             ],
             "description" : [
                 {{
@@ -142,8 +142,8 @@ def extractCitations(
                 {{
                     "paragraph": "Existing machines with integrated functions may lack user-friendly interfaces and customizable settings, resulting in inconsistent coffee quality and user dissatisfaction. The coffee machine described herein integrates a grinder, brewer, and milk frother into one appliance, allowing users to prepare a variety of coffee beverages quickly and efficiently. The machine features a touch screen interface for ease of use, programmable settings for customization, and a self-cleaning mechanism for minimal maintenance.",
                     "highlight": "The coffee machine described herein integrates a grinder, brewer, and milk frother into one appliance, allowing users to prepare a variety of coffee beverages quickly and efficiently."
-                }},
-            ],
+                }}
+            ]
         }},
         "Dispenses milk." : {{
             "claims" : [],
@@ -161,9 +161,9 @@ def extractCitations(
                 {{
                     "paragraph": "Users can select the froth option on the touch screen interface. The milk frother draws milk from the container, froths it using the steam wand, and dispenses it into the cup.",
                     "highlight": "Users load coffee beans into the hopper, select the desired grind size and brew strength via the touch screen interface. The grinder automatically grinds the beans, and the ground coffee is transferred to the brewing chamber. Hot water is then pumped into the brewing chamber, where it extracts the coffee, which is dispensed into the user's cup. Users can select the froth option on the touch screen interface. The milk frother draws milk from the container, froths it using the steam wand, and dispenses it into the cup. The touch screen interface allows users to save preferred settings for grind size, brew strength, and beverage volume."
-                }},
-            ],
-        }},
+                }}
+            ]
+        }}
     }}
     ```
 
@@ -178,7 +178,7 @@ def extractCitations(
     Abstract Section: {abstract_text}
     Description: {description_text}
 
-    The only output you should give is in this JSON format, with the sections described. Please ensure that the reponse is also a valid JSON.
+    The only output you should give is in this JSON format, with the sections described. It is very important that the output is valid JSON data. If there is a mistake in the JSON of the example, ignore it, and ensure your output is valid JSON fromat. I want you to find at least one thing for each section - abstract, claims, description - for each metric. Each metric should have at least three highlighted texts.
     """
 
     # Initialize the ChatOpenAI client with the provided API key and model
@@ -201,8 +201,6 @@ def extractCitations(
     # Extract and return the percentages
     result = chain.invoke({"metrics": metrics})
 
-    print("LLM RESPONSE:", result.content)
-
     try:
         # Parse the JSON output
         parsed_result = parser.parse(result.content)
@@ -210,14 +208,7 @@ def extractCitations(
         raise ValueError(f"Failed to parse JSON from completion: {e}")
 
     # Convert the parsed result to a dictionary
-    print(parsed_result)
     result_dict = parsed_result.dict()["__root__"]
-    # print(result_dict)
-
-    # Create the desired output format
-    # output = {
-    #     "data": {metric: result_dict["data"][metric] for metric in metricsList},
-    # }
 
     # Return the result as a Flask JSON object
     return jsonify(result_dict)
