@@ -11,7 +11,7 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
   const routes = {
     about: "/about",
     contact: "/contact",
-    tool: "/tool",
+    // tool: "/tool",
   };
 
   return (
@@ -28,7 +28,9 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
           </StyledLi>
         ))}
       </StyledUl>
-      <LoginLink><Link href="/signin">Sign In</Link></LoginLink>
+      <LoginLink>
+        <Link href="/signin">Sign In</Link>
+      </LoginLink>
     </StyledNav>
   );
 };
