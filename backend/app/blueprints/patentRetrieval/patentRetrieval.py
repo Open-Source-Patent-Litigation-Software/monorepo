@@ -18,7 +18,6 @@ def patentRetrievalRoute():
     n = 10
     result_type = "patent"
     after = "2016-01-01"
-    print(searchRequest)
     params = {  # create parameter object
         "q": searchRequest,  # search query
         "n": n,  # no. of results
@@ -32,7 +31,6 @@ def patentRetrievalRoute():
     results = response.json().get("results")  # decode response
     if not results:
         return jsonify({"message": "No results found."})
-    print(results)
     return jsonify({"results": results})
 
 

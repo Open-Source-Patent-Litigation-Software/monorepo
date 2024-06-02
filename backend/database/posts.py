@@ -209,7 +209,6 @@ def retrieveUserInfo():
     """Retrive User Info"""
     try:
         id = session["user_id"]
-        print(id)
         # Establish a connection
         conn = psycopg2.connect(NEON_CONNECTION_STRING)
         cur = conn.cursor(cursor_factory=RealDictCursor)

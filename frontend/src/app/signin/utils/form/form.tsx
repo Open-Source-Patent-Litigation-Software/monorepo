@@ -165,7 +165,6 @@ const SignInForm = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
         // Show success modal here, might have to place a next redirect here to the dashboard
         setIsSubmitted(true);
         setFormData({

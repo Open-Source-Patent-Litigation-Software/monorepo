@@ -1,11 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import { Navbar } from "../components/navbar/navbar";
-import { Footer } from "../components/footer/footer";
-import Metrics from "./components/metrics/metrics";
-import PatentList from "./components/patentList/patentList";
-import SearchText from "./components/search/searchText";
-import LoadingSpinner from "./components/search/loadingSpinner";
+import { Navbar } from "../_components/navbar/navbar";
+import { Footer } from "../_components/footer/footer";
+import Metrics from "./_components/metrics/metrics";
+import PatentList from "./_components/patentList/patentList";
+import SearchText from "./_components/search/searchText";
+import LoadingSpinner from "./_components/search/loadingSpinner";
 
 import {
   SearchContainer,
@@ -37,8 +37,8 @@ function Index() {
   const [searchState, setSearchState] = useState<SearchVal>(SearchVal.noSearch);
 
   const addMetric = () => {
-    if(metrics.length >= 10) return;
-    setMetrics([...metrics, '']);
+    if (metrics.length >= 10) return;
+    setMetrics([...metrics, ""]);
   };
 
   const removeMetric = (index: number) => {
@@ -58,10 +58,10 @@ function Index() {
       setSearchState(SearchVal.loading);
 
       // if there is data, reset Data to clear all state below
-      if(data) setData(null);
+      if (data) setData(null);
 
       // if there are metrics, reset the metrics
-      if(metrics.length > 0) setMetrics([]);
+      if (metrics.length > 0) setMetrics([]);
 
       // Append the patentQuery as a query parameter
       const searchURL = new URL(`${backendUrl}/patents/makeQuery`);
@@ -72,7 +72,6 @@ function Index() {
       }
       const searchData = await searchResponse.json();
       setData(searchData.results);
-      console.log(searchData);
 
       const formattedSearch = {
         query: patentQuery, // Convert the data to a JSON string and wrap it in "query"
@@ -83,9 +82,9 @@ function Index() {
 
       // construct the POST request
       const metricsResponse = await fetch(metricsURL.toString(), {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json', 
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formattedSearch),
       });
@@ -105,7 +104,7 @@ function Index() {
       setError("");
     } catch (e) {
       // if there is an error, reset everything and display the error
-      setSearchState(SearchVal.noSearch)
+      setSearchState(SearchVal.noSearch);
       setMetrics([]);
       const error = e as Error;
       setError(error.message);
@@ -131,19 +130,23 @@ function Index() {
             if (searchState == SearchVal.dataAvailable && data) {
               return (
                 <>
-                  <Metrics metrics={metrics} addMetric={addMetric} editMetric={editMetric} removeMetric={removeMetric}/>
-                  <PatentList items={data} metrics={metrics} search={patentQuery}/>
+                  <Metrics
+                    metrics={metrics}
+                    addMetric={addMetric}
+                    editMetric={editMetric}
+                    removeMetric={removeMetric}
+                  />
+                  <PatentList
+                    items={data}
+                    metrics={metrics}
+                    search={patentQuery}
+                  />
                 </>
-                
-            );
-            } else if(searchState == SearchVal.loading) {
-              return (
-                <LoadingSpinner/>
               );
+            } else if (searchState == SearchVal.loading) {
+              return <LoadingSpinner />;
             } else {
-              return (
-                <SearchText/>
-              );
+              return <SearchText />;
             }
           })()}
         </AnimationContainer>

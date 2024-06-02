@@ -40,7 +40,6 @@ def extractSpecificPatentMetrics():
         patentURL=data.get("patentURL"),
         metrics=data.get("metrics_str"),
     )
-    print(response)
     return response
 
 @llmCalls.route("/highlightText", methods=["POST"])

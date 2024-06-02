@@ -40,7 +40,6 @@ const SignUpForm = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
     fetch(`${apiUrl}/ops/signup`, {
       method: "POST",
       headers: {
@@ -50,7 +49,6 @@ const SignUpForm = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
         setIsSubmitted(true);
         setFormData({
           firstName: "",

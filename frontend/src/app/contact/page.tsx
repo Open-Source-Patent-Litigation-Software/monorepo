@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { SnapScrollContainer, DivView } from "../styles";
-import { Navbar } from "../components/navbar/navbar";
-import { Footer } from "../components/footer/footer";
+import { Navbar } from "../_components/navbar/navbar";
+import { Footer } from "../_components/footer/footer";
 
 const fadeIn = keyframes`
   0% {
@@ -169,7 +169,6 @@ const ContactForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
     fetch(`${apiUrl}/ops/contact`, {
       method: "POST",
       headers: {
@@ -179,7 +178,6 @@ const ContactForm = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
         setIsSubmitted(true);
         setFormData({
           firstName: "",
@@ -189,7 +187,6 @@ const ContactForm = () => {
         });
       })
       .catch((error) => {
-        console.error("Error:", error);
         alert("There was an error submitting your form. Please try again.");
       });
   };

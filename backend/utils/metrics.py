@@ -171,7 +171,7 @@ def extractSpecificPercentages(
     model: str = "gpt-3.5-turbo",
 ) -> Dict:
     claims = scrapeClaims(patentURL)
-    metricsList = [metric.strip() for metric in metrics.split('\0')]
+    metricsList = [metric.strip() for metric in metrics.split("\0")]
     if not claims:
         raise ValueError("No claims found or failed to scrape.")
 
@@ -269,11 +269,5 @@ def extractSpecificPercentages(
 
     # Convert the parsed result to a dictionary
     result_dict = parsed_result.dict()
-
-    # Create the desired output format
-    output = {
-        "data": {metric: result_dict["data"][metric] for metric in metricsList},
-    }
-
     # Return the result as a Flask JSON object
-    return jsonify(output)
+    return jsonify(result_dict)
