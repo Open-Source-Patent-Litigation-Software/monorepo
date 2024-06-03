@@ -3,7 +3,7 @@ import json
 from langchain_openai import OpenAI
 from app.settings import OPEN_AI_KEY
 from utils.metrics import extractTheMetrics, extractSpecificPercentages
-from utils.highlighting import extractCitations
+from utils.citations import extractCitations
 
 llmCalls = Blueprint("llmCalls", __name__, template_folder="templates")
 

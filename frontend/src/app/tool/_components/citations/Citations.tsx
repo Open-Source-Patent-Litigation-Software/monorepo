@@ -19,7 +19,7 @@ interface Data {
 }
 
 interface DataProp {
-  data: Data;
+  data: Data | null;
 }
 
 interface MetricProp {
@@ -45,6 +45,8 @@ const SectionComponent: React.FC<MetricProp> = ({ metricData }) => {
 };
 
 const Citations: React.FC<DataProp> = ({ data }) => {
+  // this is probably not the best way to do this
+  if(data == null ) return(<></>);
   return (
     <div>
       {Object.entries(data).map(([functionName, metricData]) => (

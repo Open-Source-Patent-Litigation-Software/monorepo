@@ -16,7 +16,7 @@ UI
 important commands
 ---------------------------------------------------------------------
 flask:
-        $ gunicorn --reload -b 127.0.0.1:8000 run:app // manually set port and host
+        $ gunicorn --timeout 120 --reload -b 127.0.0.1:8000 run:app // manually set port and host
     or  $ python3 run.py --debug // inherits the port and host in .env
 nextjs:
         npm install // install all the npm stuff
