@@ -71,6 +71,7 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
   const [backendUrl, setBackendUrl] = useState(
     process.env.NEXT_PUBLIC_DEV_BACKEND
   );
+  const [citationsData, setCitationsData] = useState(null);
   const [data, setData] = useState({
     labels: ["Running", "Swimming", "Eating", "Cycling"],
     datasets: [
@@ -131,7 +132,32 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
           },
         ],
       });
+
       setIsAnalyzed(true);
+
+      const citationsSearch = {
+        user: "user",
+        patentURL: item.www_link,
+        metrics_str: concatMetrics,
+      };
+
+      const citationsURL = new URL(
+        `${backendUrl}/llm/getCitations`
+      );
+      const citationsResponse = await fetch(citationsURL.toString(), {
+        method: "POST", // HTTP method
+        headers: {
+          "Content-Type": "application/json", // Specify content type as JSON
+        },
+        body: JSON.stringify(formattedSearch), // Convert data to JSON string
+      });
+
+      if (!citationsResponse.ok) {
+        throw new Error(`HTTP error! status: ${citationsResponse.status}`);
+      }
+      const citationData = await citationsResponse.json();
+      console.log(citationData);
+      setCitationsData(citationData);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
