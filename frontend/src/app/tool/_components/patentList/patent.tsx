@@ -141,9 +141,7 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
         metrics_str: concatMetrics,
       };
 
-      const citationsURL = new URL(
-        `${backendUrl}/llm/getCitations`
-      );
+      const citationsURL = new URL(`${backendUrl}/llm/getCitations`);
       const citationsResponse = await fetch(citationsURL.toString(), {
         method: "POST", // HTTP method
         headers: {
@@ -200,7 +198,7 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
             <ChartContainer>
               <Radar data={data} />
             </ChartContainer>
-            <Citations data={mockData} />
+            <Citations data={mockData} metric="Brews coffee." />
           </div>
         ) : (
           <CustomButton loading={loading} handleClick={fetchData}>
