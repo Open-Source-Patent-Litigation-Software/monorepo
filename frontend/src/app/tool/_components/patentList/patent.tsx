@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import CustomButton from "./CustomButton";
 
@@ -72,6 +71,7 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
     process.env.NEXT_PUBLIC_DEV_BACKEND
   );
   const [citationsData, setCitationsData] = useState(null);
+  const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
   const [data, setData] = useState({
     labels: ["Running", "Swimming", "Eating", "Cycling"],
     datasets: [
@@ -88,6 +88,14 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
       },
     ],
   });
+
+  // function to define metric dropdown changes
+  const handleDropdownChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSelectedMetric(event.target.value);
+    console.log(event.target.value);
+  };
 
   const fetchData = async () => {
     setLoading(true);
@@ -198,6 +206,20 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
             <ChartContainer>
               <Radar data={data} />
             </ChartContainer>
+            <div>
+              {/*Drop down component goes here*/}
+              <label>Drop Down</label>
+              <select onChange={handleDropdownChange}>
+                <option value="" disabled>
+                  Select a Metric to Analyze
+                </option>
+                {searchMetrics.map((metric) => (
+                  <option key={metric} value={metric}>
+                    {metric}
+                  </option>
+                ))}
+              </select>
+            </div>
             <Citations data={mockData} metric="Brews coffee." />
           </div>
         ) : (
