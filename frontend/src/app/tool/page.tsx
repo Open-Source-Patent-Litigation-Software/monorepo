@@ -1,11 +1,19 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navbar } from "../_components/navbar/navbar";
 import { Footer } from "../_components/footer/footer";
 import Metrics from "./_components/metrics/metrics";
 import PatentList from "./_components/patentList/patentList";
 import SearchText from "./_components/search/searchText";
 import LoadingSpinner from "./_components/search/loadingSpinner";
+import useMetricSearchStateStore from "@/app/_stores/useMetricStore";
+
+/*
+ >>> TODO: Jun 5th
+    >>> Add use effect to the zuztand store above
+    >>> Create drop down with all items in the store
+    >>> Adjust citations component to render only items shown
+*/
 
 import {
   SearchContainer,
@@ -32,6 +40,7 @@ function Index() {
   const [backendUrl, setBackendUrl] = useState(
     process.env.NEXT_PUBLIC_DEV_BACKEND
   );
+  const { storeMetrics, setAll } = useMetricSearchStateStore();
   const [metrics, setMetrics] = useState<string[]>([]);
   const [isEditing, setIsEditing] = useState<boolean[]>([]);
   const [searchState, setSearchState] = useState<SearchVal>(SearchVal.noSearch);
