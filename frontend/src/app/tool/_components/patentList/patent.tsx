@@ -220,7 +220,7 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
                 ))}
               </select>
             </div>
-            <Citations data={mockData} metric="Brews coffee." />
+            <Citations data={mockData} metric={selectedMetric || ""} />
           </div>
         ) : (
           <CustomButton loading={loading} handleClick={fetchData}>
