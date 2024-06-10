@@ -1,10 +1,11 @@
-// Citations.tsx
 import React from "react";
 import styles from "./Citations.module.css";
+import { Dictionary } from "@/app/_utils/dictionary";
 
 interface Paragraph {
-  paragraph: string;
+  before: string;
   highlight: string;
+  after: string;
 }
 
 interface MetricData {
@@ -12,46 +13,49 @@ interface MetricData {
 }
 
 interface Data {
-  [functionName: string]: MetricData;
+  [metric: string]: MetricData;
 }
 
 interface CitationsProps {
-  data: Data | null;
+  data: Dictionary;
   metric: string;
+  loading: boolean;
 }
 
-const Citations: React.FC<CitationsProps> = ({ data, metric }) => {
+const Citations: React.FC<CitationsProps> = ({ data, metric, loading }) => {
+  if (loading) {
+    return <div className={styles.loading}>Loading citations...</div>;
+  }
+
   if (data === null || !data[metric]) {
-    return null;
+    return <div className={styles.noCitations}>No citations available.</div>;
   }
 
   const metricData = data[metric];
 
-  const highlightText = (paragraph: string, highlight: string) => {
-    const parts = paragraph.split(highlight);
+  const highlightText = (before: string, highlight: string, after: string) => {
     return (
-      <>
-        {parts.map((part, index) => (
-          <React.Fragment key={index}>
-            {part}
-            {index !== parts.length - 1 && (
-              <span className={styles.highlight}>{highlight}</span>
-            )}
-          </React.Fragment>
-        ))}
-      </>
+      <div className={styles.paragraph}>
+        <span>{before}</span>
+        <span className={styles.highlight}>{highlight}</span>
+        <span>{after}</span>
+      </div>
     );
   };
 
   return (
-    <div>
-      <h2>{metric}</h2>
+    <div className={styles.container}>
+      <h2 className={styles.metricTitle}>{metric}</h2>
       {Object.entries(metricData).map(([sectionName, paragraphs]) => (
-        <div key={sectionName}>
-          <h4>{sectionName}</h4>
+        <div key={sectionName} className={styles.section}>
+          <h4 className={styles.sectionTitle}>{sectionName}</h4>
           {paragraphs.map((paragraph, index) => (
             <div key={index}>
-              <div>{highlightText(paragraph.paragraph, paragraph.highlight)}</div>
+              {highlightText(
+                paragraph.before,
+                paragraph.highlight,
+                paragraph.after
+              )}
             </div>
           ))}
         </div>

@@ -11,6 +11,7 @@ llmCalls = Blueprint("llmCalls", __name__, template_folder="templates")
 @llmCalls.route("/obtainMetrics", methods=["POST"])
 def obtainMetrics():
     """Route to extract metrics from a given text."""
+    print("/obtainMetrics - called")
     data = request.get_json()
     if data is None:
         return jsonify({"error": "No JSON data provided"}), 400
@@ -31,6 +32,7 @@ def obtainMetrics():
 @llmCalls.route("/extractSpecificPatentMetrics", methods=["POST"])
 def extractSpecificPatentMetrics():
     """Route to extract specific metrics from a given patent."""
+    print("/extractSpecificPatentMetrics - called")
     data = request.get_json()
     if data is None:
         return jsonify({"error": "No JSON data provided"}), 400
@@ -43,32 +45,34 @@ def extractSpecificPatentMetrics():
     )
     return response
 
+
 @llmCalls.route("/getCitations", methods=["POST"])
 def getCitations():
     """Route to extract highlighted text based on metrics for a given patent."""
+    print("/getCitations - called")
     data = request.get_json()
     if data is None:
         return jsonify({"error": "No JSON data provided"}), 400
-    
+
     response = extractCitations(
         user=data.get("user"),
         patentURL=data.get("patentURL"),
         metrics=data.get("metrics_str"),
     )
     return response
-    
-    
+
+
 @llmCalls.route("/getCitation", methods=["POST"])
 def getCitation():
     """Route to extract highlighted text based on metrics for a given patent."""
+    print("/getCitation - called")
     data = request.get_json()
     if data is None:
         return jsonify({"error": "No JSON data provided"}), 400
-    
+
     response = extractCitaionsSingleMetric(
         user=data.get("user"),
         patentURL=data.get("patentURL"),
-        metric=data.get("metric_str"),
+        metric=data.get("metric_:str"),
     )
     return response
-    

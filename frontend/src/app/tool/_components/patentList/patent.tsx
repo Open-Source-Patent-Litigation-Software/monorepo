@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CustomButton from "./CustomButton";
-
+import { Dictionary } from "@/app/_utils/dictionary";
 import {
   PatentBox,
   BoxTitle,
@@ -12,6 +12,12 @@ import {
   BoldedDetail,
   Wrapper,
   ChartContainer,
+  DropdownContainer,
+  DropdownLabel,
+  DropdownSelect,
+  DropdownOption,
+  NoMetricSelected,
+  AnalyzedContentWrapper,
 } from "./styles";
 
 import {
@@ -25,7 +31,6 @@ import {
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
 import Citations from "../citations/Citations";
-import { mockData } from "../citations/mockData";
 ChartJS.register(
   RadialLinearScale,
   PointElement,
@@ -70,7 +75,8 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
   const [backendUrl, setBackendUrl] = useState(
     process.env.NEXT_PUBLIC_DEV_BACKEND
   );
-  const [citationsData, setCitationsData] = useState(null);
+  const [citationsLoading, setCitationsLoading] = useState<boolean>(false);
+  const [citationsData, setCitationsData] = useState<Dictionary>({});
   const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
   const [data, setData] = useState({
     labels: ["Running", "Swimming", "Eating", "Cycling"],
@@ -89,12 +95,63 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
     ],
   });
 
-  // function to define metric dropdown changes
+  const citationCache: { [key: string]: string } = {};
+
+  const addCitation = (metric: string, data: string) => {
+    setCitationsData((prevCitations) => ({
+      ...prevCitations,
+      [metric]: data,
+    }));
+  };
+
   const handleDropdownChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    setSelectedMetric(event.target.value);
-    console.log(event.target.value);
+    const value = event.target.value;
+    setSelectedMetric(value);
+    if (value && !citationsData[value]) {
+      fetchCitation(value);
+    }
+  };
+
+  const fetchCitation = async (metric: string) => {
+    if (citationCache[metric]) {
+      addCitation(metric, citationCache[metric]);
+      return;
+    }
+
+    setCitationsLoading(true);
+    try {
+      const citationURL = new URL(`${backendUrl}/llm/getCitation`);
+      const citationJSON = {
+        user: "TEMP_VAL",
+        patentURL: item.www_link,
+        metric_str: metric,
+      };
+      const requestParameters = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(citationJSON),
+      };
+      const citationResponse = await fetch(
+        citationURL.toString(),
+        requestParameters
+      );
+
+      if (!citationResponse.ok) {
+        throw new Error(`HTTP error! status: ${citationResponse.status}`);
+      }
+
+      const citationData = await citationResponse.json();
+      citationCache[metric] = citationData;
+      addCitation(metric, citationData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setCitationsLoading(false);
+    }
   };
 
   const fetchData = async () => {
@@ -112,11 +169,11 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
         `${backendUrl}/llm/extractSpecificPatentMetrics`
       );
       const metricsResponse = await fetch(metricsURL.toString(), {
-        method: "POST", // HTTP method
+        method: "POST",
         headers: {
-          "Content-Type": "application/json", // Specify content type as JSON
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formattedSearch), // Convert data to JSON string
+        body: JSON.stringify(formattedSearch),
       });
 
       if (!metricsResponse.ok) {
@@ -143,27 +200,6 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
 
       setIsAnalyzed(true);
 
-      const citationsSearch = {
-        user: "user",
-        patentURL: item.www_link,
-        metrics_str: concatMetrics,
-      };
-
-      const citationsURL = new URL(`${backendUrl}/llm/getCitations`);
-      const citationsResponse = await fetch(citationsURL.toString(), {
-        method: "POST", // HTTP method
-        headers: {
-          "Content-Type": "application/json", // Specify content type as JSON
-        },
-        body: JSON.stringify(formattedSearch), // Convert data to JSON string
-      });
-
-      if (!citationsResponse.ok) {
-        throw new Error(`HTTP error! status: ${citationsResponse.status}`);
-      }
-      const citationData = await citationsResponse.json();
-      console.log(citationData);
-      setCitationsData(citationData);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -202,26 +238,36 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
       )}
       <Wrapper>
         {isAnalyzed ? (
-          <div>
+          <AnalyzedContentWrapper>
             <ChartContainer>
               <Radar data={data} />
             </ChartContainer>
-            <div>
-              {/*Drop down component goes here*/}
-              <label>Drop Down</label>
-              <select onChange={handleDropdownChange}>
-                <option value="" disabled>
+            <DropdownContainer>
+              <DropdownLabel>Drop Down</DropdownLabel>
+              <DropdownSelect
+                onChange={handleDropdownChange}
+                value={selectedMetric || ""}
+              >
+                <DropdownOption value="" disabled>
                   Select a Metric to Analyze
-                </option>
+                </DropdownOption>
                 {searchMetrics.map((metric) => (
-                  <option key={metric} value={metric}>
+                  <DropdownOption key={metric} value={metric}>
                     {metric}
-                  </option>
+                  </DropdownOption>
                 ))}
-              </select>
-            </div>
-            <Citations data={mockData} metric={selectedMetric || ""} />
-          </div>
+              </DropdownSelect>
+            </DropdownContainer>
+            {selectedMetric ? (
+              <Citations
+                data={citationsData}
+                metric={selectedMetric || ""}
+                loading={!citationsData[selectedMetric]}
+              />
+            ) : (
+              <NoMetricSelected>No Metric Selected</NoMetricSelected>
+            )}
+          </AnalyzedContentWrapper>
         ) : (
           <CustomButton loading={loading} handleClick={fetchData}>
             Analyze

@@ -1,3 +1,9 @@
+# Ignore environment files and directories
 .env
 env
-__pychache__/
+
+# Ignore all __pycache__ directories recursively
+__pycache__/
+
+# Ensure that all __pycache__ directories at any level are ignored
+**/__pycache__/
