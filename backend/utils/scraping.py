@@ -7,11 +7,14 @@ def scrapeClaims(url, headers=None):
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
+
+        response.encoding = 'utf-8'
+        response_text = response.text
     except requests.RequestException as e:
         print(f"Request failed: {e}")
         return None
 
-    soup = BeautifulSoup(response.text, "html.parser")
+    soup = BeautifulSoup(response_text, "html.parser")
     claim_dependent_sections = soup.find_all(class_="claim")
 
     seen = set()  # Using a set for seen items
@@ -35,12 +38,15 @@ def scrapeAbstract(url, headers=None):
     """Scrapes abstract from a given patent URL on Google Patents."""
     try:
         response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
+        response.raise_for_status()
+
+        response.encoding = 'utf-8'
+        response_text = response.text
     except requests.RequestException as e:
         print(f"Request failed: {e}")
         return None
     
-    soup = BeautifulSoup(response.text, "html.parser")
+    soup = BeautifulSoup(response_text, "html.parser")
     abstract_element = soup.find('abstract')
 
     if abstract_element == None:
@@ -56,15 +62,20 @@ def scrapeDescription(url, headers=None):
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
+        
+        # Ensure the response is decoded using UTF-8
+        response.encoding = 'utf-8'
+        response_text = response.text
+        
     except requests.RequestException as e:
         print(f"Request failed: {e}")
         return None
     
-    soup = BeautifulSoup(response.text, "html.parser")
+    soup = BeautifulSoup(response_text, "html.parser")
 
     description_element = soup.find_all(class_="description-paragraph")
 
-    if description_element == None:
+    if description_element is None:
         return []
     
     descriptions = []
@@ -74,6 +85,3 @@ def scrapeDescription(url, headers=None):
         descriptions.append(description_text)
 
     return descriptions
-
-scrapeAbstract("https://patents.google.com/patent/CN1640349B/en?q=(coffee+machine)&oq=coffee+machine")
-scrapeDescription("https://patents.google.com/patent/US8940340B2/en")

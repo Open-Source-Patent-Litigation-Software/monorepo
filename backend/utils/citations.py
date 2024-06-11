@@ -351,17 +351,32 @@ class Quote(BaseModel):
     highlight: str
     after: Optional[str]
 
-    @validator('before', 'after')
-    def check_length(cls, v):
-        # if v is not None and len(v.split()) > 50:
-        #     raise ValueError('Context must be at most 50 words')
-        return v
+    # pre means this is runs before any other validation and always means it runs despite being optional
+    # This checks to ensure that both 'before' and 'after' are not empty.
+    @root_validator(pre=True)
+    def check_not_both_empty(cls, values):
+        before = values.get("before")
+        after = values.get("after")
+        if not before and not after:
+            raise ValueError('Both "before" and "after" cannot be empty')
+        return values
 
 
 class Section(BaseModel):
-    claims: List[Quote]
-    abstract: List[Quote]
-    description: List[Quote]
+    claims: Optional[List[Quote]]
+    abstract: Optional[List[Quote]]
+    description: Optional[List[Quote]]
+
+    # checks that at least 1 of the Claims, Abstract or Description Sections are there
+    @root_validator(pre=True)
+    def check_sections_not_all_empty(cls, values):
+        if (
+            not values.get("claims") and
+            not values.get("abstract") and
+            not values.get("description")
+        ):
+            raise ValueError('At least one of "claims", "abstract", or "description" must not be empty')
+        return values
 
 def extractCitaionsSingleMetric(
     user: str,
@@ -487,17 +502,16 @@ def extractCitaionsSingleMetric(
     }}
     ```
 
-    You should use this format for a metric, outputting 2-3 per section.
+    You should use this format for a metric, outputting 2-3 before, highlight and after sections per section (abstract, claims and description).
 
-    Now that you understand the flow, I will give you the metrics, claims Section, abstract section and description. You will need to extract the important sentences from each section.
+    Now that you understand the flow. I will give you 1 metric and each of the three sections - abstract, claims and description. You should find 2-3 clusters in each section for the metric provided. If a sections is missing, you should ignore it and output that field as an empty list.
 
-    Make sure to include each metric I provide in your output, with at least 1 highlighted text for each section for every metric. If i give you 8 metrics, you should return 8 metrics. Additionally, each metric should have at least 1 selected section per claims, abstract and description.
-    Metrics: {metric}
+    Metric: {metric}
     Claims Section: {claims_text}
     Abstract Section: {abstract_text}
     Description: {description_text}
 
-    The only output you should give is in this JSON format, with the sections described. It is very important that the output is valid JSON data. If there is a mistake in the JSON of the example, ignore it, and ensure your output is valid JSON fromat.
+    The only output you should give is in the format provided and should be valid JSON format.
     """
 
     # Initialize the ChatOpenAI client with the provided API key and model
@@ -519,6 +533,7 @@ def extractCitaionsSingleMetric(
 
     # Extract and return the percentages
     result = chain.invoke({"metric": metric})
+    print(result.content)
 
     try:
         # Parse the JSON output
@@ -529,6 +544,7 @@ def extractCitaionsSingleMetric(
 
     # Convert the parsed result to a dictionary
     result_dict = parsed_result.dict()
+    # print(result_dict)
 
     # Return the result as a Flask JSON object
     return jsonify(result_dict)
