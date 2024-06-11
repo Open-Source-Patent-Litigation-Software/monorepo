@@ -9,7 +9,7 @@ This document describes the workflow for creating a new branch from the `develop
 Before creating a new branch, ensure that your local `development` branch is up-to-date with the remote repository.
 
 ``` bash
-git checkout development"
+git checkout development
 git pull origin development
 ```
 
@@ -23,7 +23,7 @@ git checkout -b feature/new-feature
 
 ### 3. Make Your Changes
 
-Make the necessary changes in your codebase.
+Implement the feature / changes planned.
 
 ### 4. Stage and Commit Your Changes
 
@@ -48,7 +48,7 @@ Go to your repository on GitHub (or your chosen Git service) and create a pull r
 
 ### 7. Review and Merge
 
-Have your team review the pull request. Once approved, merge the pull request into the `development` branch.
+Review the pull request and merge into development.
 
 ### 8. Update Your Local Development Branch
 
