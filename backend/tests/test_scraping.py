@@ -42,20 +42,46 @@ def test_scrapeAbstract(mock_requests):
     abstract = scrapeAbstract(url)
     assert abstract == "Abstract text"
 
-def test_scrapeDescription(mock_requests):
+def test_scrapeDescriptionBasic(mock_requests):
     url = "http://example.com/patent"
     html_content = """
     <html>
     <body>
         <div class="description-paragraph">Description paragraph 1</div>
         <div class="description-paragraph">Description paragraph 2</div>
+        <div class="description-list">Description paragraph 3</div>
+        <div class="descript-list">Description paragraph 2</div>
     </body>
     </html>
     """
     mock_requests.get(url, text=html_content)
 
     descriptions = scrapeDescription(url)
-    assert descriptions == "Description paragraph 1\nDescription paragraph 2"
+    print(descriptions)
+    assert descriptions == "Description paragraph 1\nDescription paragraph 2\nDescription paragraph 3"
+
+def test_scrapeDescriptionNested(mock_requests):
+    url = "http://example.com/patent"
+    html_content = """
+    <html>
+    <body>
+        <div class="description">
+            <div class="description-paragraph">Description paragraph 1</div>
+            <div class="description-paragraph">Description paragraph 2</div>
+            <div class="description-list">Description paragraph 3</div>
+            <div class="descript-list">Description paragraph 2</div>
+        </div>
+        <div class="description-paragraph">Description paragraph 2</div>
+        <div class="description-list">Description paragraph 3</div>
+        <div class="descript-list">Description paragraph 2</div>
+    </body>
+    </html>
+    """
+    mock_requests.get(url, text=html_content)
+
+    descriptions = scrapeDescription(url)
+    print(descriptions)
+    assert descriptions == "Description paragraph 1\nDescription paragraph 2\nDescription paragraph 3\nDescription paragraph 2\nDescription paragraph 3"
 
 def test_scrapeClaims_no_claims(mock_requests):
     url = "http://example.com/patent"
