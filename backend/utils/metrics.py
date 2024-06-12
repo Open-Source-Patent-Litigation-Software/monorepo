@@ -10,39 +10,10 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.output_parsers import PydanticOutputParser
 from langchain_openai import ChatOpenAI
+from utils.scraping import scrapeClaims
 
 load_dotenv()
 OPEN_AI_KEY = os.environ.get("OPEN_AI_KEY")
-
-
-def scrapeClaims(url, headers=None):
-    """Scrapes claims 1-N from a given patent URL on Google Patents."""
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
-    except requests.RequestException as e:
-        print(f"Request failed: {e}")
-        return None
-
-    soup = BeautifulSoup(response.text, "html.parser")
-    claim_dependent_sections = soup.find_all(class_="claim")
-
-    seen = set()  # Using a set for seen items
-    newClaims = []
-
-    # Extracting the claims from the patent
-    for section in claim_dependent_sections:
-        claim_text_sections = [
-            claim_text.get_text(strip=True)
-            for claim_text in section.find_all(class_="claim-text")
-        ]
-
-        for item in claim_text_sections:
-            if item not in seen:
-                seen.add(item)
-                newClaims.append(item)
-
-    return newClaims  # Returning the list of claims
 
 
 # Define the desired data structure using Pydantic
@@ -170,12 +141,10 @@ def extractSpecificPercentages(
     metrics: str,
     model: str = "gpt-3.5-turbo",
 ) -> Dict:
-    claims = scrapeClaims(patentURL)
+    claims_text = scrapeClaims(patentURL)
     metricsList = [metric.strip() for metric in metrics.split("\0")]
-    if not claims:
+    if not claims_text:
         raise ValueError("No claims found or failed to scrape.")
-
-    claims_text = "\n".join(claims)
 
     percentageTemplate = f"""
     Your job is to take a search query and its associated metrics (aka functions) and extract the percentage of each metric using a patent's claims section.
@@ -234,7 +203,7 @@ def extractSpecificPercentages(
 
     Now that you understand the flow, I will give you the search query, the user, and the patent ID. You will need to extract the percentage of each function in the claims section.
     Search Query: {search}
-    Metrics: {metrics}
+    Metrics: {metricsList}
     Claims Section: {claims_text}
 
     Try to make the percentages reasonably accurate. Just estimate it. If it is a related topic, but not directly mentioned, give a lower percentage, somewhere like 0.1-0.3. If it is directly mentioned, give a higher percentage.

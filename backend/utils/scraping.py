@@ -32,7 +32,7 @@ def scrapeClaims(url, headers=None):
                 seen.add(item)
                 newClaims.append(item)
 
-    return newClaims  # Returning the list of claims
+    return "\n".join(newClaims)  # Return the claims concatinated by newline chars
 
 def scrapeAbstract(url, headers=None):
     """Scrapes abstract from a given patent URL on Google Patents."""
@@ -84,4 +84,4 @@ def scrapeDescription(url, headers=None):
         description_text = description.get_text(separator=' ', strip=True)
         descriptions.append(description_text)
 
-    return descriptions
+    return "\n".join(descriptions)
