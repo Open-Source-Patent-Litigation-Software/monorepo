@@ -12,7 +12,7 @@ def scrapeClaims(url, headers=None):
         response_text = response.text
     except requests.RequestException as e:
         print(f"Request failed: {e}")
-        return None
+        return ""
 
     soup = BeautifulSoup(response_text, "html.parser")
     claim_dependent_sections = soup.find_all(class_="claim")
@@ -70,7 +70,7 @@ def scrapeDescription(url, headers=None):
     except requests.RequestException as e:
         # log the error:
 
-        return None
+        return ""
     
     soup = BeautifulSoup(response_text, "html.parser")
 
