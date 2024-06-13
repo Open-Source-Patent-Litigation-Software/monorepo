@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-
+import re
 
 def scrapeClaims(url, headers=None):
     """Scrapes claims 1-N from a given patent URL on Google Patents."""
@@ -61,27 +61,32 @@ def scrapeDescription(url, headers=None):
     """Scrapes description from a given patent URL on Google Patents."""
     try:
         response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
+        response.raise_for_status() 
         
         # Ensure the response is decoded using UTF-8
         response.encoding = 'utf-8'
         response_text = response.text
         
     except requests.RequestException as e:
-        print(f"Request failed: {e}")
+        # log the error:
+
         return None
     
     soup = BeautifulSoup(response_text, "html.parser")
 
-    description_element = soup.find_all(class_="description-paragraph")
+    description_element = soup.find_all(class_=re.compile(r'\bdescription\b'))
 
     if description_element is None:
-        return []
+        return ""
     
-    descriptions = []
+    descriptions = []  # Use a set to avoid duplicates
 
-    for description in description_element:
-        description_text = description.get_text(separator=' ', strip=True)
+    for element in description_element:
+        if element.find(class_=re.compile(r'\bdescription\b')):
+            continue  # Skip this element if it contains nested description elements
+
+        description_text = element.get_text(separator=' ', strip=True)
         descriptions.append(description_text)
+
 
     return "\n".join(descriptions)

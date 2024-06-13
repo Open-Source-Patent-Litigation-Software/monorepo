@@ -18,6 +18,12 @@ class Quote(BaseModel):
     highlight: str
     after: str
 
+    @root_validator()
+    def check_all_strings_not_empty(cls, values):
+        if(not values.get("before") or not values.get("highlight") or not values.get("after")):
+            raise ValueError('Before, highlight and after must contain text.')
+        return values
+
 class Section(BaseModel):
     claims: Optional[List[Quote]]
     abstract: Optional[List[Quote]]
