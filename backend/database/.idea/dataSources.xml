@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="dulanyDB@ep-odd-poetry-a43ma4ds.us-east-1.aws.neon.tech" uuid="d91f194a-7add-4bb0-a263-683917a0d7dc">
+    <data-source source="LOCAL" name="dulanyDB@development" uuid="d91f194a-7add-4bb0-a263-683917a0d7dc">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://ep-odd-poetry-a43ma4ds.us-east-1.aws.neon.tech:5432/dulanyDB</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="dulanyDB@experimental" uuid="0dd12d82-6460-4028-bd1c-49020c89361c">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ep-flat-sun-a4jjitct.us-east-1.aws.neon.tech:5432/dulanyDB</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
