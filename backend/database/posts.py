@@ -33,19 +33,19 @@ def postToList(email: str, phoneNumber: str):
         conn.close()
         return jsonify(dataResponse), 200
 
-    except psycopg2.Error as e:
+    except psycopg2.Error as error:
         # Handle specific psycopg2 errors
         conn.rollback()  # Rollback the transaction if an error occurs
         cur.close()
         conn.close()
-        return jsonify({"error": f"Database error: {str(e)}"}), 500
+        return jsonify({"error": f"Database error: {str(error)}"}), 500
 
-    except Exception as e:
+    except Exception as error:
         # Handle any other unexpected errors
         conn.rollback()  # Rollback the transaction if an error occurs
         cur.close()
         conn.close()
-        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+        return jsonify({"error": f"An error occurred: {str(error)}"}), 500
 
 
 def postContactQuery(firstName: str, lastName: str, email: str, message: str):
