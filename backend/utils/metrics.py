@@ -11,10 +11,12 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain.output_parsers import PydanticOutputParser
 from langchain_openai import ChatOpenAI
 from utils.scraping import scrapeClaims
+import logging
 
 load_dotenv()
 OPEN_AI_KEY = os.environ.get("OPEN_AI_KEY")
 
+logger =  logging.getLogger("__name__")
 
 # Define the desired data structure using Pydantic
 class MetricExtraction(BaseModel):

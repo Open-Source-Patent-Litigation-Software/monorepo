@@ -1,0 +1,44 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "formatters": {
+      "json": {
+        "()": "utils.logging.custom_logger.MyJSONFormatter",
+        "fmt_keys": {
+          "level": "levelname",
+          "message": "message",
+          "timestamp": "timestamp",
+          "logger": "name",
+          "module": "module",
+          "function": "funcName",
+          "line": "lineno",
+          "thread_name": "threadName"
+        }
+      }
+    },
+    "handlers": {
+      "file_json": {
+        "class": "logging.handlers.RotatingFileHandler",
+        "level": "INFO",
+        "formatter": "json",
+        "filename": "logs/__name__.log.jsonl",
+        "maxBytes": 10000000,
+        "backupCount": 3
+      },
+      "queue_handler": {
+        "class": "logging.handlers.QueueHandler",
+        "handlers": [
+          "file_json"
+        ],
+        "respect_handler_level": true
+      }
+    },
+    "loggers": {
+      "root": {
+        "level": "DEBUG",
+        "handlers": [
+          "queue_handler"
+        ]
+      }
+    }
+  }
