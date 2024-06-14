@@ -7,3 +7,5 @@ __pycache__/
 
 # Ensure that all __pycache__ directories at any level are ignored
 **/__pycache__/
+
+/logs
