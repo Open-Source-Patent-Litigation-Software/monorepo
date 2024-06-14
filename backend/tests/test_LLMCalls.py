@@ -38,7 +38,7 @@ def testCitationsInvalidArgs(client):
     invalidArgTypeResponse = client.post('/llm/getCitation', json=invalidArgTypePayload)
     assert invalidArgTypeResponse.status_code == 400
 
-def testInvalidPatent(client):
+def testPatent(client):
     # empty string for one of the args
     invalidPatentPayload = {
         "user": "test",
@@ -47,3 +47,6 @@ def testInvalidPatent(client):
     }
     empytArgResponse = client.post('/llm/getCitation', json=invalidPatentPayload)
     assert empytArgResponse.status_code == 400
+
+    #im not sure what else to test...
+
