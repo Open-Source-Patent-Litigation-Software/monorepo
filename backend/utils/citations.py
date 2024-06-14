@@ -3,6 +3,7 @@ import json
 from typing import List, Dict, Optional
 from dotenv import load_dotenv
 from flask import jsonify
+import logging
 from langchain_core.pydantic_v1 import BaseModel, root_validator, ValidationError
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.prompts import ChatPromptTemplate
@@ -12,6 +13,8 @@ from utils.scraping import scrapeAbstract, scrapeClaims, scrapeDescription
 
 load_dotenv()
 OPEN_AI_KEY = os.environ.get("OPEN_AI_KEY")
+
+logger =  logging.getLogger("__name__")
 
 class Quote(BaseModel):
     before: str
@@ -62,7 +65,8 @@ def extractCitaionsSingleMetric(
 
     # if we cant find claims, abstract or description, return
     if not claims_text and not abstract_text and not description_text:
-        raise ValueError("Claims, Abstract and Description no found or failed to scrape.")
+        logger.error("Unable to scrape data from google patents")
+        return jsonify({"error": "Unable to scrape data from google patents"}), 400
 
     # template for GPT request
     highlightedSentencesTemplate = f"""
