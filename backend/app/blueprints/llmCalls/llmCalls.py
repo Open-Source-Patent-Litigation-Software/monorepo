@@ -45,23 +45,6 @@ def extractSpecificPatentMetrics():
     )
     return response
 
-
-# @llmCalls.route("/getCitations", methods=["POST"])
-# def getCitations():
-#     """Route to extract highlighted text based on metrics for a given patent."""
-#     print("/getCitations - called")
-#     data = request.get_json()
-#     if data is None:
-#         return jsonify({"error": "No JSON data provided"}), 400
-
-#     response = extractCitations(
-#         user=data.get("user"),
-#         patentURL=data.get("patentURL"),
-#         metrics=data.get("metrics_str"),
-#     )
-#     return response
-
-
 @llmCalls.route("/getCitation", methods=["POST"])
 def getCitation():
     """Route to extract highlighted text based on metrics for a given patent."""
@@ -73,6 +56,6 @@ def getCitation():
     response = extractCitaionsSingleMetric(
         user=data.get("user"),
         patentURL=data.get("patentURL"),
-        metric=data.get("metric_:str"),
+        metric=data.get("metric_str"),
     )
     return response
