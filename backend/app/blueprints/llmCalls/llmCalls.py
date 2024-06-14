@@ -55,8 +55,8 @@ def extractSpecificPatentMetrics():
     requiredFields = {
         "search": str,
         "user": str,
-        "url": str,
-        "metrics": str,
+        "patentURL": str,
+        "metrics_str": str,
     }
 
     valid, errorMessage = validate_json(data, requiredFields)

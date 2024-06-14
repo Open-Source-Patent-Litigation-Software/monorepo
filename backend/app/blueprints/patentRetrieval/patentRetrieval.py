@@ -35,7 +35,7 @@ def patentRetrievalRoute():
         "token": PQ_AI_KEY,  # API key
     }
     response = requests.get(url, params=params)  # send the request
-    if response.status_code is 200:
+    if response.status_code is not 200:
         logger.error("Response code not 200")
         return jsonify({"error": "error"}), 400
 
