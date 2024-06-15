@@ -13,7 +13,7 @@ from app.extensions import bcrypt
 
 # Import blueprints
 from app.blueprints.patentRetrieval.patentRetrieval import patentRetrieval
-from app.blueprints.llmCalls.llmCalls import llmCalls
+from app.blueprints.llmCalls.routes import llmCalls
 from app.blueprints.operations.operations import operations
 
 

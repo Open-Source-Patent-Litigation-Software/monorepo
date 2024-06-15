@@ -3,7 +3,7 @@ import json
 from langchain_openai import OpenAI
 from app.settings import OPEN_AI_KEY
 from utils.metrics import extractTheMetrics, extractSpecificPercentages
-from utils.citations import extractCitaionsSingleMetric
+from .factory import LLMCallFactory
 
 llmCalls = Blueprint("llmCalls", __name__, template_folder="templates")
 
@@ -48,14 +48,16 @@ def extractSpecificPatentMetrics():
 @llmCalls.route("/getCitation", methods=["POST"])
 def getCitation():
     """Route to extract highlighted text based on metrics for a given patent."""
-    print("/getCitation - called")
-    data = request.get_json()
-    if data is None:
-        return jsonify({"error": "No JSON data provided"}), 400
+    try:
+        data = request.get_json()
+        handler = LLMCallFactory.getHandler('c', data)
+        print("done")
+        response = handler.handleRequest(request)
+        return jsonify(response.to_dict())
+    except ValueError as e:
+        # Handle validation errors
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        # Handle any other unexpected errors
+        return jsonify({'error': f"An unexpected error occurred: {str(e)}"}), 500
 
-    response = extractCitaionsSingleMetric(
-        user=data.get("user"),
-        patentURL=data.get("patentURL"),
-        metric=data.get("metric_str"),
-    )
-    return response
