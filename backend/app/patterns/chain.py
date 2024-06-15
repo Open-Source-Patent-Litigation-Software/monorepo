@@ -1,5 +1,6 @@
 from typing import Optional
 
+# Generic Handler
 class Handler:
     def __init__(self, name: str, method: function, next: Optional['Handler'] = None):
         self.name = name
