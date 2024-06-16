@@ -1,5 +1,5 @@
 # this file is for pydantic validators
-from typing import List, Dict, Optional
+from typing import List, Optional
 from langchain_core.pydantic_v1 import BaseModel, root_validator
 
 class Quote(BaseModel):
@@ -28,7 +28,6 @@ class Section(BaseModel):
         ):
             raise ValueError('At least one of "claims", "abstract", or "description" must not be empty')
         return values
-    
 
 # validator for the input for Citations
 class CitationsInput(BaseModel):

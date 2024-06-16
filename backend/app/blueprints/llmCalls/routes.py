@@ -49,11 +49,17 @@ def extractSpecificPatentMetrics():
 def getCitation():
     """Route to extract highlighted text based on metrics for a given patent."""
     try:
+        # get data from JSON
         data = request.get_json()
+
+        # get handler object with parsed data
         handler = LLMCallFactory.getHandler('c', data)
-        print("done")
-        response = handler.handleRequest(request)
-        return jsonify(response.to_dict())
+
+        # handle the request
+        response = handler.handleRequest()
+
+        # return jsonified response
+        return jsonify(response.to_dict()), 200
     except ValueError as e:
         # Handle validation errors
         return jsonify({'error': str(e)}), 400
