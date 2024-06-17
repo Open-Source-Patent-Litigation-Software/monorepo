@@ -1,8 +1,4 @@
 from flask import Blueprint, jsonify, request
-import json
-from langchain_openai import OpenAI
-from app.settings import OPEN_AI_KEY
-from utils.metrics import extractTheMetrics, extractSpecificPercentages
 from .factory import LLMCallFactory
 
 llmCalls = Blueprint("llmCalls", __name__, template_folder="templates")

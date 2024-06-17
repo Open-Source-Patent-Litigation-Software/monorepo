@@ -126,7 +126,7 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
       const citationJSON = {
         user: "TEMP_VAL",
         patentURL: item.www_link,
-        metric_str: metric,
+        metrics: metric,
       };
       const requestParameters = {
         method: "POST",
