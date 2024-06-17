@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 import requests
 from app.settings import PQ_AI_KEY
-from utils.scraping import scrapeClaims
+from utils.scraping import PatentScraper
 
 patentRetrieval = Blueprint("patentRetrieval", __name__, template_folder="templates")
 
@@ -38,7 +38,8 @@ def patentRetrievalRoute():
 def scrapeGooglePatents():
     """Scrape Google Patents for a specific patent's claims."""
     googlePatentsURL = request.args.get("url")
-    htmlOutput = scrapeClaims(url=googlePatentsURL)
+    patentScraper = PatentScraper(url=googlePatentsURL)
+    htmlOutput = patentScraper.scrapePatent(["claims"])
     return (
         jsonify({"description": htmlOutput}),
         200,

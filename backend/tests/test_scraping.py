@@ -1,108 +1,87 @@
-# tests/test_scraping.py
+import pytest
 import requests
 import requests_mock
-import pytest
-from utils.scraping import scrapeClaims, scrapeAbstract, scrapeDescription
+import re
 
-@pytest.fixture
-def mock_requests():
-    with requests_mock.Mocker() as m:
-        yield m
+from utils.scraping import PatentScraper  
 
-def test_scrapeClaims(mock_requests):
-    url = "http://example.com/patent"
-    html_content = """
+def test_patent_scraper_valid_url(requests_mock):
+    # Mock a valid URL response
+    url = "http://example.com"
+    html_content = '''
     <html>
-    <body>
-        <div class="claim">
-            <div class="claim-text">Claim 1 text</div>
-        </div>
-        <div class="claim">
-            <div class="claim-text">Claim 2 text</div>
-        </div>
-    </body>
+        <body>
+            <div class="section1">Section 1 Text</div>
+            <div class="section2">Section 2 Text</div>
+        </body>
     </html>
-    """
-    mock_requests.get(url, text=html_content)
+    '''
+    requests_mock.get(url, text=html_content)
+    
+    # Create an instance of PatentScraper
+    scraper = PatentScraper(url)
+    
+    # Test the scrapePatent method
+    sections = ['section1', 'section2']
+    result = scraper.scrapePatent(sections)
+    
+    # Verify the scraped data
+    assert result == ["Section 1 Text", "Section 2 Text"]
 
-    claims = scrapeClaims(url)
-    assert claims == "Claim 1 text\nClaim 2 text"
+def test_patent_scraper_invalid_url(requests_mock):
+    # Mock an invalid URL response
+    url = "http://invalid-url.com"
+    requests_mock.get(url, status_code=404)
+    
+    with pytest.raises(Exception):
+        PatentScraper(url)
 
-def test_scrapeAbstract(mock_requests):
-    url = "http://example.com/patent"
-    html_content = """
+def test_patent_scraper_empty_section(requests_mock):
+    # Mock a valid URL response with no matching sections
+    url = "http://example.com"
+    html_content = '''
     <html>
-    <body>
-        <abstract>Abstract text</abstract>
-    </body>
+        <body>
+            <div class="other-section">Other Section Text</div>
+        </body>
     </html>
-    """
-    mock_requests.get(url, text=html_content)
+    '''
+    requests_mock.get(url, text=html_content)
+    
+    # Create an instance of PatentScraper
+    scraper = PatentScraper(url)
+    
+    # Test the scrapePatent method with a non-existent section
+    sections = ['section1']
+    result = scraper.scrapePatent(sections)
+    
+    # Verify the scraped data
+    assert result == [""]
 
-    abstract = scrapeAbstract(url)
-    assert abstract == "Abstract text"
-
-def test_scrapeDescriptionBasic(mock_requests):
-    url = "http://example.com/patent"
-    html_content = """
+def test_patent_scraper_nested_elements(requests_mock):
+    # Mock a valid URL response with nested elements
+    url = "http://example.com"
+    html_content = '''
     <html>
-    <body>
-        <div class="description-paragraph">Description paragraph 1</div>
-        <div class="description-paragraph">Description paragraph 2</div>
-        <div class="description-list">Description paragraph 3</div>
-        <div class="descript-list">Description paragraph 2</div>
-    </body>
+        <body>
+            <div class="section1">
+                <div class="section1">
+                    Nested Section 1 Text
+                </div>
+            </div>
+            <div class="section2">Section 2 Text</div>
+        </body>
     </html>
-    """
-    mock_requests.get(url, text=html_content)
+    '''
+    requests_mock.get(url, text=html_content)
+    
+    # Create an instance of PatentScraper
+    scraper = PatentScraper(url)
+    
+    # Test the scrapePatent method
+    sections = ['section1', 'section2']
+    result = scraper.scrapePatent(sections)
+    
+    # Verify the scraped data
+    assert result == ["Nested Section 1 Text", "Section 2 Text"]
 
-    descriptions = scrapeDescription(url)
-    print(descriptions)
-    assert descriptions == "Description paragraph 1\nDescription paragraph 2\nDescription paragraph 3"
-
-def test_scrapeDescriptionNested(mock_requests):
-    url = "http://example.com/patent"
-    html_content = """
-    <html>
-    <body>
-        <div class="description">
-            <div class="description-paragraph">Description paragraph 1</div>
-            <div class="description-paragraph">Description paragraph 2</div>
-            <div class="description-list">Description paragraph 3</div>
-            <div class="descript-list">Description paragraph 2</div>
-        </div>
-        <div class="description-paragraph">Description paragraph 2</div>
-        <div class="description-list">Description paragraph 3</div>
-        <div class="descript-list">Description paragraph 2</div>
-    </body>
-    </html>
-    """
-    mock_requests.get(url, text=html_content)
-
-    descriptions = scrapeDescription(url)
-    print(descriptions)
-    assert descriptions == "Description paragraph 1\nDescription paragraph 2\nDescription paragraph 3\nDescription paragraph 2\nDescription paragraph 3"
-
-def test_scrapeClaims_no_claims(mock_requests):
-    url = "http://example.com/patent"
-    html_content = "<html><body>No claims here</body></html>"
-    mock_requests.get(url, text=html_content)
-
-    claims = scrapeClaims(url)
-    assert claims == ''
-
-def test_scrapeAbstract_no_abstract(mock_requests):
-    url = "http://example.com/patent"
-    html_content = "<html><body>No abstract here</body></html>"
-    mock_requests.get(url, text=html_content)
-
-    abstract = scrapeAbstract(url)
-    assert abstract == ""
-
-def test_scrapeDescription_no_description(mock_requests):
-    url = "http://example.com/patent"
-    html_content = "<html><body>No description here</body></html>"
-    mock_requests.get(url, text=html_content)
-
-    descriptions = scrapeDescription(url)
-    assert descriptions == ''
