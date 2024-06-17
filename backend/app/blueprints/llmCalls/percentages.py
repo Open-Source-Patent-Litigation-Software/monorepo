@@ -98,4 +98,4 @@ class Percentages(LlmRequests):
         invokeArgs = {"searchQuery": self.searchQuery}
 
         # invoke the request, return the result
-        return super().makeRequest(template, PercentExtraction, invokeArgs)
+        return self.makeRequest(template, PercentExtraction, invokeArgs)

@@ -80,4 +80,4 @@ class Metrics(LlmRequests):
         # these are the invoke args.
         invokeArgs = {"searchQuery": self.searchQuery}
 
-        return super().makeRequest(template, MetricExtraction, invokeArgs)
+        return self.makeRequest(template, MetricExtraction, invokeArgs)
