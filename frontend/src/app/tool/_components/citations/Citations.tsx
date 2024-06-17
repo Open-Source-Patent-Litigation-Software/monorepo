@@ -27,7 +27,7 @@ const Citations: React.FC<CitationsProps> = ({ data, metric, loading }) => {
     return <div className={styles.loading}>Loading citations...</div>;
   }
 
-  if (data === null || !data[metric]) {
+  if (!data || !data[metric]) {
     return <div className={styles.noCitations}>No citations available.</div>;
   }
 
@@ -49,7 +49,7 @@ const Citations: React.FC<CitationsProps> = ({ data, metric, loading }) => {
       {Object.entries(metricData).map(([sectionName, paragraphs]) => (
         <div key={sectionName} className={styles.section}>
           <h4 className={styles.sectionTitle}>{sectionName}</h4>
-          {paragraphs.map((paragraph, index) => (
+          {Array.isArray(paragraphs) && paragraphs.map((paragraph, index) => (
             <div key={index}>
               {highlightText(
                 paragraph.before,

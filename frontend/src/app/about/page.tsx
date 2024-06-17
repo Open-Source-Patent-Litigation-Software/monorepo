@@ -15,6 +15,12 @@ const fadeIn = keyframes`
   }
 `;
 
+interface SectionProps {
+  $bgColor?: string;
+  $textColor?: string;
+  $fullHeight?: boolean;
+}
+
 const Container = styled.div`
   width: 100%;
   display: flex;
@@ -22,29 +28,30 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Section = styled.section`
+const Section = styled.section<SectionProps>`
   width: 100%;
   padding: 10% 15%;
   text-align: center;
-  background-color: ${({ bgColor }) => bgColor || "#fff"};
-  color: ${({ textColor }) => textColor || "#000"};
+  background-color: ${({ $bgColor }) => $bgColor || "#fff"};
+  color: ${({ $textColor }) => $textColor || "#000"};
   animation: ${fadeIn} 1s ease-in;
-  min-height: ${({ fullHeight }) => (fullHeight ? "100vh" : "auto")};
+  min-height: ${({ $fullHeight }) => ($fullHeight ? "100vh" : "auto")};
   display: flex;
   flex-direction: column;
   justify-content: center;
 `;
 
-const Title = styled.h1`
+const Title = styled.h1<{ color?: string }>`
   font-size: 5rem;
   margin-bottom: 3rem;
   color: ${({ color }) => color || "#000"};
 `;
 
-const Text = styled.p`
+const Text = styled.p<{ textColor?: string }>`
   font-size: 1.75rem;
   margin-bottom: 2rem;
   line-height: 1.75;
+  color: ${({ textColor }) => textColor || "#000"};
 `;
 
 const Highlight = styled.b`
@@ -109,7 +116,7 @@ const useFadeIn = () => {
         const rect = section.getBoundingClientRect();
         if (rect.top < window.innerHeight - 100) {
           section.style.animation = `fadeIn 1s ease-in`;
-          section.style.opacity = 1;
+          section.style.opacity = "1"; // Convert number to string
           section.style.transform = "translateY(0)";
         }
       });
@@ -129,7 +136,7 @@ function Index() {
     <div>
       <Navbar />
       <Container>
-        <Section bgColor="#f5efe6" fullHeight>
+        <Section $bgColor="#f5efe6" $fullHeight>
           <Title color="#1a4d2e">What is EasyIP?</Title>
           <Text textColor="#333">
             EasyIP is a platform that makes researching intellectual property
@@ -138,7 +145,7 @@ function Index() {
           </Text>
         </Section>
 
-        <Section bgColor="#1a4d2e" textColor="#f5efe6">
+        <Section $bgColor="#1a4d2e" $textColor="#f5efe6">
           <Title color="#f5efe6">The Problem</Title>
           <Text>
             We are here to provide IP analysts a
@@ -151,7 +158,7 @@ function Index() {
           </Text>
         </Section>
 
-        <Section bgColor="#4f6f52" textColor="#f5efe6">
+        <Section $bgColor="#4f6f52" $textColor="#f5efe6">
           <Title color="#FFFFFF">Our Solution</Title>
           <FeaturesContainer>
             <Feature>
@@ -178,7 +185,7 @@ function Index() {
           </FeaturesContainer>
         </Section>
 
-        <Section bgColor="#f5efe6">
+        <Section $bgColor="#f5efe6">
           <Title color="#1a4d2e">Meet Our Team</Title>
           <TeamContainer>
             <TeamMember>
