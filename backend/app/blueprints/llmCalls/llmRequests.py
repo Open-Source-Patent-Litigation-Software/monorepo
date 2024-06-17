@@ -8,6 +8,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.output_parsers import PydanticOutputParser
 from langchain_openai import ChatOpenAI
+import logging
 import os
 
 class LlmRequests:
@@ -15,10 +16,14 @@ class LlmRequests:
         # when you create the child class, load in the OPENAI API key
         load_dotenv()
         self.OPEN_AI_KEY = os.environ.get("OPEN_AI_KEY")
+        self.logger = logging.getLogger("__name__")
 
     def makeRequest(self, template, validator, args):
         # add some way to determine which model should be used based on the # of tokens
         model = "gpt-3.5-turbo"
+
+        # log the number of tokens
+        self.logger.info(f"This request used about {len(template)/4} tokens")
 
         # create the llm model
         llm = ChatOpenAI(model=model, temperature=1, api_key=self.OPEN_AI_KEY)
