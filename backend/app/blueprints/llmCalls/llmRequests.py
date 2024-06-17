@@ -1,5 +1,4 @@
 from abc import abstractmethod
-from utils.scraping import scrapeAbstract, scrapeClaims, scrapeDescription
 from typing import List
 from flask import jsonify
 from dotenv import load_dotenv
@@ -10,6 +9,7 @@ from langchain.output_parsers import PydanticOutputParser
 from langchain_openai import ChatOpenAI
 import logging
 import os
+from utils.scraping import PatentScraper
 
 class LlmRequests:
     def __init__(self):
@@ -56,20 +56,11 @@ class LlmRequests:
 
     # recieves a list of sections to scrape, returns a list of strs -> each str is a concatinated section
     def scrapePatent(self, sections: List[str], url: str) -> List[str]:
-        # this will be different when we have a class for this
-        outputSections = []
-
-        # for right now, loop through sections and scrape them based on which one it is
-        for section in sections:
-            if section == "abstract":
-                outputSections.append(scrapeAbstract(url))
-            elif section == "description":
-                outputSections.append(scrapeDescription(url))
-            else:
-                outputSections.append(scrapeClaims(url))
+        # create the scraping object
+        scraper = PatentScraper(url)
             
-        # the output will be in the same order it is inputted in.
-        return outputSections
+        # return the outputted list from scraping
+        return scraper.scrapePatent(sections)
         
     @abstractmethod
     def handleRequest(self):
