@@ -8,7 +8,7 @@ class Citations(LlmRequests):
             validatedData = CitationsInput(**data)
 
             # set the variables
-            self.metric = validatedData.metric_str
+            self.metric = validatedData.metric
             self.url = validatedData.patentURL
             self.user = validatedData.user
 

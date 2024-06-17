@@ -32,13 +32,13 @@ class CitationsExtraction(BaseModel):
 # validator for the input for Citations
 class CitationsInput(BaseModel):
     patentURL: str
-    metric_str: str
+    metric: str
     user: str
 
     # validate that none of the strings are empty
     @root_validator()
     def checkEmptyStrings(cls, values):
-        if(not values.get("patentURL") or not values.get("metric_str") or not values.get("user")):
+        if(not values.get("patentURL") or not values.get("metric") or not values.get("user")):
             raise ValueError('None of the strings can be empty')
         return values
 

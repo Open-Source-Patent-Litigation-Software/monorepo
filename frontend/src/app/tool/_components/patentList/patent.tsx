@@ -126,7 +126,7 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
       const citationJSON = {
         user: "TEMP_VAL",
         patentURL: item.www_link,
-        metrics: metric,
+        metric: metric,
       };
       const requestParameters = {
         method: "POST",
@@ -159,10 +159,10 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
     try {
       const concatMetrics = concatenateWithComma(searchMetrics);
       const formattedSearch = {
-        search: search,
+        searchQuery: search,
         user: "user",
         patentURL: item.www_link,
-        metrics_str: concatMetrics,
+        metrics: concatMetrics,
       };
 
       const metricsURL = new URL(

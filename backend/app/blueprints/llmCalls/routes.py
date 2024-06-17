@@ -1,8 +1,9 @@
 from flask import Blueprint, jsonify, request
 from .factory import LLMCallFactory
+import logging
 
 llmCalls = Blueprint("llmCalls", __name__, template_folder="templates")
-
+logger = logging.getLogger("__name__")
 
 @llmCalls.route("/obtainMetrics", methods=["POST"])
 def obtainMetrics():
@@ -21,9 +22,11 @@ def obtainMetrics():
         return jsonify(response), 200
     except ValueError as e:
         # Handle validation errors
+        logger.error(str(e))
         return jsonify({'error': str(e)}), 400
     except Exception as e:
         # Handle any other unexpected errors
+        logger.error(str(e))
         return jsonify({'error': f"An unexpected error occurred: {str(e)}"}), 500
 
 
@@ -44,9 +47,11 @@ def extractSpecificPatentMetrics():
         return jsonify(response), 200
     except ValueError as e:
         # Handle validation errors
+        logger.error(str(e))
         return jsonify({'error': str(e)}), 400
     except Exception as e:
         # Handle any other unexpected errors
+        logger.error(str(e))
         return jsonify({'error': f"An unexpected error occurred: {str(e)}"}), 500
 
 @llmCalls.route("/getCitation", methods=["POST"])
@@ -66,8 +71,10 @@ def getCitation():
         return jsonify(response), 200
     except ValueError as e:
         # Handle validation errors
+        logger.error(str(e))
         return jsonify({'error': str(e)}), 400
     except Exception as e:
         # Handle any other unexpected errors
+        logger.error(str(e))
         return jsonify({'error': f"An unexpected error occurred: {str(e)}"}), 500
 
