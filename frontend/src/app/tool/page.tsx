@@ -83,7 +83,8 @@ function Index() {
       setData(searchData.results);
 
       const formattedSearch = {
-        query: patentQuery, // Convert the data to a JSON string and wrap it in "query"
+        searchQuery: patentQuery, // Convert the data to a JSON string and wrap it in "query"
+        user: "user"
       };
 
       // This part gets the metrics
@@ -104,7 +105,7 @@ function Index() {
       }
 
       const metricsData = await metricsResponse.json();
-      const metricList: string[] = Object.values(metricsData);
+      const metricList: string[] = Object.values(metricsData["functions"]);
       setMetrics(metricList);
 
       // after all data is loaded, display the data
