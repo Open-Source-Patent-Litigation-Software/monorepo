@@ -1,6 +1,5 @@
 from .llmRequests import LlmRequests
-from .schemas import CitationsInput
-from .schemas import Section
+from .schemas import CitationsInput, CitationsExtraction
 
 class Citations(LlmRequests):
     def __init__(self, data: dict):
@@ -137,4 +136,4 @@ class Citations(LlmRequests):
         args = {"metric": self.metric}
 
         # invoke the request and return the result
-        return self.makeRequest(template, Section, args)
+        return self.makeRequest(template, CitationsExtraction, args)

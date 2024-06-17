@@ -11,39 +11,47 @@ llmCalls = Blueprint("llmCalls", __name__, template_folder="templates")
 @llmCalls.route("/obtainMetrics", methods=["POST"])
 def obtainMetrics():
     """Route to extract metrics from a given text."""
-    print("/obtainMetrics - called")
-    data = request.get_json()
-    if data is None:
-        return jsonify({"error": "No JSON data provided"}), 400
-    query = data.get("query")
-    metrics = extractTheMetrics(searchQuery=query, model="gpt-3.5-turbo-0125")[
-        "functions"
-    ]
+    try:
+        # get data from JSON
+        data = request.get_json()
 
-    returnObject = {}
-    for index in range(len(metrics)):
-        returnObject[f"metric{index+1}"] = metrics[index]
+        # get handler object with parsed data
+        handler = LLMCallFactory.getHandler('m', data)
 
-    ### IMPLEMENT DATABASE CACHING OF QUERIES HERE IN THE FUTURE ###
+        # handle the request
+        response = handler.handleRequest()
 
-    return jsonify(returnObject), 200
+        # return jsonified response
+        return jsonify(response), 200
+    except ValueError as e:
+        # Handle validation errors
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        # Handle any other unexpected errors
+        return jsonify({'error': f"An unexpected error occurred: {str(e)}"}), 500
 
 
 @llmCalls.route("/extractSpecificPatentMetrics", methods=["POST"])
 def extractSpecificPatentMetrics():
     """Route to extract specific metrics from a given patent."""
-    print("/extractSpecificPatentMetrics - called")
-    data = request.get_json()
-    if data is None:
-        return jsonify({"error": "No JSON data provided"}), 400
+    try:
+        # get data from JSON
+        data = request.get_json()
 
-    response = extractSpecificPercentages(
-        search=data.get("search"),
-        user=data.get("user"),
-        patentURL=data.get("patentURL"),
-        metrics=data.get("metrics_str"),
-    )
-    return response
+        # get handler object with parsed data
+        handler = LLMCallFactory.getHandler('p', data)
+
+        # handle the request
+        response = handler.handleRequest()
+
+        # return jsonified response
+        return jsonify(response), 200
+    except ValueError as e:
+        # Handle validation errors
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        # Handle any other unexpected errors
+        return jsonify({'error': f"An unexpected error occurred: {str(e)}"}), 500
 
 @llmCalls.route("/getCitation", methods=["POST"])
 def getCitation():
@@ -57,7 +65,6 @@ def getCitation():
 
         # handle the request
         response = handler.handleRequest()
-        print(response)
 
         # return jsonified response
         return jsonify(response), 200

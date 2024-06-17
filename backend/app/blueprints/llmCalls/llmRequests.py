@@ -39,6 +39,7 @@ class LlmRequests:
 
         # create a parser object
         parser = PydanticOutputParser(pydantic_object=validator)
+        print(result.content)
         try:
             # parse the response
             parsed_result = parser.parse(result.content)
