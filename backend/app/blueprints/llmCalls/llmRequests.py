@@ -16,7 +16,7 @@ class LlmRequests:
         load_dotenv()
         self.OPEN_AI_KEY = os.environ.get("OPEN_AI_KEY")
 
-    def makeRequest(self, template, validator):
+    def makeRequest(self, template, validator, args):
         # add some way to determine which model should be used based on the # of tokens
         model = "gpt-3.5-turbo"
 
@@ -35,7 +35,7 @@ class LlmRequests:
         chain = prompt | llm
 
         # invoke the model
-        result = chain.invoke()
+        result = chain.invoke(args)
 
         # create a parser object
         parser = PydanticOutputParser(pydantic_object=validator)
@@ -47,7 +47,7 @@ class LlmRequests:
             raise ValueError(f"Failed to parse JSON from completion: {e}")
 
         # return the parse dictionary
-        return jsonify(parsed_result.dict())
+        return parsed_result.dict()
 
     # recieves a list of sections to scrape, returns a list of strs -> each str is a concatinated section
     def scrapePatent(self, sections: List[str], url: str) -> List[str]:

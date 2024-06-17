@@ -57,9 +57,10 @@ def getCitation():
 
         # handle the request
         response = handler.handleRequest()
+        print(response)
 
         # return jsonified response
-        return jsonify(response.to_dict()), 200
+        return jsonify(response), 200
     except ValueError as e:
         # Handle validation errors
         return jsonify({'error': str(e)}), 400

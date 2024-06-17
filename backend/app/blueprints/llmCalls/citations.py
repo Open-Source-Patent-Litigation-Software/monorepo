@@ -134,5 +134,7 @@ class Citations(LlmRequests):
         The only output you should give is in the format provided and should be valid JSON format.
         """
 
+        args = {"metric": self.metric}
+
         # invoke the request and return the result
-        return self.makeRequest(template, Section)
+        return self.makeRequest(template, Section, args)
