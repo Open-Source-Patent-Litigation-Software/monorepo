@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Citations.module.css";
-import { Dictionary } from "@/app/_utils/dictionary";
+import { Dictionary } from "@/utils/dictionary";
 
 interface Paragraph {
   before: string;

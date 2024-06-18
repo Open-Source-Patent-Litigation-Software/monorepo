@@ -1,8 +1,8 @@
 "use client";
-import { Navbar } from "./_components/navbar/navbar";
+import { Navbar } from "../components/navbar/navbar";
 import { DivView, SnapScrollContainer } from "./styles";
-import { Footer } from "./_components/footer/footer";
-import { Summary } from "./_components/summary/summary";
+import { Footer } from "../components/footer/footer";
+import { Summary } from "../components/summary/summary";
 export default function Home() {
   return (
     <>

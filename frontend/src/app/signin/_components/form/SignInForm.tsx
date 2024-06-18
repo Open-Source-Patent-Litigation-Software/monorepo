@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import useUserStore from "@/app/_stores/useUserStore";
-import { navigate } from "@/app/_redirects/toolRedirect";
+import useUserStore from "@/_stores/useUserStore";
+import { navigate } from "@/_redirects/toolRedirect";
 import {
   FormContainer,
   StyledForm,

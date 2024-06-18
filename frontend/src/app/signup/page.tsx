@@ -2,9 +2,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import SignUpForm from "./utils/form/SignUpForm";
-import { Navbar } from "../_components/navbar/navbar";
+import { Navbar } from "../../components/navbar/navbar";
 import { DivView } from "../styles";
-import { Footer } from "../_components/footer/footer";
+import { Footer } from "../../components/footer/footer";
 
 interface props {}
 

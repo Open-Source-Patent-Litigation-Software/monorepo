@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CustomButton from "./CustomButton";
-import { Dictionary } from "@/app/_utils/dictionary";
+import { Dictionary } from "@/utils/dictionary";
 import {
   PatentBox,
   BoxTitle,

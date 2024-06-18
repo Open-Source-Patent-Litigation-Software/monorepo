@@ -1,12 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Navbar } from "../_components/navbar/navbar";
-import { Footer } from "../_components/footer/footer";
+import { Navbar } from "../../components/navbar/navbar";
+import { Footer } from "../../components/footer/footer";
 import Metrics from "./_components/metrics/metrics";
 import PatentList from "./_components/patentList/patentList";
 import SearchText from "./_components/search/searchText";
 import LoadingSpinner from "./_components/search/loadingSpinner";
-import useMetricSearchStateStore from "@/app/_stores/useMetricStore";
+import useMetricSearchStateStore from "@/_stores/useMetricStore";
 
 /*
  >>> TODO: Jun 5th

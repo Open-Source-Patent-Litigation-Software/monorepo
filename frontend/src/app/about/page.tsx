@@ -1,8 +1,8 @@
 "use client";
 import styled, { keyframes } from "styled-components";
 import React, { useEffect } from "react";
-import { Navbar } from "../_components/navbar/navbar";
-import { Footer } from "../_components/footer/footer";
+import { Navbar } from "../../components/navbar/navbar";
+import { Footer } from "../../components/footer/footer";
 
 const fadeIn = keyframes`
   0% {
