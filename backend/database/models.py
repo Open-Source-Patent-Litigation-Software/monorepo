@@ -8,10 +8,9 @@ from sqlalchemy import (
     String,
     DateTime,
     func,
-    text,
     UniqueConstraint,
 )
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship, declarative_base, sessionmaker
 
 Base = declarative_base()
 load_dotenv()
@@ -293,11 +292,9 @@ class SearchAnalytics(Base):
 
 
 # Set up the database connection and create all tables
-print("Creating engine...")
-print(EXPERIMENTAL_CONNECTION_STRING)
 engine = create_engine(EXPERIMENTAL_CONNECTION_STRING)
-print("Engine created.")
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-print("Creating tables...")
-Base.metadata.create_all(engine, checkfirst=True)
-print("Tables created.")
+
+# Uncomment the line below to create all tables
+# Base.metadata.create_all(engine, checkfirst=True)

@@ -1,11 +1,12 @@
 from flask import Blueprint, jsonify, request, session
+from database.factories import DatabaseCallFactory
 from database.posts import (
     postToList,
     postContactQuery,
     registerUser,
     signInUser,
     postOrganization,
-    retrieveUserInfo
+    retrieveUserInfo,
 )
 from flask import jsonify, session
 
@@ -46,14 +47,21 @@ def signup():
     if data is None:
         return jsonify({"error": "No JSON data provided"}), 400
 
-    response = registerUser(
+    # response = registerUser(
+    #     data.get("firstName"),
+    #     data.get("lastName"),
+    #     data.get("email"),
+    #     data.get("phone"),
+    #     data.get("password"),
+    # )
+    authHandler = DatabaseCallFactory.getHandler(DatabaseCallFactory.RequestType.AUTH)
+    response = authHandler.registerUser(
         data.get("firstName"),
         data.get("lastName"),
         data.get("email"),
         data.get("phone"),
         data.get("password"),
     )
-
     return response
 
 
