@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from "react";
 import { Navbar } from "../../components/navbar/navbar";
 import { Footer } from "../../components/footer/footer";
-import Metrics from "./_components/metrics/metrics";
-import PatentList from "./_components/patent/patentList";
-import SearchText from "./_components/search/searchText";
-import LoadingSpinner from "./_components/loading/loadingSpinner";
+import Metrics from "./components/metrics/metrics";
+import PatentList from "./components/patent/patentList";
+import SearchText from "./components/search/searchText";
+import LoadingSpinner from "./components/loading/loadingSpinner";
 import useMetricSearchStateStore from "@/stores/useMetricStore";
 import "./styles.css";
 

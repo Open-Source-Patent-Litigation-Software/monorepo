@@ -1,12 +1,6 @@
 import React from 'react';
 import './metrics.css';
-
-interface MetricProps {
-  metrics: string[];
-  addMetric: () => void;
-  removeMetric: (index: number) => void;
-  editMetric: (index: number, newMetric: string) => void;
-}
+import { MetricProps } from '@/types/types';
 
 const Metrics: React.FC<MetricProps> = ({ metrics, addMetric, removeMetric, editMetric }) => {
   const half = Math.ceil(metrics.length / 2);
