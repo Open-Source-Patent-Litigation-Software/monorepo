@@ -75,3 +75,24 @@ export type PercentagesDataType = {
     labels: string[];
     datasets: Dataset[];
 };
+
+export type Metric = string;
+
+export interface SearchResult {
+  // Define the structure of your search result
+}
+
+export interface FormattedSearch {
+    searchQuery: string;
+    user: string;
+}
+
+export interface Error {
+    message: string;
+}
+
+export enum SearchVal {
+    loading = 1,
+    noSearch = 0,
+    dataAvailable = 2,
+}
