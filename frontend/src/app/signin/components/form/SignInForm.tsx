@@ -1,22 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import useUserStore from "@/_stores/useUserStore";
-import { navigate } from "@/_redirects/toolRedirect";
-import {
-  FormContainer,
-  StyledForm,
-  FormTitle,
-  FormDescription,
-  HR,
-  FormGroup,
-  Label,
-  Input,
-  Button,
-  ModalOverlay,
-  ModalContent,
-  NoAccount,
-  SignUpLink,
-} from "./styles";
+import useUserStore from "@/stores/useUserStore";
+import { navigate } from "@/redirects/toolRedirect";
+import "./SignInForm.css";
 
 const SignInForm = () => {
   const apiUrl = process.env.NEXT_PUBLIC_DEV_BACKEND;
@@ -76,16 +62,17 @@ const SignInForm = () => {
 
   return (
     <>
-      <FormContainer>
-        <FormTitle>Sign In</FormTitle>
-        <FormDescription>
+      <div className="form-container">
+        <h1 className="form-title">Sign In</h1>
+        <h3 className="form-description">
           Welcome back! Please sign in to your account.
-        </FormDescription>
-        <HR />
-        <StyledForm onSubmit={handleSubmit}>
-          <FormGroup>
-            <Label htmlFor="email">Email:</Label>
-            <Input
+        </h3>
+        <hr className="hr" />
+        <form className="styled-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="label" htmlFor="email">Email:</label>
+            <input
+              className="input"
               type="email"
               id="email"
               name="email"
@@ -93,10 +80,11 @@ const SignInForm = () => {
               onChange={handleChange}
               required
             />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="password">Password:</Label>
-            <Input
+          </div>
+          <div className="form-group">
+            <label className="label" htmlFor="password">Password:</label>
+            <input
+              className="input"
               type="password"
               id="password"
               name="password"
@@ -104,26 +92,30 @@ const SignInForm = () => {
               onChange={handleChange}
               required
             />
-          </FormGroup>
-          <Button type="submit">Sign In</Button>
-          {/* <NoAccount>
+          </div>
+          <button className="button" type="submit">Sign In</button>
+          {/* 
+          <div className="no-account">
             No Account?
-            <SignUpLink>
+            <span className="sign-up-link">
               <Link href="/signup">Sign Up</Link>
-            </SignUpLink>
-          </NoAccount> */}
-        </StyledForm>
-      </FormContainer>
+            </span>
+          </div>
+          */}
+        </form>
+      </div>
 
-      {/* {isSubmitted && (
-        <ModalOverlay>
-          <ModalContent>
+      {/* 
+      {isSubmitted && (
+        <div className="modal-overlay">
+          <div className="modal-content">
             <h2>Sign-In Successful</h2>
             <p>Welcome back! You have successfully signed in.</p>
-            <Button onClick={closeModal}>Close</Button>
-          </ModalContent>
-        </ModalOverlay>
-      )} */}
+            <button className="button" onClick={closeModal}>Close</button>
+          </div>
+        </div>
+      )} 
+      */}
     </>
   );
 };

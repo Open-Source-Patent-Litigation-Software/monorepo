@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { StyledFooter } from "./styles"; // Make sure to import the StyledFooter
+import './footer.css';
 
 interface FooterProps {
   // Define any props here if needed
@@ -8,8 +8,8 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = (props) => {
   return (
-    <StyledFooter>
+    <footer className="styled-footer">
       <p>© 2024 easyip.io - All rights reserved.</p>
-    </StyledFooter>
+    </footer>
   );
 };

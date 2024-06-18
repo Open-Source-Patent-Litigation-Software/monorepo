@@ -1,20 +1,12 @@
 import React, { useState, useRef } from "react";
-import {
-  Button,
-  Input,
-  Label,
-  Overlay,
-  Form,
-  Modal,
-  WaitlistButton,
-} from "./styles";
+import "./waitlist.css";
 
 const WaitlistPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
-  const formRef = useRef<HTMLFormElement>(null); // Add a reference for the form
+  const formRef = useRef<HTMLFormElement>(null);
   const apiUrl = process.env.NEXT_PUBLIC_DEV_BACKEND;
 
   const togglePopup = () => {
@@ -23,7 +15,7 @@ const WaitlistPopup = () => {
       setTimeout(() => {
         setIsOpen(false);
         setIsAnimating(false);
-      }, 300); // Corresponds to animation duration
+      }, 300);
     } else {
       setIsOpen(true);
     }
@@ -51,7 +43,7 @@ const WaitlistPopup = () => {
       const data = await response.json();
 
       if (response.ok) {
-        formRef.current?.reset(); // Reset the form using the form reference
+        formRef.current?.reset();
         alert("Thank you for joining the waitlist!");
       } else {
         alert(
@@ -72,18 +64,17 @@ const WaitlistPopup = () => {
 
   return (
     <>
-      <WaitlistButton onClick={togglePopup}>
+      <button className="waitlist-button" onClick={togglePopup}>
         Interested? Join our waitlist!
-      </WaitlistButton>
+      </button>
       {isOpen && (
-        <Overlay out={!isOpen && isAnimating} onClick={handleClose}>
-          <Modal ref={modalRef} out={!isOpen && isAnimating}>
+        <div className={`overlay ${!isOpen && isAnimating ? "fade-out" : "fade-in"}`} onClick={handleClose}>
+          <div className={`modal ${!isOpen && isAnimating ? "fade-out" : "fade-in"}`} ref={modalRef}>
             <h1>Join the Waitlist</h1>
-            <Form onSubmit={handleSubmit} ref={formRef}>
-              {" "}
-              {/* Attach the form reference */}
-              <Label htmlFor="email">Email:</Label>
-              <Input
+            <form className="form" onSubmit={handleSubmit} ref={formRef}>
+              <label className="label" htmlFor="email">Email:</label>
+              <input
+                className="input"
                 type="email"
                 id="email"
                 name="email"
@@ -91,8 +82,9 @@ const WaitlistPopup = () => {
                 required
                 disabled={isSubmitting}
               />
-              <Label htmlFor="phone">Phone Number</Label>
-              <Input
+              <label className="label" htmlFor="phone">Phone Number</label>
+              <input
+                className="input"
                 type="tel"
                 id="phone"
                 name="phone"
@@ -101,15 +93,15 @@ const WaitlistPopup = () => {
                 required
                 disabled={isSubmitting}
               />
-              <Button type="submit" disabled={isSubmitting}>
+              <button className="button" type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Submitting..." : "Submit"}
-              </Button>
-            </Form>
-            <Button onClick={togglePopup} disabled={isSubmitting}>
+              </button>
+            </form>
+            <button className="button" onClick={togglePopup} disabled={isSubmitting}>
               Close
-            </Button>
-          </Modal>
-        </Overlay>
+            </button>
+          </div>
+        </div>
       )}
     </>
   );

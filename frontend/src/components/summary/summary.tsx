@@ -1,12 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  SummaryDiv,
-  Title,
-  InlineContainer,
-  GreenText,
-} from "./styles";
+import "./Summary.css";
 import WaitlistPopup from "./component/waitlist/waitlist";
 
 interface SummaryProps {
@@ -16,14 +11,14 @@ interface SummaryProps {
 export const Summary: React.FC<SummaryProps> = (props) => {
   return (
     <>
-      <SummaryDiv>
-        <InlineContainer>
-          <Title>
-            Welcome to <GreenText>EasyIP</GreenText>. The all in one solution to
+      <div className="summary-div">
+        <div className="inline-container">
+          <p className="title">
+            Welcome to <span className="green-text">EasyIP</span>. The all in one solution to
             IP research.
-          </Title>
-        </InlineContainer>
-      </SummaryDiv>
+          </p>
+        </div>
+      </div>
       <WaitlistPopup />
     </>
   );

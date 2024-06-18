@@ -1,44 +1,10 @@
 import React, { useState } from "react";
-import CustomButton from "./CustomButton";
+import CustomButton from "../../../../components/buttons/CustomButton";
 import { Dictionary } from "@/utils/dictionary";
-import {
-  PatentBox,
-  BoxTitle,
-  Abstract,
-  Details,
-  PatentLink,
-  InventorList,
-  InventorItem,
-  BoldedDetail,
-  Wrapper,
-  ChartContainer,
-  DropdownContainer,
-  DropdownLabel,
-  DropdownSelect,
-  DropdownOption,
-  NoMetricSelected,
-  AnalyzedContentWrapper,
-} from "./styles";
-
-import {
-  Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend,
-} from "chart.js";
 import { Radar } from "react-chartjs-2";
 import Citations from "../citations/Citations";
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend
-);
+import "chart.js/auto";
+import "./patent.css";
 
 interface PatentItem {
   abstract: string;
@@ -199,7 +165,6 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
       });
 
       setIsAnalyzed(true);
-
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -208,73 +173,62 @@ const Patent: React.FC<PatentListProps> = ({ item, searchMetrics, search }) => {
   };
 
   return (
-    <PatentBox key={item.id}>
-      <BoxTitle>
+    <div className="patent-box" key={item.id}>
+      <h2 className="box-title">
         {item.title} ({item.type})
-      </BoxTitle>
-      <Abstract>{item.abstract}</Abstract>
-      <Details>
-        <BoldedDetail>Owned by:</BoldedDetail> {item.owner}
-      </Details>
-      <Details>
-        <BoldedDetail>Publication Date:</BoldedDetail> {item.publication_date}
-      </Details>
-      <Details>
-        <BoldedDetail>Patent Number:</BoldedDetail> {item.publication_id}
-      </Details>
-      <PatentLink
-        href={item.www_link}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      </h2>
+      <p className="abstract">{item.abstract}</p>
+      <p className="details">
+        <span className="bolded-detail">Owned by:</span> {item.owner}
+      </p>
+      <p className="details">
+        <span className="bolded-detail">Publication Date:</span> {item.publication_date}
+      </p>
+      <p className="details">
+        <span className="bolded-detail">Patent Number:</span> {item.publication_id}
+      </p>
+      <a className="patent-link" href={item.www_link} target="_blank" rel="noopener noreferrer">
         Google Patents Link
-      </PatentLink>
+      </a>
       {item.inventors && (
-        <InventorList>
+        <ul className="inventor-list">
           {item.inventors.map((inventor) => (
-            <InventorItem key={inventor}>{inventor}</InventorItem>
+            <li className="inventor-item" key={inventor}>{inventor}</li>
           ))}
-        </InventorList>
+        </ul>
       )}
-      <Wrapper>
+      <div className="wrapper">
         {isAnalyzed ? (
-          <AnalyzedContentWrapper>
-            <ChartContainer>
+          <div className="analyzed-content-wrapper">
+            <div className="chart-container">
               <Radar data={data} />
-            </ChartContainer>
-            <DropdownContainer>
-              <DropdownLabel>Drop Down</DropdownLabel>
-              <DropdownSelect
-                onChange={handleDropdownChange}
-                value={selectedMetric || ""}
-              >
-                <DropdownOption value="" disabled>
+            </div>
+            <div className="dropdown-container">
+              <label className="dropdown-label">Drop Down</label>
+              <select className="dropdown-select" onChange={handleDropdownChange} value={selectedMetric || ""}>
+                <option className="dropdown-option" value="" disabled>
                   Select a Metric to Analyze
-                </DropdownOption>
+                </option>
                 {searchMetrics.map((metric) => (
-                  <DropdownOption key={metric} value={metric}>
+                  <option className="dropdown-option" key={metric} value={metric}>
                     {metric}
-                  </DropdownOption>
+                  </option>
                 ))}
-              </DropdownSelect>
-            </DropdownContainer>
+              </select>
+            </div>
             {selectedMetric ? (
-              <Citations
-                data={citationsData}
-                metric={selectedMetric || ""}
-                loading={!citationsData[selectedMetric]}
-              />
+              <Citations data={citationsData} metric={selectedMetric || ""} loading={!citationsData[selectedMetric]} />
             ) : (
-              <NoMetricSelected>No Metric Selected</NoMetricSelected>
+              <div className="no-metric-selected">No Metric Selected</div>
             )}
-          </AnalyzedContentWrapper>
+          </div>
         ) : (
           <CustomButton loading={loading} handleClick={fetchData}>
             Analyze
           </CustomButton>
         )}
-      </Wrapper>
-    </PatentBox>
+      </div>
+    </div>
   );
 };
 

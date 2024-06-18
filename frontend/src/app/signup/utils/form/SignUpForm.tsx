@@ -1,21 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import {
-  FormContainer,
-  StyledForm,
-  FormTitle,
-  FormDescription,
-  HR,
-  Label,
-  Input,
-  Button,
-  FormGroup,
-  ModalOverlay,
-  ModalContent,
-  HaveAccount,
-  SignInLink,
-} from "./styles";
+import "./signup.css";
 
 const SignUpForm = () => {
   const apiUrl = process.env.NEXT_PUBLIC_DEV_BACKEND;
@@ -70,14 +56,15 @@ const SignUpForm = () => {
 
   return (
     <>
-      <FormContainer>
-        <FormTitle>Sign Up</FormTitle>
-        <FormDescription>Create a new account.</FormDescription>
-        <HR />
-        <StyledForm onSubmit={handleSubmit}>
-          <FormGroup>
-            <Label htmlFor="firstName">First Name:</Label>
-            <Input
+      <div className="form-container">
+        <h1 className="form-title">Sign Up</h1>
+        <h3 className="form-description">Create a new account.</h3>
+        <hr className="hr" />
+        <form className="styled-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="label" htmlFor="firstName">First Name:</label>
+            <input
+              className="input"
               type="text"
               id="firstName"
               name="firstName"
@@ -85,10 +72,11 @@ const SignUpForm = () => {
               onChange={handleChange}
               required
             />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="lastName">Last Name:</Label>
-            <Input
+          </div>
+          <div className="form-group">
+            <label className="label" htmlFor="lastName">Last Name:</label>
+            <input
+              className="input"
               type="text"
               id="lastName"
               name="lastName"
@@ -96,10 +84,11 @@ const SignUpForm = () => {
               onChange={handleChange}
               required
             />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="email">Email:</Label>
-            <Input
+          </div>
+          <div className="form-group">
+            <label className="label" htmlFor="email">Email:</label>
+            <input
+              className="input"
               type="email"
               id="email"
               name="email"
@@ -107,10 +96,11 @@ const SignUpForm = () => {
               onChange={handleChange}
               required
             />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="phone">Phone Number:</Label>
-            <Input
+          </div>
+          <div className="form-group">
+            <label className="label" htmlFor="phone">Phone Number:</label>
+            <input
+              className="input"
               type="tel"
               id="phone"
               name="phone"
@@ -118,10 +108,11 @@ const SignUpForm = () => {
               onChange={handleChange}
               required
             />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="password">Password:</Label>
-            <Input
+          </div>
+          <div className="form-group">
+            <label className="label" htmlFor="password">Password:</label>
+            <input
+              className="input"
               type="password"
               id="password"
               name="password"
@@ -129,25 +120,25 @@ const SignUpForm = () => {
               onChange={handleChange}
               required
             />
-          </FormGroup>
-          <Button type="submit">Sign Up</Button>
-          <HaveAccount>
+          </div>
+          <button className="button" type="submit">Sign Up</button>
+          <h1 className="have-account">
             Have an Account?
-            <SignInLink>
+            <span className="sign-in-link">
               <Link href="/signin">Sign In</Link>
-            </SignInLink>
-          </HaveAccount>
-        </StyledForm>
-      </FormContainer>
+            </span>
+          </h1>
+        </form>
+      </div>
 
       {isSubmitted && (
-        <ModalOverlay>
-          <ModalContent>
+        <div className="modal-overlay">
+          <div className="modal-content">
             <h2>Sign-Up Successful</h2>
             <p>Welcome! Your account has been created successfully.</p>
-            <Button onClick={closeModal}>Close</Button>
-          </ModalContent>
-        </ModalOverlay>
+            <button className="button" onClick={closeModal}>Close</button>
+          </div>
+        </div>
       )}
     </>
   );

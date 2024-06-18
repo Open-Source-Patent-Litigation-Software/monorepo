@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button } from "../summary/component/waitlist/styles";
+import "../summary/component/waitlist/waitlist.css";
 
 interface Props {
   message: string;
@@ -13,7 +13,7 @@ const GenericModal: React.FC<Props> = (props) => {
     <div>
       <div>{props.message}</div>
       {props.redirect ? <p>{props.redirect}</p> : null}
-      {props.closeButton ? <button>Close</button> : null}
+      {props.closeButton ? <button className="button">Close</button> : null}
     </div>
   );
 };

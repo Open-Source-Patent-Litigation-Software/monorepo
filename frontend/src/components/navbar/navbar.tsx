@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { StyledNav, StyledUl, StyledLi, LogoText, LoginLink } from "./styles";
+import "./navbar.css";
 
 interface NavigationProps {
   // Your props here
@@ -15,22 +15,22 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
   };
 
   return (
-    <StyledNav>
-      <LogoText>
+    <nav className="styled-nav">
+      <p className="logo-text">
         <Link href="/">EasyIP</Link>
-      </LogoText>
-      <StyledUl>
+      </p>
+      <ul className="styled-ul">
         {Object.entries(routes).map(([name, path]) => (
-          <StyledLi key={name}>
+          <li className="styled-li" key={name}>
             <Link href={path} passHref>
               {name.charAt(0).toUpperCase() + name.slice(1)}
             </Link>
-          </StyledLi>
+          </li>
         ))}
-      </StyledUl>
-      <LoginLink>
+      </ul>
+      <p className="login-link">
         <Link href="/signin">Sign In</Link>
-      </LoginLink>
-    </StyledNav>
+      </p>
+    </nav>
   );
 };

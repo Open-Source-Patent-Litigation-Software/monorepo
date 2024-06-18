@@ -3,10 +3,11 @@ import React, { useState, useEffect } from "react";
 import { Navbar } from "../../components/navbar/navbar";
 import { Footer } from "../../components/footer/footer";
 import Metrics from "./_components/metrics/metrics";
-import PatentList from "./_components/patentList/patentList";
+import PatentList from "./_components/patent/patentList";
 import SearchText from "./_components/search/searchText";
-import LoadingSpinner from "./_components/search/loadingSpinner";
-import useMetricSearchStateStore from "@/_stores/useMetricStore";
+import LoadingSpinner from "./_components/loading/loadingSpinner";
+import useMetricSearchStateStore from "@/stores/useMetricStore";
+import "./styles.css";
 
 /*
  >>> TODO: Jun 5th
@@ -15,14 +16,6 @@ import useMetricSearchStateStore from "@/_stores/useMetricStore";
     >>> Adjust citations component to render only items shown
 */
 
-import {
-  SearchContainer,
-  ColoredDiv,
-  SearchTextArea,
-  SearchButton,
-  SearchBarTitle,
-  AnimationContainer,
-} from "./styles";
 interface Error {
   message: string;
 }
@@ -124,18 +117,19 @@ function Index() {
 
   return (
     <>
-      <ColoredDiv>
+      <div className="colored-div">
         <Navbar />
-        <AnimationContainer>
-          <SearchContainer>
-            <SearchBarTitle>Search Patents</SearchBarTitle>
-            <SearchTextArea
+        <div className="animation-container">
+          <div className="search-container">
+            <h2 className="search-bar-title">Search Patents</h2>
+            <textarea
+              className="search-textarea"
               onChange={(e) => setPatentQuery(e.target.value)}
               placeholder="Describe your invention in 500 words or less."
             />
-            <SearchButton onClick={fetchData}>Search</SearchButton>
+            <button className="search-button" onClick={fetchData}>Search</button>
             {error && <div>Error: {error}</div>}
-          </SearchContainer>
+          </div>
           {(() => {
             if (searchState == SearchVal.dataAvailable && data) {
               return (
@@ -159,8 +153,8 @@ function Index() {
               return <SearchText />;
             }
           })()}
-        </AnimationContainer>
-      </ColoredDiv>
+        </div>
+      </div>
       <Footer />
     </>
   );

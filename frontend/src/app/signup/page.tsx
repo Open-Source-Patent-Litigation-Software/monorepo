@@ -1,25 +1,25 @@
 "use client";
 import React from "react";
-import PropTypes from "prop-types";
 import SignUpForm from "./utils/form/SignUpForm";
 import { Navbar } from "../../components/navbar/navbar";
-import { DivView } from "../styles";
 import { Footer } from "../../components/footer/footer";
+import "./signup.css";
 
-interface props {}
+interface Props {}
 
-function SignUpPage(props: props) {
+function SignUpPage(props: Props) {
   return (
     <div>
       <Navbar />
-      <DivView paddingTop="300px">
+      <div
+        className="div-view"
+        style={{ "--padding-top": "300px" } as React.CSSProperties}
+      >
         <SignUpForm />
-      </DivView>
+      </div>
       <Footer />
     </div>
   );
 }
-
-SignUpPage.propTypes = {};
 
 export default SignUpPage;
