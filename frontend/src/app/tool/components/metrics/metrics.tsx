@@ -2,7 +2,7 @@ import React from 'react';
 import './metrics.css';
 import { MetricProps } from '@/types/types';
 
-const Metrics: React.FC<MetricProps> = ({ metrics, addMetric, removeMetric, editMetric }) => {
+const Metrics: React.FC<MetricProps> = ({ metrics, addMetric, removeMetric, editMetric, lockMetrics }) => {
   const half = Math.ceil(metrics.length / 2);
   return (
     <div className="container">
@@ -30,7 +30,10 @@ const Metrics: React.FC<MetricProps> = ({ metrics, addMetric, removeMetric, edit
           </div>
         ))}
       </div>
-      <button className="add-button" onClick={addMetric}>Add Metric</button>
+      <div className="button-container">
+        <button className="add-button" onClick={addMetric}>Add Metric</button>
+        <button className="lock-button" onClick={lockMetrics}>Lock Metrics</button>
+      </div>
     </div>
   );
 }

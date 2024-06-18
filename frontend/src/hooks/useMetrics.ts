@@ -8,8 +8,7 @@ interface UseFetchMetricsReturn {
   isMetricsLocked: boolean;
   searchState: SearchVal;
   fetchMetrics: (patentQuery: string, backendUrl: string | undefined) => Promise<void>;
-  lockMetrics: () => void;
-  fetchSearchResults: (patentQuery: string, backendUrl: string | undefined) => Promise<void>;
+  lockMetricsAndSearch: (patentQuery: string, backendUrl: string | undefined) => Promise<void>;
   addMetric: () => void;
   removeMetric: (index: number) => void;
   editMetric: (index: number, newValue: string) => void;
@@ -73,34 +72,28 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
     }
   };
 
-  const lockMetrics = () => {
+  const lockMetricsAndSearch = async (patentQuery: string, backendUrl: string | undefined) => {
     setIsMetricsLocked(true);
-  };
-
-  const fetchSearchResults = async (patentQuery: string, backendUrl: string | undefined) => {
-    if (!isMetricsLocked) {
-      lockMetrics();
-    }
     try {
-      setSearchState(SearchVal.loading);
-      setError("");
-
-      const searchURL = new URL(`${backendUrl}/patents/makeQuery`);
-      searchURL.searchParams.append("search", patentQuery);
-      const searchResponse = await fetch(searchURL.toString());
-      if (!searchResponse.ok) {
-        throw new Error(`HTTP error! status: ${searchResponse.status}`);
+        setSearchState(SearchVal.loading);
+        setError("");
+  
+        const searchURL = new URL(`${backendUrl}/patents/makeQuery`);
+        searchURL.searchParams.append("search", patentQuery);
+        const searchResponse = await fetch(searchURL.toString());
+        if (!searchResponse.ok) {
+          throw new Error(`HTTP error! status: ${searchResponse.status}`);
+        }
+        const searchData = await searchResponse.json();
+        setData(searchData.results);
+  
+        setSearchState(SearchVal.dataAvailable);
+      } catch (e) {
+        setSearchState(SearchVal.noSearch);
+        const error = e as Error;
+        setError(error.message);
+        setData(null);
       }
-      const searchData = await searchResponse.json();
-      setData(searchData.results);
-
-      setSearchState(SearchVal.dataAvailable);
-    } catch (e) {
-      setSearchState(SearchVal.noSearch);
-      const error = e as Error;
-      setError(error.message);
-      setData(null);
-    }
   };
 
   return {
@@ -110,8 +103,7 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
     isMetricsLocked,
     searchState,
     fetchMetrics,
-    lockMetrics,
-    fetchSearchResults,
+    lockMetricsAndSearch,
     addMetric,
     removeMetric,
     editMetric

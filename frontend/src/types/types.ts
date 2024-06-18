@@ -56,6 +56,7 @@ export interface MetricProps {
     addMetric: () => void;
     removeMetric: (index: number) => void;
     editMetric: (index: number, newMetric: string) => void;
+    lockMetrics: () => void;
 }
 
 type Dataset = {

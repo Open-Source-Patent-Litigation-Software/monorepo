@@ -9,7 +9,7 @@
     display: flex;
     justify-content: center;
     margin: 20px 0;
-    gap: 20px;
+    gap: 10px;
     flex-wrap: wrap;
   }
   
@@ -33,7 +33,7 @@
     background-color: #ff4500;
   }
   
-  .add-button {
+  .add-button, .lock-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -48,7 +48,7 @@
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s;
   }
   
-  .add-button:hover {
+  .add-button:hover, .lock-button:hover {
     background-color: #4F6F52;
     color: white;
     transform: scale(1.05);
@@ -80,3 +80,26 @@
     transform: scale(1.2);
   }
   
+  .metric-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    background: #f0f8ff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    cursor: default;
+  }
+  
+  .metric-box:hover {
+    transform: translateY(-5px);
+  }
+
+  .metric-text {
+    font-size: 1.2em;
+    color: #333;
+    text-align: center;
+    width: 200px;
+  }
