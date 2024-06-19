@@ -8,7 +8,7 @@ This document describes the workflow for creating a new branch from the `develop
 
 Before creating a new branch, ensure that your local `development` branch is up-to-date with the remote repository.
 
-``` bash
+```bash
 git checkout development
 git pull origin development
 ```
@@ -73,5 +73,6 @@ git push origin --delete feature/new-feature
 For staging any changes in the backend directory since the .gitignore is inconsistent.
 
 ```bash
-find . -type f ! -path "*.pyc" ! -path "*/__pycache__/*" ! -path "*.idea/*" ! -path "*/env/*" | xargs git add
+git add .
+git reset HEAD '**/*.pyc' '**/__pycache__/*' '**/.idea/*' '**/env/*'
 ```

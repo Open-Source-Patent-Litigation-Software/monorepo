@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, session
+from flask import Blueprint, jsonify, request
 from backend.database.factory import DatabaseCallFactory
 from database.posts import (
     postToList,
@@ -8,7 +8,6 @@ from database.posts import (
     postOrganization,
     retrieveUserInfo,
 )
-from flask import jsonify, session
 
 operations = Blueprint("operations", __name__, template_folder="templates")
 
@@ -79,7 +78,6 @@ def signin():
 
 @operations.route("/signout", methods=["GET"])
 def signout():
-    session.clear()
     return jsonify({"message": "Successfully signed out"})
 
 

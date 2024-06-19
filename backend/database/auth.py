@@ -3,6 +3,8 @@ from .models import LoginCredential, RegUser
 from .factory import DatabaseCall
 from app.extensions import bcrypt
 from flask import jsonify
+import logging
+
 
 class Auth(DatabaseCall):
     def __init__(self):
@@ -15,7 +17,9 @@ class Auth(DatabaseCall):
         else:
             return jsonify({"error": "Invalid credentials."}), 401
 
-    def registerUser(self, firstName: str, lastName: str, email: str, phone: str, password: str):
+    def registerUser(
+        self, firstName: str, lastName: str, email: str, phone: str, password: str
+    ):
         try:
             hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
 
@@ -48,14 +52,14 @@ class Auth(DatabaseCall):
 
         except Exception as e:
             self.session.rollback()
-            logger.error(f"An error occurred during registration: {e}")
+            self.logger.error(f"An error occurred during registration: {e}")
             return jsonify({"error": f"An error occurred: {e}"}), 400
 
     def signOutUser(self):
         try:
             # Implement sign out logic here
-            logger.info("Sign out logic")
+            self.logger.info("Sign out logic")
             return jsonify({"message": "User signed out successfully."}), 200
         except Exception as e:
-            logger.error(f"An error occurred during sign out: {e}")
+            self.logger.error(f"An error occurred during sign out: {e}")
             return jsonify({"error": f"An error occurred: {e}"}), 400
