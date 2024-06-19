@@ -16,7 +16,9 @@
   .metric {
     display: flex;
     align-items: center;
-    margin: 0 20px 20px 0; /* Increase the space between boxes */
+    margin: 0 20px 20px 0;
+    position: relative;
+    display: inline-block;
   }
   
   .button {
@@ -58,7 +60,8 @@
     padding: 10px;
     margin-right: 10px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    background-color: #ffff;
+    border-radius: 10px;
     width: 200px; 
     height: 100px;
     resize: none;
@@ -66,6 +69,9 @@
   }
   
   .remove-button {
+    position: absolute;
+    top: 5px;
+    right: 15px;
     background: none;
     border: none;
     color: #ff4500;
@@ -78,7 +84,7 @@
   .remove-button:hover {
     color: #ff0000;
     transform: scale(1.2);
-  }
+  }  
   
   .metric-box {
     display: flex;
@@ -102,4 +108,9 @@
     color: #333;
     text-align: center;
     width: 200px;
+  }
+
+  .button-container {
+    display: flex;
+    gap: 15px;
   }
