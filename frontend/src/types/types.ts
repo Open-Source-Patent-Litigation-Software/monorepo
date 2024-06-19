@@ -1,3 +1,5 @@
+export const backendUrl = process.env.NEXT_PUBLIC_DEV_BACKEND;
+
 export interface PatentItem {
     abstract: string;
     alias: string;
@@ -92,8 +94,9 @@ export interface Error {
     message: string;
 }
 
-export enum SearchVal {
+export enum PatentSearchVal {
     loading = 1,
     noSearch = 0,
     dataAvailable = 2,
 }
+

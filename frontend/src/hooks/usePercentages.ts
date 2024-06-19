@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { fetchPercentages } from "@/utils/fetchPercentages";
-import { PercentagesDataType } from '@/types/types';
+import { PercentagesDataType, backendUrl } from '@/types/types';
 
 export const useFetchPercentages = (
     searchMetrics: string[],
     search: string,
     itemUrl: string,
-    backendUrl: string | undefined
 ) => {
     const [isAnalyzed, setIsAnalyzed] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
@@ -32,7 +31,6 @@ export const useFetchPercentages = (
         searchMetrics,
         search,
         itemUrl,
-        backendUrl,
         setpercentagesData,
         setLoading,
         setIsAnalyzed

@@ -1,10 +1,10 @@
 import { concateMetrics } from "./utils";
+import { backendUrl } from "@/types/types";
 
 export const fetchPercentages = async (
     searchMetrics: string[],
     search: string,
     itemUrl: string,
-    backendUrl: string | undefined,
     setData: React.Dispatch<
     React.SetStateAction<{
         labels: string[];

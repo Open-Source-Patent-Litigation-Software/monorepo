@@ -3,9 +3,10 @@ import './metrics.css';
 
 interface NonEditableMetricProps {
   metrics: string[];
+  unlockMetrics: () => void;
 }
 
-const NonEditableMetrics: React.FC<NonEditableMetricProps> = ({ metrics }) => {
+const NonEditableMetrics: React.FC<NonEditableMetricProps> = ({ metrics, unlockMetrics }) => {
   const half = Math.ceil(metrics.length / 2);
   return (
     <div className="container">
@@ -23,7 +24,11 @@ const NonEditableMetrics: React.FC<NonEditableMetricProps> = ({ metrics }) => {
           </div>
         ))}
       </div>
+      <div className="button-container">
+        <button className="add-button" onClick={unlockMetrics}>Edit Metrics</button>
+      </div>
     </div>
+    
   );
 }
 

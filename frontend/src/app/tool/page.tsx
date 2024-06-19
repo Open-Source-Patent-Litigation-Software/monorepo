@@ -9,32 +9,31 @@ import SearchText from "./components/search/searchText";
 import LoadingSpinner from "./components/loading/loadingSpinner";
 import useMetricSearchStateStore from "@/stores/useMetricStore";
 import "./styles.css";
-import { useFetchMetrics } from "@/hooks/useMetrics";
-import { SearchVal } from "@/types/types";
+import { useFetchMetrics } from "@/hooks/useSearchMetrics";
 
 const Index = () => {
-  const backendUrl = process.env.NEXT_PUBLIC_DEV_BACKEND;
   const { storeMetrics, setAll } = useMetricSearchStateStore();
   const [patentQuery, setPatentQuery] = useState<string>("");
   const {
-    data,
+    searchResults,
     error,
     metrics,
     isMetricsLocked,
-    searchState,
+    isLoading,
     fetchMetrics,
     lockMetricsAndSearch,
     addMetric,
     removeMetric,
-    editMetric
+    editMetric,
+    unlockMetrics
   } = useFetchMetrics();
 
   const handleFetchMetrics = () => {
-    fetchMetrics(patentQuery, backendUrl);
+    fetchMetrics(patentQuery);
   };
 
   const handleLockMetricsAndSearch = () => {
-    lockMetricsAndSearch(patentQuery, backendUrl);
+    lockMetricsAndSearch(metrics);
   };
 
   return (
@@ -50,11 +49,11 @@ const Index = () => {
               placeholder="Describe your invention in 500 words or less."
             />
             <button className="search-button" onClick={handleFetchMetrics}>
-              Fetch Metrics
+              Search
             </button>
             {error && <div>Error: {error}</div>}
           </div>
-          {searchState === SearchVal.dataAvailable && !isMetricsLocked && (
+          {!isMetricsLocked && metrics.length > 0 && (
               <Metrics
                 metrics={metrics}
                 addMetric={addMetric}
@@ -63,18 +62,21 @@ const Index = () => {
                 lockMetrics={handleLockMetricsAndSearch}
               />
           )}
-          {searchState === SearchVal.dataAvailable && isMetricsLocked && (
-              <NonEditableMetrics metrics={metrics} />
+          {isMetricsLocked && (
+              <NonEditableMetrics metrics={metrics} unlockMetrics={unlockMetrics}/>
           )}
-          {searchState === SearchVal.loading && <LoadingSpinner />}
-          {searchState === SearchVal.noSearch && <SearchText />}
-          {searchState === SearchVal.dataAvailable && data && (
+          {/* if there are no metrics, search results, and its not loading */}
+          {!searchResults && metrics.length == 0 && !isLoading && <SearchText />}
+          {/* if the metrics are locked and there are search results */}
+          {isMetricsLocked && searchResults && (
             <PatentList
-              items={data}
+              items={searchResults}
               metrics={metrics}
               search={patentQuery}
             />
           )}
+          {/* if loading, populate the spinner */}
+          {isLoading && <LoadingSpinner />}
         </div>
       </div>
       <Footer />

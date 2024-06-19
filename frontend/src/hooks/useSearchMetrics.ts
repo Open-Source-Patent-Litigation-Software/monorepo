@@ -1,24 +1,25 @@
 import { useState } from 'react';
-import { Metric, PatentItem, FormattedSearch, SearchVal } from "@/types/types";
+import { Metric, PatentItem, FormattedSearch, backendUrl } from "@/types/types";
 
 interface UseFetchMetricsReturn {
-  data: PatentItem[] | null;
+  searchResults: PatentItem[] | null;
   error: string;
   metrics: Metric[];
   isMetricsLocked: boolean;
-  searchState: SearchVal;
-  fetchMetrics: (patentQuery: string, backendUrl: string | undefined) => Promise<void>;
-  lockMetricsAndSearch: (patentQuery: string, backendUrl: string | undefined) => Promise<void>;
+  isLoading: boolean;
+  fetchMetrics: (patentQuery: string) => Promise<void>;
+  lockMetricsAndSearch: (metrics: string[]) => Promise<void>;
   addMetric: () => void;
   removeMetric: (index: number) => void;
   editMetric: (index: number, newValue: string) => void;
+  unlockMetrics: () => void;
 }
 
 export const useFetchMetrics = (): UseFetchMetricsReturn => {
-  const [data, setData] = useState<PatentItem[] | null>(null);
+  const [searchResults, setSearchResults] = useState<PatentItem[] | null>(null);
   const [error, setError] = useState<string>("");
   const [metrics, setMetrics] = useState<Metric[]>([]);
-  const [searchState, setSearchState] = useState<SearchVal>(SearchVal.noSearch);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isMetricsLocked, setIsMetricsLocked] = useState<boolean>(false);
 
   const addMetric = () => {
@@ -27,7 +28,7 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
   };
 
   const removeMetric = (index: number) => {
-    if (isMetricsLocked) return;
+    if (isMetricsLocked || metrics.length <= 6) return;
     setMetrics(metrics.filter((_, i) => i !== index));
   };
 
@@ -38,10 +39,10 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
     setMetrics(newMetrics);
   };
 
-  const fetchMetrics = async (patentQuery: string, backendUrl: string | undefined) => {
+  const fetchMetrics = async (patentQuery: string) => {
     try {
-      setSearchState(SearchVal.loading);
       setError("");
+      setIsLoading(true);
 
       const metricsURL = new URL(`${backendUrl}/llm/obtainMetrics`);
       const formattedSearch: FormattedSearch = {
@@ -63,49 +64,54 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
       const metricsData = await metricsResponse.json();
       const metricList: Metric[] = Object.values(metricsData["functions"]);
       setMetrics(metricList);
+      setIsLoading(false);
 
-      setSearchState(SearchVal.dataAvailable);
     } catch (e) {
-      setSearchState(SearchVal.noSearch);
       const error = e as Error;
       setError(error.message);
+      setIsLoading(false);
     }
   };
 
-  const lockMetricsAndSearch = async (patentQuery: string, backendUrl: string | undefined) => {
+  const unlockMetrics = () => {
+    setIsMetricsLocked(false);
+    setSearchResults(null);
+  }
+
+  const lockMetricsAndSearch = async (metrics: string[]) => {
     setIsMetricsLocked(true);
+    setIsLoading(true);
     try {
-        setSearchState(SearchVal.loading);
         setError("");
   
         const searchURL = new URL(`${backendUrl}/patents/makeQuery`);
-        searchURL.searchParams.append("search", patentQuery);
+        searchURL.searchParams.append("search", metrics.join("\n"));
         const searchResponse = await fetch(searchURL.toString());
         if (!searchResponse.ok) {
           throw new Error(`HTTP error! status: ${searchResponse.status}`);
         }
         const searchData = await searchResponse.json();
-        setData(searchData.results);
-  
-        setSearchState(SearchVal.dataAvailable);
+        setSearchResults(searchData.results);
+        setIsLoading(false);
       } catch (e) {
-        setSearchState(SearchVal.noSearch);
         const error = e as Error;
         setError(error.message);
-        setData(null);
+        setSearchResults(null);
+        setIsLoading(false);
       }
   };
 
   return {
-    data,
+    searchResults,
     error,
     metrics,
     isMetricsLocked,
-    searchState,
+    isLoading,
     fetchMetrics,
     lockMetricsAndSearch,
     addMetric,
     removeMetric,
-    editMetric
+    editMetric,
+    unlockMetrics
   };
 };
