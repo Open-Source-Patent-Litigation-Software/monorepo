@@ -8,6 +8,7 @@ from sqlalchemy import (
     String,
     DateTime,
     func,
+    JSON,
     UniqueConstraint,
 )
 from sqlalchemy.orm import relationship, declarative_base, sessionmaker
@@ -218,7 +219,7 @@ class SpecificPatentMetric(Base):
         Integer, ForeignKey("public.metric.id", ondelete="CASCADE"), nullable=False
     )
     percentage = Column(Integer, nullable=False)
-    information = Column(String)
+    information = Column(JSON)
     search = relationship("Search", backref="specific_patent_metrics")
     patent = relationship("Patent", backref="specific_patent_metrics")
     metric = relationship("Metric", backref="specific_patent_metrics")

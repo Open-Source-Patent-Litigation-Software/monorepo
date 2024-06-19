@@ -67,3 +67,11 @@ After the changes have been merged, you can delete the feature branch locally an
 git branch -d feature/new-feature
 git push origin --delete feature/new-feature
 ```
+
+### 10. Staging Changes in the Backend Directory
+
+For staging any changes in the backend directory since the .gitignore is inconsistent.
+
+```bash
+find . -type f ! -path "*.pyc" ! -path "*/__pycache__/*" ! -path "*.idea/*" ! -path "*/env/*" | xargs git add
+```
