@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from .models import Search, Metric, SpecificPatentMetric, Patent
-from .factory import DatabaseCall
+from .databaseCall import DatabaseCall
 
 
 class Cache(DatabaseCall):

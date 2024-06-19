@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from backend.database.factory import DatabaseCallFactory
+from database.factory import DatabaseCallFactory
 from database.posts import (
     postToList,
     postContactQuery,
