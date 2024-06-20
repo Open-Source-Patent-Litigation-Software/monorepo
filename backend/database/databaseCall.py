@@ -8,7 +8,7 @@ class DatabaseCall:
 
     def __init__(self):
         self.session = SessionLocal()
-        self.logger = logger = logging.getLogger("__name__")
+        self.logger = logging.getLogger("__name__")
 
     def createAndCommit(self, objects: list):
         """Create and commit objects to the database"""

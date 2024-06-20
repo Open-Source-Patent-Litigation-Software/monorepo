@@ -4,6 +4,8 @@ from .databaseCall import DatabaseCall
 
 
 class Cache(DatabaseCall):
+    """Caching refers to storing metrics, prior searches, and citations in a cache."""
+
     def __init__(self):
         super().__init__()
 
