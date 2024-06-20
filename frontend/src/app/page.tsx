@@ -1,17 +1,21 @@
 "use client";
-import { Navbar } from "./_components/navbar/navbar";
-import { DivView, SnapScrollContainer } from "./styles";
-import { Footer } from "./_components/footer/footer";
-import { Summary } from "./_components/summary/summary";
+import { Navbar } from "../components/navbar/navbar";
+import { Footer } from "../components/footer/footer";
+import { Summary } from "../components/summary/summary";
+import "./home.css";
+
 export default function Home() {
   return (
     <>
-      <SnapScrollContainer>
+      <div className="snap-scroll-container">
         <Navbar />
-        <DivView>
+        <div
+          className="div-view custom-padding custom-background"
+          style={{ "--custom-padding-top": "10%", "--custom-background-color": "#F5EFE6" } as React.CSSProperties}
+        >
           <Summary />
-        </DivView>
-      </SnapScrollContainer>
+        </div>
+      </div>
       <Footer />
     </>
   );

@@ -1,0 +1,64 @@
+@keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .snap-scroll-container {
+    overflow-y: scroll; /* Enable vertical scrolling */
+    scroll-snap-type: y mandatory; /* Enable snap scrolling on the y-axis */
+    width: 100%; /* Ensure it takes up the full width to prevent unexpected behavior */
+    background: #E8DFCA;
+  }
+  
+  .pricing-div {
+    background: #f5efe6;
+    display: flex;
+    margin-top: -5%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 110vh; /* Full viewport height */
+    scroll-snap-align: start; /* Align the top of the element with the snap container's scrollport */
+    width: 100%; /* Ensure it takes up the full width */
+  }
+  
+  .pricing-container {
+    animation: fadeIn 0.5s ease-in;
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    padding: 20px;
+    width: 80%;
+    height: 40vh; /* Take a good portion of the viewport height */
+  }
+  
+  .pricing-card {
+    width: 30%;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .plan-name {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .plan-divider {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
+  }
+  
+  .plan-description {
+    flex-grow: 1;
+  }
+  

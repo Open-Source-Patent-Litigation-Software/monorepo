@@ -1,24 +1,25 @@
 "use client";
 import React from "react";
-import PropTypes from "prop-types";
-import SignInForm from "./_components/form/SignInForm";
-import { Navbar } from "../_components/navbar/navbar";
-import { DivView } from "../styles";
-import { Footer } from "../_components/footer/footer";
+import SignInForm from "./components/form/SignInForm";
+import { Navbar } from "../../components/navbar/navbar";
+import { Footer } from "../../components/footer/footer";
+import "./signin.css";
+
 interface props {}
 
 function Index(props: props) {
   return (
     <div>
       <Navbar />
-      <DivView paddingTop="200px">
+      <div
+        className="div-view"
+        style={{ "--padding-top": "200px" } as React.CSSProperties}
+      >
         <SignInForm />
-      </DivView>
+      </div>
       <Footer />
     </div>
   );
 }
-
-Index.propTypes = {};
 
 export default Index;

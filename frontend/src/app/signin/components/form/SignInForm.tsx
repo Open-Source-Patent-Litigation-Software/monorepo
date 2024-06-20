@@ -1,22 +1,21 @@
 "use client";
 import React, { useState } from "react";
-import Link from "next/link";
-import "./signup.css";
+import useUserStore from "@/stores/useUserStore";
+import { navigate } from "@/redirects/toolRedirect";
+import "./SignInForm.css";
 
-const SignUpForm = () => {
+const SignInForm = () => {
   const apiUrl = process.env.NEXT_PUBLIC_DEV_BACKEND;
+  const setAll = useUserStore((state) => state.setAll);
 
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
     email: "",
-    phone: "",
     password: "",
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -24,25 +23,32 @@ const SignUpForm = () => {
     });
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetch(`${apiUrl}/ops/signup`, {
+    fetch(`${apiUrl}/ops/signin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(formData),
     })
       .then((response) => response.json())
       .then((data) => {
-        setIsSubmitted(true);
+        console.log("Success:", data);
+
+        setAll({
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phone: data.phone,
+        });
         setFormData({
-          firstName: "",
-          lastName: "",
           email: "",
-          phone: "",
           password: "",
         });
+        setIsSubmitted(true);
+        navigate();
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -57,34 +63,12 @@ const SignUpForm = () => {
   return (
     <>
       <div className="form-container">
-        <h1 className="form-title">Sign Up</h1>
-        <h3 className="form-description">Create a new account.</h3>
+        <h1 className="form-title">Sign In</h1>
+        <h3 className="form-description">
+          Welcome back! Please sign in to your account.
+        </h3>
         <hr className="hr" />
         <form className="styled-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="label" htmlFor="firstName">First Name:</label>
-            <input
-              className="input"
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="label" htmlFor="lastName">Last Name:</label>
-            <input
-              className="input"
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              required
-            />
-          </div>
           <div className="form-group">
             <label className="label" htmlFor="email">Email:</label>
             <input
@@ -93,18 +77,6 @@ const SignUpForm = () => {
               id="email"
               name="email"
               value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="label" htmlFor="phone">Phone Number:</label>
-            <input
-              className="input"
-              type="tel"
-              id="phone"
-              name="phone"
-              value={formData.phone}
               onChange={handleChange}
               required
             />
@@ -121,27 +93,31 @@ const SignUpForm = () => {
               required
             />
           </div>
-          <button className="button" type="submit">Sign Up</button>
-          <h1 className="have-account">
-            Have an Account?
-            <span className="sign-in-link">
-              <Link href="/signin">Sign In</Link>
+          <button className="button" type="submit">Sign In</button>
+          {/* 
+          <div className="no-account">
+            No Account?
+            <span className="sign-up-link">
+              <Link href="/signup">Sign Up</Link>
             </span>
-          </h1>
+          </div>
+          */}
         </form>
       </div>
 
+      {/* 
       {isSubmitted && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h2>Sign-Up Successful</h2>
-            <p>Welcome! Your account has been created successfully.</p>
+            <h2>Sign-In Successful</h2>
+            <p>Welcome back! You have successfully signed in.</p>
             <button className="button" onClick={closeModal}>Close</button>
           </div>
         </div>
-      )}
+      )} 
+      */}
     </>
   );
 };
 
-export default SignUpForm;
+export default SignInForm;
