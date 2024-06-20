@@ -8,10 +8,10 @@ from sqlalchemy import (
     String,
     DateTime,
     func,
-    text,
+    JSON,
     UniqueConstraint,
 )
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship, declarative_base, sessionmaker
 
 Base = declarative_base()
 load_dotenv()
@@ -219,7 +219,7 @@ class SpecificPatentMetric(Base):
         Integer, ForeignKey("public.metric.id", ondelete="CASCADE"), nullable=False
     )
     percentage = Column(Integer, nullable=False)
-    information = Column(String)
+    information = Column(JSON)
     search = relationship("Search", backref="specific_patent_metrics")
     patent = relationship("Patent", backref="specific_patent_metrics")
     metric = relationship("Metric", backref="specific_patent_metrics")
@@ -293,11 +293,9 @@ class SearchAnalytics(Base):
 
 
 # Set up the database connection and create all tables
-print("Creating engine...")
-print(EXPERIMENTAL_CONNECTION_STRING)
 engine = create_engine(EXPERIMENTAL_CONNECTION_STRING)
-print("Engine created.")
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-print("Creating tables...")
-Base.metadata.create_all(engine, checkfirst=True)
-print("Tables created.")
+
+# Uncomment the line below to create all tables
+# Base.metadata.create_all(engine, checkfirst=True)

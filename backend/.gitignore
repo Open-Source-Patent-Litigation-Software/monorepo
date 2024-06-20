@@ -1,16 +1,13 @@
 # Ignore environment files and directories
 .env
-env
+env/
 
 # Ignore all __pycache__ directories recursively
 __pycache__/
-
-# Ensure that all __pycache__ directories at any level are ignored
 **/__pycache__/
 
-/logs
-
-# all the pyc files
+# Ignore all pyc files
 *.pyc
+
+# Ignore specific database files
 database/.idea/
-database/.idea
