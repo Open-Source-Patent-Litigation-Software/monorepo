@@ -9,7 +9,6 @@ import { useCitations } from "@/hooks/useCitations";
 import { useFetchPercentages } from "@/hooks/usePercentages";
 
 const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
-  const backendUrl = process.env.NEXT_PUBLIC_DEV_BACKEND;
   const { citationsLoading, citationsData, selectedMetric, handleDropdownChange } = useCitations(item.www_link);
   const { isAnalyzed, loading, percentagesData, fetchPercentagesHandler } = useFetchPercentages(
     searchMetrics,

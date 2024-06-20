@@ -1,10 +1,10 @@
 import { Dictionary } from "@/utils/dictionary";
+import { backendUrl } from "@/types/types";
 
 // Function to fetch citation data
 export const fetchCitation = async (
     metric: string, // The metric for which the citation is being fetched
     itemUrl: string, // URL of the patent item
-    backendUrl: string | undefined, // Backend URL for the API call
     citationCache: { [key: string]: string }, // Cache for citations to avoid redundant API calls
     setCitationsData: React.Dispatch<React.SetStateAction<Dictionary>>, // State setter function to update citation data
     setCitationsLoading: React.Dispatch<React.SetStateAction<boolean>> // State setter function to update loading state
@@ -65,4 +65,4 @@ export const fetchCitation = async (
         // Set loading state to false as the API call has completed
         setCitationsLoading(false);
     }
-  };
+};

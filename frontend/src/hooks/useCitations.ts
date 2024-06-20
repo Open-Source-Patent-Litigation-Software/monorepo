@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Dictionary } from "@/utils/dictionary";
 import { fetchCitation } from "@/utils/fetchCitations";
+import { backendUrl } from '@/types/types';
 
-export const useCitations = (backendUrl: string | undefined, itemUrl: string) => {
+export const useCitations = (itemUrl: string) => {
     const [citationsLoading, setCitationsLoading] = useState<boolean>(false);
     const [citationsData, setCitationsData] = useState<Dictionary>({});
     const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
@@ -15,7 +16,6 @@ export const useCitations = (backendUrl: string | undefined, itemUrl: string) =>
         fetchCitation(
             value,
             itemUrl,
-            backendUrl,
             citationCache,
             setCitationsData,
             setCitationsLoading
