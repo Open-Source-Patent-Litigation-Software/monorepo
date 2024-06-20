@@ -12,11 +12,8 @@ def obtainMetrics():
         # get data from JSON
         data = request.get_json()
 
-        # get handler object with parsed data
-        handler = LLMCallFactory.getHandler('m', data)
-
-        # handle the request
-        response = handler.handleRequest()
+        # get the response from the factory
+        response = LLMCallFactory.getHandler(LLMCallFactory.RequestType.METRICS, data)
 
         # return jsonified response
         return jsonify(response), 200
@@ -37,11 +34,8 @@ def extractSpecificPatentMetrics():
         # get data from JSON
         data = request.get_json()
 
-        # get handler object with parsed data
-        handler = LLMCallFactory.getHandler('p', data)
-
-        # handle the request
-        response = handler.handleRequest()
+        # get the response from the factory
+        response = LLMCallFactory.getHandler(LLMCallFactory.RequestType.PERCENTAGES, data)
 
         # return jsonified response
         return jsonify(response), 200
@@ -61,11 +55,8 @@ def getCitation():
         # get data from JSON
         data = request.get_json()
 
-        # get handler object with parsed data
-        handler = LLMCallFactory.getHandler('c', data)
-
-        # handle the request
-        response = handler.handleRequest()
+        # get the response from the factory
+        response = LLMCallFactory.getHandler(LLMCallFactory.RequestType.CITATIONS, data)
 
         # return jsonified response
         return jsonify(response), 200
@@ -78,3 +69,23 @@ def getCitation():
         logger.error(str(e))
         return jsonify({'error': f"An unexpected error occurred: {str(e)}"}), 500
 
+@llmCalls.route("/getSummary", methods=["POST"])
+def getSummary():
+    """Route to extract the summar of the patent."""
+    try:
+        # get data from JSON
+        data = request.get_json()
+
+        # get the response from the factory
+        response = LLMCallFactory.getHandler(LLMCallFactory.RequestType.SUMMARY, data)
+
+        # return jsonified response
+        return jsonify(response), 200
+    except ValueError as e:
+        # Handle validation errors
+        logger.error(str(e))
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        # Handle any other unexpected errors
+        logger.error(str(e))
+        return jsonify({'error': f"An unexpected error occurred: {str(e)}"}), 500
