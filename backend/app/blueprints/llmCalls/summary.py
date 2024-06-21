@@ -12,6 +12,7 @@ class Summary(LlmRequests):
             self.patentURL = validatedInput.patentURL
 
             # only need to scrape the claims sections for this request
+            # TODO: determine which sections we really need for the summary
             self.sections = ["claims", "abstract", "description"]
 
             # initialize the parent class
