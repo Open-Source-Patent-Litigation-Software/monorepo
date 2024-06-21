@@ -5,6 +5,10 @@ env/
 # Ignore all __pycache__ directories recursively
 __pycache__/
 **/__pycache__/
+/app/__pycache__
+app/blueprints/operations/__pycache__
+app/blueprints/llmCalls/__pycache__
+app/blueprints/patentRetrieval/__pycache__
 
 # Ignore all pyc files
 *.pyc
