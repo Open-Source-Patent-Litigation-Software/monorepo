@@ -24,13 +24,6 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
     tool: "/tool",
   };
 
-  // Redirection After Sign In
-  useEffect(() => {
-    if (user) {
-      redirectToTool();
-    }
-  }, [user]);
-
   const handleSignOut = () => {
     window.location.href = "/api/auth/logout";
   };
