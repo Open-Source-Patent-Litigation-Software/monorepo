@@ -55,7 +55,7 @@ const ContactForm = () => {
   return (
     <>
       <div className="form-container">
-        <h1 className="form-title">Contact The EasyIP Team</h1>
+        <h1 className="form-title">Contact The DulanyAI Team</h1>
         <h3 className="form-description">We will contact you within 24 hours.</h3>
         <hr className="hr" />
         <form className="styled-form" onSubmit={handleSubmit}>

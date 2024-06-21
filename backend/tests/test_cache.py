@@ -4,4 +4,3 @@ import requests_mock
 import pytest
 from utils.scraping import scrapeClaims, scrapeAbstract, scrapeDescription
 
-def test
