@@ -14,7 +14,7 @@
     padding: 0 20px;
   }
   
-  .login-link {
+  .auth-link {
     color: white;
     background-color: #4f6f52;
     text-decoration: none;
@@ -22,12 +22,12 @@
     transition: font-weight 0.3s ease, color 0.3s ease, font-size 0.3s ease;
   }
   
-  .login-link:hover {
+  .auth-link:hover {
     font-weight: bold;
     font-size: 25px;
   }
   
-  .login-link a {
+  .auth-link a {
     color: #ffffff;
     text-decoration: none;
   }

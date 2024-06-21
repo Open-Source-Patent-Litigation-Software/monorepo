@@ -1,4 +1,4 @@
-# EasyIP Workflow
+# DulanyAI Workflow
 
 This document describes the workflow for creating a new branch from the `development` branch, making changes, and merging it back into the `development` branch.
 

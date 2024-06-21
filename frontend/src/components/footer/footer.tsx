@@ -9,7 +9,7 @@ interface FooterProps {
 export const Footer: React.FC<FooterProps> = (props) => {
   return (
     <footer className="styled-footer">
-      <p>© 2024 easyip.io - All rights reserved.</p>
+      <p>© 2024 dulany.ai - All rights reserved.</p>
     </footer>
   );
 };

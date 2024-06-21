@@ -14,7 +14,7 @@ export const Summary: React.FC<SummaryProps> = (props) => {
       <div className="summary-div">
         <div className="inline-container">
           <p className="title">
-            Welcome to <span className="green-text">EasyIP</span>. The all in one solution to
+            Welcome to <span className="green-text">DulanyAI</span>. The all in one solution to
             IP research.
           </p>
         </div>
