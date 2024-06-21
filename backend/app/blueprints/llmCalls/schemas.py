@@ -88,3 +88,18 @@ class PercentExtraction(BaseModel):
             if not isinstance(value, (int, float)):
                 raise ValueError("Each value in the data object must be a number.")
         return v
+
+# error checks the input of the json data
+class SummaryInput(BaseModel):
+    patentURL: str
+    user: str
+
+    @root_validator()
+    def checkEmptyStrings(cls, values):
+        if(not values.get("user") or not values.get("patentURL")):
+            raise ValueError('None of the strings can be empty')
+        return values
+
+# validates the output of the model
+class SummaryExtraction(BaseModel):
+    summary: str
