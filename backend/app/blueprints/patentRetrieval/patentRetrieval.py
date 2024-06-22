@@ -2,11 +2,20 @@ from flask import Blueprint, request, jsonify
 import requests
 from app.settings import PQ_AI_KEY
 from utils.scraping import PatentScraper
+from authlib.integrations.flask_oauth2 import ResourceProtector
+from validator import Auth0JWTBearerTokenValidator
 
 patentRetrieval = Blueprint("patentRetrieval", __name__, template_folder="templates")
 
+require_auth = ResourceProtector()
+validator = Auth0JWTBearerTokenValidator(
+    "{yourDomain}",
+    "{yourApiIdentifier}"
+)
+require_auth.register_token_validator(validator)
 
 @patentRetrieval.route("/makeQuery", methods=["GET"])
+@require_auth(None)
 def patentRetrievalRoute():
     """Retrieve prior-art documents with text query."""
     searchRequest = request.args.get("search")
@@ -35,6 +44,7 @@ def patentRetrievalRoute():
 
 
 @patentRetrieval.route("/scrapeGooglePatents", methods=["GET"])
+@require_auth(None)
 def scrapeGooglePatents():
     """Scrape Google Patents for a specific patent's claims."""
     googlePatentsURL = request.args.get("url")

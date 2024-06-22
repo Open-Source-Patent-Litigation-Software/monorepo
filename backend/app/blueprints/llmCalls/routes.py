@@ -1,11 +1,22 @@
 from flask import Blueprint, jsonify, request
 from .factory import LLMCallFactory
+from authlib.integrations.flask_oauth2 import ResourceProtector
+from validator import Auth0JWTBearerTokenValidator
 import logging
 
 llmCalls = Blueprint("llmCalls", __name__, template_folder="templates")
 logger = logging.getLogger("__name__")
 
+
+require_auth = ResourceProtector()
+validator = Auth0JWTBearerTokenValidator(
+    "{yourDomain}",
+    "{yourApiIdentifier}"
+)
+require_auth.register_token_validator(validator)
+
 @llmCalls.route("/obtainMetrics", methods=["POST"])
+@require_auth(None)
 def obtainMetrics():
     """Route to extract metrics from a given text."""
     try:
@@ -28,6 +39,7 @@ def obtainMetrics():
 
 
 @llmCalls.route("/extractSpecificPatentMetrics", methods=["POST"])
+@require_auth(None)
 def extractSpecificPatentMetrics():
     """Route to extract specific metrics from a given patent."""
     try:
@@ -49,6 +61,7 @@ def extractSpecificPatentMetrics():
         return jsonify({'error': f"An unexpected error occurred: {str(e)}"}), 500
 
 @llmCalls.route("/getCitation", methods=["POST"])
+@require_auth(None)
 def getCitation():
     """Route to extract highlighted text based on metrics for a given patent."""
     try:
@@ -70,6 +83,7 @@ def getCitation():
         return jsonify({'error': f"An unexpected error occurred: {str(e)}"}), 500
 
 @llmCalls.route("/getSummary", methods=["POST"])
+@require_auth(None)
 def getSummary():
     """Route to extract the summar of the patent."""
     try:

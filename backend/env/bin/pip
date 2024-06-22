@@ -1,4 +1,4 @@
-#!/Users/devk/Developer/EasyIP/backend/env/bin/python3.12
+#!/Users/alecpalo/Projects/DulanyAI/backend/env/bin/python3.12
 # -*- coding: utf-8 -*-
 import re
 import sys
