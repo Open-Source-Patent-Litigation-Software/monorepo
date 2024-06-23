@@ -11,7 +11,6 @@ def patentRetrievalRoute():
     """Retrieve prior-art documents with text query."""
     searchRequest = request.args.get("search")
     endpoint = "https://api.projectpq.ai"
-
     # These are all tunable
     route = "/search/102"
     url = endpoint + route

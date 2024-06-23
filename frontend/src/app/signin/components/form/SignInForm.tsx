@@ -35,7 +35,6 @@ const SignInForm = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
 
         setAll({
           email: data.email,
