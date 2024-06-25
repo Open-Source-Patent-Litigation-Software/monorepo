@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Metric, PatentItem, FormattedSearch, backendUrl } from "@/types/types";
+import { Metric, PatentItem, backendUrl } from "@/types/types";
 
 interface UseFetchMetricsReturn {
   searchResults: PatentItem[] | null;
@@ -44,34 +44,29 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
       setError("");
       setIsLoading(true);
 
-      const metricsURL = new URL(`${backendUrl}/llm/obtainMetrics`);
-      const formattedSearch: FormattedSearch = {
-        searchQuery: patentQuery,
-        user: "user",
-      };
-      const metricsResponse = await fetch(metricsURL.toString(), {
+      const response = await fetch('/api/metrics', {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formattedSearch),
+        body: JSON.stringify({ patentQuery }),
       });
-
-      if (!metricsResponse.ok) {
-        throw new Error(`HTTP error! status: ${metricsResponse.status}`);
+  
+      if (!response.ok) {
+        console.log(response);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      const metricsData = await metricsResponse.json();
+  
+      const metricsData = await response.json();
       const metricList: Metric[] = Object.values(metricsData["functions"]);
       setMetrics(metricList);
       setIsLoading(false);
-
     } catch (e) {
       const error = e as Error;
       setError(error.message);
       setIsLoading(false);
     }
-  };
+  };  
 
   const unlockMetrics = () => {
     setIsMetricsLocked(false);
@@ -83,14 +78,23 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
     setIsLoading(true);
     try {
         setError("");
-  
-        const searchURL = new URL(`${backendUrl}/patents/makeQuery`);
-        searchURL.searchParams.append("search", metrics.join("\n"));
-        const searchResponse = await fetch(searchURL.toString());
-        if (!searchResponse.ok) {
-          throw new Error(`HTTP error! status: ${searchResponse.status}`);
+        const metricsString = metrics.join("\n");
+
+        const response = await fetch('/api/search', {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ metricsString }),
+        });
+        
+        if (!response.ok) {
+          console.log(response);
+          console.log("test");
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const searchData = await searchResponse.json();
+    
+        const searchData = await response.json();
         setSearchResults(searchData.results);
         setIsLoading(false);
       } catch (e) {
