@@ -12,7 +12,7 @@ def patent():
     data = request.get_json()
     try:
         validatedData = PatentData(**data)
-        print(validatedData)
+        logger.info(validatedData)
     except Exception as e:
         return jsonify({"error": str(e)}), 400
     return jsonify({"response": "properly worked"}), 200
