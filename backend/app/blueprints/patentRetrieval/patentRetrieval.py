@@ -2,9 +2,17 @@ from flask import Blueprint, request, jsonify
 import requests
 from app.settings import PQ_AI_KEY
 from utils.scraping import PatentScraper
+from authlib.integrations.flask_oauth2 import ResourceProtector
+from utils.auth import Auth0JWTBearerTokenValidator
 
 patentRetrieval = Blueprint("patentRetrieval", __name__, template_folder="templates")
 
+require_auth = ResourceProtector()
+validator = Auth0JWTBearerTokenValidator(
+    "dev-giv3drwd5zd1cqsb.us.auth0.com",
+    "http://localhost:8000"
+)
+require_auth.register_token_validator(validator)
 
 @patentRetrieval.route("/makeQuery", methods=["GET"])
 def patentRetrievalRoute():

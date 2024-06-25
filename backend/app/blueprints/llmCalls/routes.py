@@ -1,11 +1,23 @@
 from flask import Blueprint, jsonify, request
 from .factory import LLMCallFactory
+from authlib.integrations.flask_oauth2 import ResourceProtector
+from utils.auth import Auth0JWTBearerTokenValidator
+
 import logging
 
 llmCalls = Blueprint("llmCalls", __name__, template_folder="templates")
 logger = logging.getLogger("__name__")
 
+require_auth = ResourceProtector()
+validator = Auth0JWTBearerTokenValidator(
+    "dev-giv3drwd5zd1cqsb.us.auth0.com",
+    "http://localhost:8000"
+)
+require_auth.register_token_validator(validator)
+
+
 @llmCalls.route("/obtainMetrics", methods=["POST"])
+@require_auth(None)
 def obtainMetrics():
     """Route to extract metrics from a given text."""
     try:

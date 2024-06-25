@@ -11,6 +11,7 @@ import useMetricSearchStateStore from "@/stores/useMetricStore";
 import "./styles.css";
 import { useFetchMetrics } from "@/hooks/useSearchMetrics";
 
+
 const Index = () => {
   const { storeMetrics, setAll } = useMetricSearchStateStore();
   const [patentQuery, setPatentQuery] = useState<string>("");
