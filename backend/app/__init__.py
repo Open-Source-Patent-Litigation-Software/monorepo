@@ -13,13 +13,16 @@ from app.extensions import bcrypt
 from app.blueprints.patentRetrieval.patentRetrieval import patentRetrieval
 from app.blueprints.llmCalls.routes import llmCalls
 from app.blueprints.operations.operations import operations
+from app.blueprints.saved.routes import saved
 
 
 def create_app():
     app = Flask(__name__)
 
     # Load configuration from environment variables
-    app.secret_key = os.getenv("SECRET_KEY")  # Ensure you set a secret key in your .env file
+    app.secret_key = os.getenv(
+        "SECRET_KEY"
+    )  # Ensure you set a secret key in your .env file
 
     # CORS configuration - replace with the actual frontend URL
     if os.getenv("FLASK_ENV") == "development":
@@ -35,6 +38,7 @@ def create_app():
     app.register_blueprint(llmCalls, url_prefix="/llm")
     app.register_blueprint(patentRetrieval, url_prefix="/patents")
     app.register_blueprint(operations, url_prefix="/ops")
+    app.register_blueprint(saved, url_prefix="/save")
 
     # Initialize extensions with app
     bcrypt.init_app(app)
