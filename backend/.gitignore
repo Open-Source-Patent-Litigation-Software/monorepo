@@ -17,3 +17,5 @@ app/blueprints/patentRetrieval/__pycache__
 
 # Ignore specific database files
 database/.idea/
+test-results.txt
+coverage.xml

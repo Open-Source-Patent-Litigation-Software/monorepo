@@ -62,3 +62,9 @@ jobs:
             issue_number: pull_request.number,
             body
           });
+
+    - name: Save test results
+      if: always()
+      working-directory: ./backend
+      run: |
+        pytest > test-results.txt
