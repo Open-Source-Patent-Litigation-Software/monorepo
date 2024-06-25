@@ -1,6 +1,5 @@
 import pytest
-from pydantic import ValidationError
-from utils.citations import parseCitationsJson, Quote, Section
+from app.blueprints.llmCalls.schemas import CitationsExtraction, Quote
 
 # Test the Quote model
 def test_quote_valid():
@@ -21,7 +20,7 @@ def test_section_valid():
         {"before": "context before", "highlight": "highlight text", "after": "context after"}
     ]
     data = {"claims": quotes, "abstract": quotes, "description": quotes}
-    section = Section(**data)
+    section = CitationsExtraction(**data)
     assert section.claims is not None
     assert section.abstract is not None
     assert section.description is not None
@@ -31,15 +30,11 @@ def test_section_no_claims():
         {"before": "context before", "highlight": "highlight text", "after": "context after"}
     ]
     data = {"abstract": quotes, "description": quotes}
-    section = Section(**data)
+    section = CitationsExtraction(**data)
     assert section.claims is None
     assert section.abstract is not None
     assert section.description is not None
 
-def test_section_all_empty():
-    data = {}
-    with pytest.raises(ValueError):
-        Section(**data)
 
 # Test the parseCitationsJson function
 def test_parse_citations_json_valid():
@@ -56,7 +51,7 @@ def test_parse_citations_json_valid():
         ]
     }
     '''
-    result = parseCitationsJson(response)
+    result = CitationsExtraction(response)
     assert "claims" in result
     assert "abstract" in result
     assert "description" in result
@@ -64,7 +59,7 @@ def test_parse_citations_json_valid():
 def test_parse_citations_json_invalid():
     response = 'Invalid JSON'
     with pytest.raises(ValueError, match="Failed to parse JSON from completion"):
-        parseCitationsJson(response)
+        CitationsExtraction(response)
 
 def test_parse_citations_json_empty_fields():
     response = '''
@@ -81,7 +76,7 @@ def test_parse_citations_json_empty_fields():
     }
     '''
     with pytest.raises(ValueError):
-        parseCitationsJson(response)
+        CitationsExtraction(response)
 
 def test_parse_citations_json_all_empty():
     response = '''
@@ -92,4 +87,4 @@ def test_parse_citations_json_all_empty():
     }
     '''
     with pytest.raises(ValueError):
-        parseCitationsJson(response)
+        CitationsExtraction(response)

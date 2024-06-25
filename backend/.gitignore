@@ -2,6 +2,8 @@
 .env
 env/
 
+logs/__name__.log.jsonl
+
 # Ignore all __pycache__ directories recursively
 __pycache__/
 **/__pycache__/
