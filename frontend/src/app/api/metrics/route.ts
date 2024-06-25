@@ -3,16 +3,12 @@ import { backendUrl } from '@/types/types';
 import { fetchAuthToken } from '@/utils/fetchAuthToken';
 
 export async function POST(request: NextRequest) {
-  console.log('API route /api/metrics called'); // Log that the route was called
-
   try {
     const body = await request.json();
     const { patentQuery } = body;
 
-    console.log('Received patentQuery:', patentQuery);
 
     if (!patentQuery) {
-      console.log('patentQuery is missing');
       return NextResponse.json({ error: 'patentQuery is required' }, { status: 400 });
     }
 

@@ -23,7 +23,7 @@ export const fetchCitation = async (
     setCitationsLoading(true);
     try {
         // Construct the API URL for fetching the citation
-        const citationURL = new URL(`${backendUrl}/llm/getCitation`);
+        const citationURL = '/api/citations';
         // Prepare the JSON payload for the API request
         const citationJSON = {
             user: "TEMP_VAL", // Temporary user value
@@ -34,13 +34,13 @@ export const fetchCitation = async (
         const requestParameters = {
             method: "POST",
             headers: {
-            "Content-Type": "application/json",
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(citationJSON), // Convert the JSON payload to a string
         };
         // Make the fetch call to the backend API
         const citationResponse = await fetch(
-            citationURL.toString(),
+            citationURL,
             requestParameters
         );
 

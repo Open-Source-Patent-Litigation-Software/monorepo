@@ -33,10 +33,8 @@ export const fetchPercentages = async (
             patentURL: itemUrl,
             metrics: concatMetrics,
         };
-        const metricsURL = new URL(
-            `${backendUrl}/llm/extractSpecificPatentMetrics`
-        );
-        const metricsResponse = await fetch(metricsURL.toString(), {
+        const percentagesURL = `/api/percentages`;
+        const metricsResponse = await fetch(percentagesURL, {
             method: "POST",
             headers: {
             "Content-Type": "application/json",

@@ -8,30 +8,33 @@ export async function POST(request: NextRequest) {
         const { metricsString } = body;
 
         if (!metricsString) {
-            console.log('metricsString is missing');
             return NextResponse.json({ error: 'metrics are required' }, { status: 400 });
         }
 
         // Get the access token
         const accessToken = await fetchAuthToken();
 
+        const formattedSearch = {
+            metrics: metricsString,
+            user: "user",
+        };
+
         const searchURL = new URL(`${backendUrl}/patents/makeQuery`);
-        searchURL.searchParams.append("search", metricsString.join("\n"));
 
         const searchResponse = await fetch(searchURL.toString(), {
-            method: "GET",
+            method: "POST",
             headers: {
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,
             },
+            body: JSON.stringify(formattedSearch),
         });
 
         if (!searchResponse.ok) {
-            console.log(searchResponse);
             throw new Error(`HTTP error! :( status: ${searchResponse.status}`);
         }
 
         const searchData = await searchResponse.json();
-        console.log(searchData);
 
         return NextResponse.json(searchData);
     } catch (error) {

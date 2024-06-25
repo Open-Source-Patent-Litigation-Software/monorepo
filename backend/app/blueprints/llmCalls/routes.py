@@ -40,6 +40,7 @@ def obtainMetrics():
 
 
 @llmCalls.route("/extractSpecificPatentMetrics", methods=["POST"])
+@require_auth(None)
 def extractSpecificPatentMetrics():
     """Route to extract specific metrics from a given patent."""
     try:
@@ -61,6 +62,7 @@ def extractSpecificPatentMetrics():
         return jsonify({'error': f"An unexpected error occurred: {str(e)}"}), 500
 
 @llmCalls.route("/getCitation", methods=["POST"])
+@require_auth(None)
 def getCitation():
     """Route to extract highlighted text based on metrics for a given patent."""
     try:
@@ -82,6 +84,7 @@ def getCitation():
         return jsonify({'error': f"An unexpected error occurred: {str(e)}"}), 500
 
 @llmCalls.route("/getSummary", methods=["POST"])
+@require_auth(None)
 def getSummary():
     """Route to extract the summar of the patent."""
     try:
