@@ -80,12 +80,12 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
         setError("");
         const metricsString = metrics.join("\n");
 
-        const searchURL = new URL(`${backendUrl}/patents/makeQuery`);
-        searchURL.searchParams.append("search", metricsString);
-
-        const response = await fetch(searchURL.toString(), {
-            method: "GET",
-
+        const response = await fetch('/api/search', {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ metricsString }),
         });
         
         if (!response.ok) {

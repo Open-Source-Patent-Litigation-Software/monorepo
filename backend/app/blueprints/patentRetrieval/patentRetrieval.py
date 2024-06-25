@@ -14,10 +14,13 @@ validator = Auth0JWTBearerTokenValidator(
 )
 require_auth.register_token_validator(validator)
 
-@patentRetrieval.route("/makeQuery", methods=["GET"])
+@patentRetrieval.route("/makeQuery", methods=["POST"])
+@require_auth(None)
 def patentRetrievalRoute():
     """Retrieve prior-art documents with text query."""
-    searchRequest = request.args.get("search")
+    data = request.get_json()
+    print(data)
+    searchRequest = data["metrics"]
     endpoint = "https://api.projectpq.ai"
     # These are all tunable
     route = "/search/102"

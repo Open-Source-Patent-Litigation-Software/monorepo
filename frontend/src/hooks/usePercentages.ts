@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { fetchPercentages } from "@/utils/fetchPercentages";
-import { PercentagesDataType, backendUrl } from '@/types/types';
+import { PercentagesDataType } from '@/types/types';
 
 export const useFetchPercentages = (
     searchMetrics: string[],
