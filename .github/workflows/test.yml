@@ -30,35 +30,10 @@ jobs:
       working-directory: ./backend
       run: |
         pytest --cov=./ --cov-report=xml --cov-report=html --cov-report=term
-
-    - name: Save test results
-      if: always()
-      working-directory: ./backend
-      run: |
-        pytest > test-results.txt
-
-    - name: Post test results as PR comment
-      if: always()
-      uses: actions/github-script@v6
+    - uses: pavelzw/pytest-action@v2
       with:
-        script: |
-          const fs = require('fs');
-          const coverageReport = fs.readFileSync('backend/coverage.xml', 'utf8');
-          const testResults = fs.readFileSync('backend/test-results.txt', 'utf8');
-          const { context } = require('@actions/github');
-          const body = `
-          ## Test Results
-          \`\`\`
-          ${testResults}
-          \`\`\`
-          ## Coverage Report
-          \`\`\`xml
-          ${coverageReport}
-          \`\`\`
-          `;
-          await github.rest.issues.createComment({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.payload.pull_request.number,
-            body
-          });
+        emoji: true
+        verbose: true
+        job-summary: true
+        click-to-expand: true
+        report-title: 'Test Report'
