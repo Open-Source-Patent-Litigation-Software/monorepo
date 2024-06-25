@@ -26,14 +26,27 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run tests with coverage
+    - name: Run tests with coverage and save output
       working-directory: ./backend
       run: |
-        pytest --cov=./ --cov-report=xml --cov-report=html --cov-report=term
-    - uses: pavelzw/pytest-action@v2
+        pytest --cov=./ > pytest_output.txt
+
+    - name: Post test results as PR comment
+      if: always()
+      uses: actions/github-script@v6
       with:
-        emoji: true
-        verbose: true
-        job-summary: true
-        click-to-expand: true
-        report-title: 'Test Report'
+        script: |
+          const fs = require('fs');
+          const testResults = fs.readFileSync('backend/pytest_output.txt', 'utf8');
+          const body = `
+          ## Test Results
+          \`\`\`
+          ${testResults}
+          \`\`\`
+          `;
+          await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
+          })
