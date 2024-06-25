@@ -110,3 +110,18 @@
     color: #888;
   }
   
+  .saveButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    margin: 2rem 0rem 1rem 0rem;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1A4D2E;
+    color: white;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s;
+  }

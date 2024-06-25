@@ -24,5 +24,5 @@ class LLMCallFactory:
         else:
             # if the request type doesn't exist throw an error
             raise ValueError("not a valid request")
-        
+
         return object.handleRequest()
