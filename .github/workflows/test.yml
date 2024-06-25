@@ -29,10 +29,36 @@ jobs:
     - name: Run tests with coverage
       working-directory: ./backend
       run: |
-        pytest --cov=./
+        pytest --cov=./ --cov-report=xml --cov-report=html --cov-report=term
 
-    - name: Upload coverage to Coveralls
-      uses: coverallsapp/github-action@v1
+    - name: Generate coverage report
+      working-directory: ./backend
+      run: |
+        coverage report
+        coverage xml
+
+    - name: Post test results as PR comment
+      if: always()
+      uses: actions/github-script@v6
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ./backend/.coverage
+        script: |
+          const fs = require('fs');
+          const coverageReport = fs.readFileSync('backend/coverage.xml', 'utf8');
+          const testResults = fs.readFileSync('backend/test-results.txt', 'utf8');
+          const { context } = require('@actions/github');
+          const { pull_request } = context.payload;
+          const body = `
+          ## Test Results
+          \`\`\`
+          ${testResults}
+          \`\`\`
+          ## Coverage Report
+          \`\`\`xml
+          ${coverageReport}
+          \`\`\`
+          `;
+          await github.rest.issues.createComment({
+            ...context.repo,
+            issue_number: pull_request.number,
+            body
+          });
