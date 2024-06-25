@@ -12,8 +12,8 @@ class LLMCallFactory:
         PERCENTAGES = "PERCENTAGES"
         METRICS = "METRICS"
 
-    # takes in the request type, returns the handler class object, instantiated
     def getHandler(requestType: str, data: dict):
+        """Get the handler object based on the request type."""
         if requestType == LLMCallFactory.RequestType.CITATIONS:
             object = Citations(data)
         elif requestType == LLMCallFactory.RequestType.METRICS:
