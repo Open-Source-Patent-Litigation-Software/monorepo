@@ -31,11 +31,11 @@ jobs:
       run: |
         pytest --cov=./ --cov-report=xml --cov-report=html --cov-report=term
 
-    - name: Generate coverage report
+    - name: Save test results
+      if: always()
       working-directory: ./backend
       run: |
-        coverage report
-        coverage xml
+        pytest > test-results.txt
 
     - name: Post test results as PR comment
       if: always()
@@ -46,7 +46,6 @@ jobs:
           const coverageReport = fs.readFileSync('backend/coverage.xml', 'utf8');
           const testResults = fs.readFileSync('backend/test-results.txt', 'utf8');
           const { context } = require('@actions/github');
-          const { pull_request } = context.payload;
           const body = `
           ## Test Results
           \`\`\`
@@ -58,13 +57,8 @@ jobs:
           \`\`\`
           `;
           await github.rest.issues.createComment({
-            ...context.repo,
-            issue_number: pull_request.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.pull_request.number,
             body
           });
-
-    - name: Save test results
-      if: always()
-      working-directory: ./backend
-      run: |
-        pytest > test-results.txt
