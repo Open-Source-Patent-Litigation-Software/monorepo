@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import SignUpForm from "./utils/form/SignUpForm";
-import { Navbar } from "../../components/navbar/navbar";
-import { Footer } from "../../components/footer/footer";
+import { Navbar } from "../../_components/navbar/navbar";
+import { Footer } from "../../_components/footer/footer";
 import "./signup.css";
 
 interface Props {}

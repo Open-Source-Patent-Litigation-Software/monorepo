@@ -19,7 +19,6 @@ require_auth.register_token_validator(validator)
 def patentRetrievalRoute():
     """Retrieve prior-art documents with text query."""
     data = request.get_json()
-    print(data)
     searchRequest = data["metrics"]
     endpoint = "https://api.projectpq.ai"
     # These are all tunable

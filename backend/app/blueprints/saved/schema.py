@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 from typing import Dict, List, Optional
 import logging
 
@@ -21,15 +21,14 @@ class PatentData(BaseModel):
     percentages: Dict[str, float]
     citations: Dict[str, Citations]
 
-    @validator("search")
+    @field_validator("search")
     def validateSearch(cls, value):
-        if len(value) > 0:
-            logging.info("Search string must be non-empty")
+        if len(value) == 0:
             raise ValueError("Search string must be non-empty")
         return value
 
-    @validator("patentNum")
+    @field_validator("patentNum")
     def validatePatentNum(cls, value):
-        if len(value) > 0:
+        if len(value) == 0:
             raise ValueError("Patent number must be non-empty")
         return value

@@ -1,5 +1,5 @@
 import React from "react";
-import CustomButton from "../../../../components/buttons/CustomButton";
+import CustomButton from "../../../../_components/buttons/CustomButton";
 import Citations from "../citations/Citations";
 import PatentChart from "./components/patentChart";
 import "./patent.css";
