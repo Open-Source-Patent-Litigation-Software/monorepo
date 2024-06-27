@@ -1,22 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { backendUrl } from '@/types/types';
 import { fetchAuthToken } from '@/utils/fetchAuthToken';
-import { withApiAuthRequired } from '@auth0/nextjs-auth0';
-
-
+import { withApiAuthRequired, getSession, getAccessToken } from '@auth0/nextjs-auth0';
 
 export const POST = withApiAuthRequired(async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { patentQuery } = body;
 
-
     if (!patentQuery) {
+      console.log("failing here");
       return NextResponse.json({ error: 'patentQuery is required' }, { status: 400 });
     }
 
     // Get the access token
-    const accessToken = await fetchAuthToken();
+    const token = await fetchAuthToken();
 
     const metricsURL = new URL(`${backendUrl}/llm/obtainMetrics`);
 
@@ -29,13 +27,14 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(formattedSearch),
     });
 
 
     if (!metricsResponse.ok) {
+      console.log(metricsResponse);
       throw new Error(`HTTP error! :( status: ${metricsResponse.status}`);
     }
 
@@ -43,6 +42,7 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
 
     return NextResponse.json(metricsData);
   } catch (error) {
+    console.log("failed here");
     return NextResponse.json({ error: error }, { status: 500 });
   }
 });

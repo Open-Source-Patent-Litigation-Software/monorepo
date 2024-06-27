@@ -17,7 +17,7 @@ require_auth.register_token_validator(validator)
 
 
 @llmCalls.route("/obtainMetrics", methods=["POST"])
-@require_auth(None)
+@require_auth("user")
 def obtainMetrics():
     """Route to extract metrics from a given text."""
     try:
@@ -40,7 +40,7 @@ def obtainMetrics():
 
 
 @llmCalls.route("/extractSpecificPatentMetrics", methods=["POST"])
-@require_auth(None)
+@require_auth("user")
 def extractSpecificPatentMetrics():
     """Route to extract specific metrics from a given patent."""
     try:
@@ -62,7 +62,7 @@ def extractSpecificPatentMetrics():
         return jsonify({'error': f"An unexpected error occurred: {str(e)}"}), 500
 
 @llmCalls.route("/getCitation", methods=["POST"])
-@require_auth(None)
+@require_auth("user")
 def getCitation():
     """Route to extract highlighted text based on metrics for a given patent."""
     try:
@@ -84,7 +84,7 @@ def getCitation():
         return jsonify({'error': f"An unexpected error occurred: {str(e)}"}), 500
 
 @llmCalls.route("/getSummary", methods=["POST"])
-@require_auth(None)
+@require_auth("user")
 def getSummary():
     """Route to extract the summar of the patent."""
     try:
