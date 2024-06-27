@@ -29,4 +29,4 @@ jobs:
     - name: Run tests with coverage and save output
       working-directory: ./backend
       run: |
-        pytest --cov=./
+        pytest --cov=./ 
