@@ -3,7 +3,7 @@ export const fetchAuthToken = async () => {
         const response = await fetch('https://dev-giv3drwd5zd1cqsb.us.auth0.com/oauth/token', {
             method: 'POST',
             headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: new URLSearchParams({
             grant_type: 'client_credentials',
@@ -14,6 +14,8 @@ export const fetchAuthToken = async () => {
         });
     
         if (!response.ok) {
+            console.log("error");
+            
             throw new Error(`HTTP error! status: ${response.status}`);
         }
     
