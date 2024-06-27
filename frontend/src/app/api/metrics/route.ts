@@ -45,4 +45,4 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
   } catch (error) {
     return NextResponse.json({ error: error }, { status: 500 });
   }
-}
+});
