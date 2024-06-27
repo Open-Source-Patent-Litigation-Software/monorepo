@@ -1,8 +1,12 @@
+// app/api/citations/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { backendUrl } from '@/types/types';
 import { fetchAuthToken } from '@/utils/fetchAuthToken';
+import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 
-export async function POST(request: NextRequest) {
+
+
+export const POST = withApiAuthRequired(async function POST(request: NextRequest) {
     try {
         const body = await request.json();
 
@@ -13,8 +17,8 @@ export async function POST(request: NextRequest) {
         // Get the access token
         const accessToken = await fetchAuthToken();
 
-        const citaionsURL = new URL(`${backendUrl}/llm/getCitation`);
-        const citationsResponse = await fetch(citaionsURL.toString(), {
+        const citationsURL = new URL(`${backendUrl}/llm/getCitation`);
+        const citationsResponse = await fetch(citationsURL.toString(), {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -23,9 +27,8 @@ export async function POST(request: NextRequest) {
             body: JSON.stringify(body),
         });
 
-
         if (!citationsResponse.ok) {
-        throw new Error(`HTTP error! :( status: ${citationsResponse.status}`);
+            throw new Error(`HTTP error! :( status: ${citationsResponse.status}`);
         }
 
         const citationsData = await citationsResponse.json();
@@ -34,4 +37,4 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 500 });
     }
-}
+});

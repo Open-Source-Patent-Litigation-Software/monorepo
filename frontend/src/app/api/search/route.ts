@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { backendUrl } from '@/types/types';
 import { fetchAuthToken } from '@/utils/fetchAuthToken';
+import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 
-export async function POST(request: NextRequest) {
-    try {
+export const POST = withApiAuthRequired(async function POST(request: NextRequest) {    try {
         const body = await request.json();
         const { metricsString } = body;
 
@@ -40,4 +40,4 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 500 });
     }
-}
+});
