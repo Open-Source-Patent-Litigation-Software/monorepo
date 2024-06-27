@@ -26,11 +26,26 @@ class Summary(LlmRequests):
 
         # TODO: implement the template
         template = f"""
-            I want you to summarize 
+            I am going to give you the claims and abstract section of a patent. I want you to summarize what the patent is and the key features of it in between 400 and 500 words.
+
+            I want you to make sure you include all of the independent claims in the summary. Below are the claims and abstract sections:
+
+            Claims:
+                {scrapedData[0]}
+
+            Abstract:
+                {scrapedData[1]}
+
+            I want you to output your response in JSON format like this:
+            ```json
+            {{
+                "summary": "your summary goes here"
+            }}
+        ```
         """
 
         # args for invoking the chain
-        invokeArgs = {"searchQuery": self.searchQuery}
+        invokeArgs = {}
 
         # invoke the request, return the result
         return self.makeRequest(template, SummaryExtraction, invokeArgs)
