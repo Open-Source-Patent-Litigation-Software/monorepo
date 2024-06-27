@@ -11,9 +11,8 @@ class Summary(LlmRequests):
             self.user = validatedInput.user
             self.patentURL = validatedInput.patentURL
 
-            # only need to scrape the claims sections for this request
-            # TODO: determine which sections we really need for the summary
-            self.sections = ["claims", "abstract", "description"]
+            # only scrape the claims + abstract for the summary
+            self.sections = ["claims", "abstract"]
 
             # initialize the parent class
             super().__init__()
@@ -27,7 +26,7 @@ class Summary(LlmRequests):
 
         # TODO: implement the template
         template = f"""
-        
+            I want you to summarize 
         """
 
         # args for invoking the chain
