@@ -5,7 +5,6 @@ export const useSummary = (patentURL: string) => {
     const [summary, setSummary] = useState<string>("");
 
     const getSummary = async () => {
-        console.log("test");
         // set the summary loading
         setSummaryLoading(true);
 

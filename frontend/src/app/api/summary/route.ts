@@ -4,7 +4,6 @@ import { fetchAuthToken } from '@/utils/fetchAuthToken';
 
 export async function POST(request: NextRequest) {
     try {
-        console.log("made it to post request");
         const body = await request.json();
 
         // Get the access token
