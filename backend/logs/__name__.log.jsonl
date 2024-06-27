@@ -3,3 +3,4 @@
 {"level": "INFO", "message": "This request used about 545.75 tokens", "timestamp": "2024-06-25T16:21:52.361259+00:00", "logger": "__name__", "module": "llmRequests", "function": "makeRequest", "line": 26, "thread_name": "MainThread"}
 {"level": "INFO", "message": "HTTP Request: POST https://api.openai.com/v1/chat/completions \"HTTP/1.1 200 OK\"", "timestamp": "2024-06-25T16:21:54.046373+00:00", "logger": "httpx", "module": "_client", "function": "_send_single_request", "line": 1026, "thread_name": "MainThread"}
 {"level": "INFO", "message": "Started Up", "timestamp": "2024-06-25T16:22:48.075005+00:00", "logger": "__name__", "module": "run", "function": "<module>", "line": 24, "thread_name": "MainThread"}
+{"level": "INFO", "message": "Started Up", "timestamp": "2024-06-27T15:14:56.681085+00:00", "logger": "__name__", "module": "run", "function": "<module>", "line": 24, "thread_name": "MainThread"}
