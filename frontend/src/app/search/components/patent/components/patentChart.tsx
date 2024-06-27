@@ -21,7 +21,6 @@ ChartJS.register(
 );
 
 const PatentChart: React.FC<PatentChartProps> = ({ data }) => {
-    console.log(data)
     return <Radar data={data} />;
 };
 

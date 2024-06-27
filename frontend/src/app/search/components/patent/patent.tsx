@@ -21,8 +21,8 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
     useFetchPercentages(searchMetrics, search, item.www_link);
 
   const { savePatentHandler, saveLoading, isSaved } = useSavePatents(
+    item,
     search,
-    item.publication_id,
     percentagesData,
     citationsData
   );

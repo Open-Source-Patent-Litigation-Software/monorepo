@@ -8,13 +8,16 @@ class PatentSaver:
 
     def savePatent(self):
         # UNIQUE KEYS: username
-        DB_Instance = DatabaseCall()
+        DB = DatabaseCall()
+
         # Initialize the patent data as a json object
         # Get the time (postgres might do this)
         # Get the username
-
+        
         # Create the patent object
         # Save the patent object
+        object = None
+        DB.createAndCommit(object)
         pass
 
     def getPatent(self):

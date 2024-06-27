@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Citations.module.css";
 import { Dictionary } from "@/utils/dictionary";
-
+import LoadingSpinner from "../loading/loadingSpinner";
 interface Paragraph {
   before: string;
   highlight: string;
