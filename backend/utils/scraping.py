@@ -1,47 +1,38 @@
 import requests
-from bs4 import BeautifulSoup
 import logging
+from app.settings import PQ_AI_KEY
 import re
 
+def extractPatentNum(url):
+    pattern = r'/patent/([^/]+)/en'
+    match = re.search(pattern, url)
+    if match:
+        return match.group(1)
+    else:
+        return None
+
+
 class PatentScraper:
-    def __init__(self, url: str):
-        try:
-            response = requests.get(url, headers=None)
-            response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
-
-            response.encoding = 'utf-8'
-            response_text = response.text
-        except requests.RequestException as e:
-            raise(f"URL failed: {e}")
+    def __init__(self, pn: str):
         self.logger = logging.getLogger("__name__")
-        self.soup = BeautifulSoup(response_text, "html.parser")
-        self.url = url
+        self.pn = pn
 
-    # takes in a list of sections, returns a list of strings (the scraped data)
-    def scrapePatent(self, sections):
-        scrapedSections = []
-        for section in sections:
-            htmlElements = self.soup.find_all(class_=re.compile(rf'\b{section}\b'))
-
-            # if there are no elements in this section, return an empty string
-            if htmlElements is None:
-                scrapedSections.append("")
-                self.logger.warning(f"scraped no data from {self.url} for section {section}.")
-                continue
-            
-            # list of scraped text from within this section
-            scrapedText = []
-
-            for element in htmlElements:
-                if element.find(class_=re.compile(rf'\b{section}\b')):
-                    continue  # Skip this element if it contains nested elements
-
-                # seperate out the text
-                elementText = element.get_text(separator=' ', strip=True)
-
-                # append to scraped text for this section
-                scrapedText.append(elementText)
-
-            # append the text for this section
-            scrapedSections.append("\n".join(scrapedText))
-        return scrapedSections
+    # takes in patent number, and the field you want (abstract, claims or description)
+    # returns that section or an empty string if an error
+    def getSection(self, field):
+        endpoint = "https://api.projectpq.ai"
+        route = f'/patents/{self.pn}/{field}'
+        url = endpoint + route
+        params = { 
+            "token": PQ_AI_KEY,  # API key
+        }
+        try:
+            response = requests.get(url, params=params)  # send the request
+            assert response.status_code == 200
+            results = response.json().get(field)  # decode response
+        except Exception as e:
+            self.logger.error(e)
+            return ""
+        if isinstance(results, list):
+            return '\n'.join(map(str, results))
+        return response

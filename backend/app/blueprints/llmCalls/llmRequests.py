@@ -10,6 +10,7 @@ from langchain_openai import ChatOpenAI
 import logging
 import os
 from utils.scraping import PatentScraper
+from utils.scraping import extractPatentNum
 
 class LlmRequests:
     def __init__(self):
@@ -57,10 +58,18 @@ class LlmRequests:
     # recieves a list of sections to scrape, returns a list of strs -> each str is a concatinated section
     def scrapePatent(self, sections: List[str], url: str) -> List[str]:
         # create the scraping object
-        scraper = PatentScraper(url)
-            
+        pn = extractPatentNum(url)
+        print(pn)
+        scraper = PatentScraper(pn)
+
+        output = []
+
+        for section in sections:
+            temp = scraper.getSection(section)
+            output.append(temp)
+
         # return the outputted list from scraping
-        return scraper.scrapePatent(sections)
+        return output
         
     @abstractmethod
     def handleRequest(self):

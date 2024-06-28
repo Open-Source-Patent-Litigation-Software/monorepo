@@ -1,34 +1,46 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { backendUrl } from '@/types/types';
-import { withApiAuthRequired, getSession, getAccessToken } from '@auth0/nextjs-auth0';
+import { withApiAuthRequired, getAccessToken } from '@auth0/nextjs-auth0';
 
 export const POST = withApiAuthRequired(async function POST(request: NextRequest) {
+    const body = await request.json();
+
+    const { queries, user } = body;
+
+    const { accessToken } = await getAccessToken({
+        scopes: ['user']
+    });
+
+    const IDSearchURL = new URL(`${backendUrl}/patents/getPatentsByIDs`);
+
     try {
-        const body = await request.json();
+        const responses = await Promise.all(
+            queries.map((query: string) => (
+                fetch(IDSearchURL.toString(), {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                    body: JSON.stringify({
+                        pn: query,
+                        user: user,
+                    }),
+                })))
+        );
 
-        const { accessToken } = await getAccessToken({
-            scopes: ['user']
+        console.log(responses);
+
+        const dataPromises = responses.map(response => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok for ${response.url}`);
+            }
+            return response.json();
         });
 
-        const IDSearchURL = new URL(`${backendUrl}/patents/getPatentsByIDs`);
+        const data = await Promise.all(dataPromises);
 
-        const response = await fetch(IDSearchURL.toString(), {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify(body),
-        });
-
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! :( status: ${response.status}`);
-        }
-
-        const patentData = await response.json();
-
-        return NextResponse.json(patentData);
+        return NextResponse.json(data);
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 500 });
     }

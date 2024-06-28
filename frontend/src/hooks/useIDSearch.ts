@@ -8,6 +8,9 @@ export const useIDSearch = () => {
     const search = async (query: string) => {
         setPatentsLoading(true);
         try {
+            // break down the queries into a list of queries
+            const linesArray = query.split('\n');
+
             const formattedSearch = {
                 searchQuery: query,
                 user: "user",
