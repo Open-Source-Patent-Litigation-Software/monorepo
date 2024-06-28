@@ -15,7 +15,7 @@ validator = Auth0JWTBearerTokenValidator(
 require_auth.register_token_validator(validator)
 
 @patentRetrieval.route("/makeQuery", methods=["POST"])
-@require_auth(None)
+@require_auth("user")
 def patentRetrievalRoute():
     """Retrieve prior-art documents with text query."""
     data = request.get_json()
@@ -44,9 +44,12 @@ def patentRetrievalRoute():
     return jsonify({"results": results})
 
 @patentRetrieval.route("/getPatentsByIDs", methods=["POST"])
+@require_auth("user")
 def getPatentsByIDs():
     """Get Patents by ID"""
+    # gets a list of IDS
     data = request.get_json()
+
 
     return (
         jsonify("test"),
