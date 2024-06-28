@@ -1,5 +1,5 @@
 import React from "react";
-import CustomButton from "../../../../components/buttons/CustomButton";
+import CustomButton from "../../../../_components/buttons/CustomButton";
 import Citations from "../citations/Citations";
 import PatentChart from "./components/patentChart";
 import "./patent.css";
@@ -29,8 +29,8 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
     useFetchPercentages(searchMetrics, search, item.www_link);
 
   const { savePatentHandler, saveLoading, isSaved } = useSavePatents(
+    item,
     search,
-    item.publication_id,
     percentagesData,
     citationsData
   );

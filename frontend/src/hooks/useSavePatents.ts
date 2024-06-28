@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { PercentagesDataType } from "@/types/types";
+import { PatentItem } from "@/types/types";
 
 export const useSavePatents = (
+  genericInfo: PatentItem,
   search: string,
-  patentNum: string,
   percentages: PercentagesDataType,
   citations: any // Using 'any' for flexibility with citation data
 ) => {
@@ -47,8 +48,8 @@ export const useSavePatents = (
     setSaveLoading(true);
 
     const patentJSON = {
+      patentInfo: genericInfo,
       search: search,
-      patentNum: patentNum,
       percentages: parsePercentages(percentages),
       citations: parseCitations(citations),
     };
@@ -61,8 +62,8 @@ export const useSavePatents = (
     setSaveLoading(false);
     setIsSaved(true);
   }, [
+    genericInfo,
     search,
-    patentNum,
     percentages,
     citations,
     parsePercentages,
