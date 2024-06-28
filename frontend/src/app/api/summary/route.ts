@@ -1,41 +1,36 @@
-// app/api/citations/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { backendUrl } from '@/types/types';
 import { withApiAuthRequired, getAccessToken } from '@auth0/nextjs-auth0';
 
-
-
 export const POST = withApiAuthRequired(async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-
-        if (!body) {
-            return NextResponse.json({ error: 'patentQuery is required' }, { status: 400 });
-        }
 
         // Get the access token
         const { accessToken } = await getAccessToken({
             scopes: ['user']
         });
 
-        const citationsURL = new URL(`${backendUrl}/llm/getCitation`);
-        const citationsResponse = await fetch(citationsURL.toString(), {
+        const searchURL = new URL(`${backendUrl}/llm/getSummary`);
+
+        const summaryResponse = await fetch(searchURL.toString(), {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify(body),
         });
 
-        if (!citationsResponse.ok) {
-            throw new Error(`HTTP error! :( status: ${citationsResponse.status}`);
+        if (!summaryResponse.ok) {
+            throw new Error(`HTTP error! :( status: ${summaryResponse.status}`);
         }
 
-        const citationsData = await citationsResponse.json();
+        const summaryData = await summaryResponse.json();
 
-        return NextResponse.json(citationsData);
+        return NextResponse.json(summaryData);
     } catch (error) {
+        console.log(error);
         return NextResponse.json({ error: error }, { status: 500 });
     }
 });

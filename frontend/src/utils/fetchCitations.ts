@@ -1,5 +1,6 @@
 import { Dictionary } from "@/utils/dictionary";
 import { backendUrl } from "@/types/types";
+import { fetchAuthToken } from "./fetchAuthToken";
 
 // Function to fetch citation data
 export const fetchCitation = async (

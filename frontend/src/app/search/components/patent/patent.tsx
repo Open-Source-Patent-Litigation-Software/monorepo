@@ -8,6 +8,8 @@ import MetricDropdown from "./components/metricDropdown";
 import { useCitations } from "@/hooks/useCitations";
 import { useFetchPercentages } from "@/hooks/usePercentages";
 import { useSavePatents } from "@/hooks/useSavePatents";
+import { useSummary } from "@/hooks/useSummary";
+import SummaryComponent from "./components/summary";
 
 const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
   const {
@@ -16,6 +18,12 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
     selectedMetric,
     handleDropdownChange,
   } = useCitations(item.www_link);
+
+  const {
+    summary,
+    summaryLoading,
+    getSummary
+  } = useSummary(item.www_link);
 
   const { isAnalyzed, loading, percentagesData, fetchPercentagesHandler } =
     useFetchPercentages(searchMetrics, search, item.www_link);
@@ -61,6 +69,7 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
           ))}
         </ul>
       )}
+      <SummaryComponent summary={summary} summaryLoading={summaryLoading} getSummary={getSummary}/>
       <div className="wrapper">
         {isAnalyzed ? (
           <div className="analyzed-content-wrapper">

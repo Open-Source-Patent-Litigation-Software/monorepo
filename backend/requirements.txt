@@ -64,3 +64,7 @@ Werkzeug==3.0.2
 urllib3>=2.2.2
 yarl==1.9.4
 Authlib
+coverage
+pytest-cov
+pytest-md
+pytest-emoji

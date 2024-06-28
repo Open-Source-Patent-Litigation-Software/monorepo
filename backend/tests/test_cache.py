@@ -2,5 +2,5 @@
 import requests
 import requests_mock
 import pytest
-from utils.scraping import scrapeClaims, scrapeAbstract, scrapeDescription
+# from utils.scraping import scrapeClaims, scrapeAbstract, scrapeDescription
 

@@ -47,7 +47,7 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
       const response = await fetch('/api/metrics', {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ patentQuery }),
       });

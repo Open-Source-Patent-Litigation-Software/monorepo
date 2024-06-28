@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { backendUrl } from '@/types/types';
-import { fetchAuthToken } from '@/utils/fetchAuthToken';
+import { withApiAuthRequired, getAccessToken } from '@auth0/nextjs-auth0';
 
-export async function POST(request: NextRequest) {
-    try {
+
+
+export const POST = withApiAuthRequired(async function POST(request: NextRequest) {    try {
         const body = await request.json();
 
         if (!body) {
@@ -11,7 +12,9 @@ export async function POST(request: NextRequest) {
         }
 
         // Get the access token
-        const accessToken = await fetchAuthToken();
+        const { accessToken } = await getAccessToken({
+            scopes: ['user']
+        });
 
         const metricsURL = new URL(
             `${backendUrl}/llm/extractSpecificPatentMetrics`
@@ -36,4 +39,4 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 500 });
     }
-}
+});
