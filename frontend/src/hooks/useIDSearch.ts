@@ -9,10 +9,11 @@ export const useIDSearch = () => {
         setPatentsLoading(true);
         try {
             // break down the queries into a list of queries
-            const linesArray = query.split('\n');
+            const ids = query.split('\n');
 
+            // ids = a list of patent numbers
             const formattedSearch = {
-                searchQuery: query,
+                qeiries: ids,
                 user: "user",
             };
     

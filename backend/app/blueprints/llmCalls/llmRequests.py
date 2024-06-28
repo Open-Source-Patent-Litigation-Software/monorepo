@@ -59,7 +59,6 @@ class LlmRequests:
     def scrapePatent(self, sections: List[str], url: str) -> List[str]:
         # create the scraping object
         pn = extractPatentNum(url)
-        print(pn)
         scraper = PatentScraper(pn)
 
         output = []
