@@ -13,7 +13,6 @@ export const useSavePatents = (
   const [saveLoading, setSaveLoading] = useState<boolean>(false);
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const { user, error, isLoading } = useUser();
-  console.log(user)
 
   const parsePercentages = useCallback(
     (percentages: PercentagesDataType): { [key: string]: any } => {
@@ -60,7 +59,6 @@ export const useSavePatents = (
     };
 
     const finalJSON = JSON.stringify(patentJSON);
-    console.log(finalJSON);
 
     // TODO: IMPLEMENT POST REQUEST TO SAVE PATENT DATA
 

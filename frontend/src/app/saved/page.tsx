@@ -11,7 +11,6 @@ const SavedPage = () => {
   const [filteredPatents, setFilteredPatents] = useState<any[]>([]);
 
   const patents = patentsMockData;
-
   useEffect(() => {
     const filteredPatents = patents.filter((patent) =>
       patent.search.toLowerCase().includes(searchQuery.toLowerCase())

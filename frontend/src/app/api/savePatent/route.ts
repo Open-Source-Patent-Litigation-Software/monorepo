@@ -10,9 +10,9 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
         const { accessToken } = await getAccessToken({
             scopes: ['user']
         });
-        const searchURL = new URL(`${backendUrl}/llm/getSummary`);
+        const searchURL = new URL(`${backendUrl}/save/patent`);
 
-        const summaryResponse = await fetch(searchURL.toString(), {
+        const savePatentResponse = await fetch(searchURL.toString(), {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -21,13 +21,13 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
             body: JSON.stringify(body),
         });
 
-        if (!summaryResponse.ok) {
-            throw new Error(`HTTP error! :( status: ${summaryResponse.status}`);
+        if (!savePatentResponse.ok) {
+            throw new Error(`HTTP error! :( status: ${savePatentResponse.status}`);
         }
 
-        const summaryData = await summaryResponse.json();
+        const savedPatentJSON = await savePatentResponse.json();
 
-        return NextResponse.json(summaryData);
+        return NextResponse.json(savedPatentJSON);
     } catch (error) {
         console.log(error);
         return NextResponse.json({ error: error }, { status: 500 });

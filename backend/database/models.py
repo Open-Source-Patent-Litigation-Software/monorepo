@@ -31,16 +31,12 @@ def resetDatabase():
     # Drop all tables
     metadata.drop_all(bind=engine)
 
-
-resetDatabase()
-
-
 class RegUser(Base):
     __tablename__ = "reg_user"
     __table_args__ = {"schema": "public"}
     id = Column(Integer, primary_key=True, autoincrement=True)
-    first_name = Column(String, nullable=False)
-    last_name = Column(String, nullable=False)
+    first_name = Column(String, nullable=True)
+    last_name = Column(String, nullable=True)
     email = Column(String, nullable=False, unique=True)
     subscription_type = Column(String)
 
@@ -98,7 +94,9 @@ class ContactQuery(Base):
 patent_tag = Table(
     "patent_tag",
     Base.metadata,
-    Column("patent_id", Integer, ForeignKey("public.saved_patent.id"), primary_key=True),
+    Column(
+        "patent_id", Integer, ForeignKey("public.saved_patent.id"), primary_key=True
+    ),
     Column("tag_id", Integer, ForeignKey("public.tag.id"), primary_key=True),
     schema="public",
 )
