@@ -19,11 +19,7 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
     handleDropdownChange,
   } = useCitations(item.www_link);
 
-  const {
-    summary,
-    summaryLoading,
-    getSummary
-  } = useSummary(item.www_link);
+  const { summary, summaryLoading, getSummary } = useSummary(item.www_link);
 
   const { isAnalyzed, loading, percentagesData, fetchPercentagesHandler } =
     useFetchPercentages(searchMetrics, search, item.www_link);
@@ -32,7 +28,8 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
     item,
     search,
     percentagesData,
-    citationsData
+    citationsData,
+    summary
   );
 
   return (
@@ -40,7 +37,9 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
       <h2 className="box-title">
         {item.title} ({item.type})
       </h2>
-      <p className="abstract">{item.abstract}</p>
+      <p className="abstract">
+        <span className="bolded-detail">Abstract: </span> {item.abstract}
+      </p>
       <p className="details">
         <span className="bolded-detail">Owned by:</span> {item.owner}
       </p>
@@ -69,7 +68,12 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
           ))}
         </ul>
       )}
-      <SummaryComponent summary={summary} summaryLoading={summaryLoading} getSummary={getSummary}/>
+      <SummaryComponent
+        summary={summary}
+        summaryLoading={summaryLoading}
+        getSummary={getSummary}
+      />
+
       <div className="wrapper">
         {isAnalyzed ? (
           <div className="analyzed-content-wrapper">

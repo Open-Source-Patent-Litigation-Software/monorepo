@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from .models import LoginCredential, RegUser
+from .models import  RegUser
 from .databaseCall import DatabaseCall
 from app.extensions import bcrypt
 from flask import jsonify

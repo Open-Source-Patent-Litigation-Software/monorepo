@@ -32,17 +32,7 @@ def resetDatabase():
     metadata.drop_all(bind=engine)
 
 
-# resetDatabase()
-
-
-class LoginCredential(Base):
-    __tablename__ = "login_credential"
-    __table_args__ = {"schema": "public"}
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    email = Column(String, unique=True, nullable=False)
-    password = Column(String, nullable=False)
-    token = Column(String, nullable=False)
-    login_provider = Column(String, nullable=False)
+resetDatabase()
 
 
 class RegUser(Base):
@@ -51,12 +41,8 @@ class RegUser(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
-    phone = Column(String)
-    login_credential_id = Column(
-        Integer, ForeignKey("public.login_credential.id"), nullable=True
-    )
-    subscription_type = Column(String, nullable=True)
-    login_credential = relationship("LoginCredential", backref="users")
+    email = Column(String, nullable=False, unique=True)
+    subscription_type = Column(String)
 
 
 class Organization(Base):
@@ -134,12 +120,12 @@ class SavedPatent(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey("public.reg_user.id"), nullable=False)
     organization_id = Column(
-        Integer, ForeignKey("public.organization.id"), nullable=False
+        Integer, ForeignKey("public.organization.id"), nullable=True
     )
     patent_data = Column(
         JSON, nullable=False
     )  # Change to String if JSON features are not needed
-    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    saved_on = Column(DateTime, server_default=func.now(), nullable=False)
     user = relationship("RegUser", backref="saved_patents")
     organization = relationship("Organization", backref="saved_patents")
     tags = relationship("Tag", secondary=patent_tag, back_populates="patents")
