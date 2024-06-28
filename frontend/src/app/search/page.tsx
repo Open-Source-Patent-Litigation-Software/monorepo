@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navbar } from "../../_components/navbar/navbar";
 import { Footer } from "../../_components/footer/footer";
 import Metrics from "./components/metrics/metrics";
@@ -8,7 +8,7 @@ import PatentList from "./components/patent/patentList";
 import SearchText from "./components/search/searchText";
 import LoadingSpinner from "./components/loading/loadingSpinner";
 import useMetricSearchStateStore from "@/stores/useMetricStore";
-import "./styles.css";
+import styles from "./styles.module.css";
 import { useFetchMetrics } from "@/hooks/useSearchMetrics";
 
 const Index = () => {
@@ -35,27 +35,32 @@ const Index = () => {
   const handleLockMetricsAndSearch = () => {
     lockMetricsAndSearch(metrics);
   };
-
+  useEffect(() => {
+    if (error) {
+      alert(error);
+    }
+  }, [error]);
   return (
     <>
-      <div className="colored-div">
+      <div className={styles.colored_div}>
         <Navbar />
-        <div className="animation-container">
-          <div className="search-container">
-            <h2 className="search-bar-title">Search{"\n"}Patents</h2>
-            <div className="search-input-wrapper">
+        <div className={styles.animation_container}>
+          <div className={styles.search_container}>
+            <h2 className={styles.search_bar_title}>Search{"\n"}Patents</h2>
+            <div className={styles.search_input_wrapper}>
               <textarea
-                className="search-textarea"
+                className={styles.search_textarea}
                 onChange={(e) => setPatentQuery(e.target.value)}
                 placeholder="Describe your invention in 500 words or less."
               />
-              <button className="search-button" onClick={handleFetchMetrics}>
+              <button
+                className={styles.search_button}
+                onClick={handleFetchMetrics}
+              >
                 Search
               </button>
             </div>
           </div>
-          {error && <div>Error: {error}</div>}
-          {error && <div>Error: {error}</div>}
           {!isMetricsLocked && metrics.length > 0 && (
             <Metrics
               metrics={metrics}
@@ -71,11 +76,9 @@ const Index = () => {
               unlockMetrics={unlockMetrics}
             />
           )}
-          {/* if there are no metrics, search results, and its not loading */}
           {!searchResults && metrics.length == 0 && !isLoading && (
             <SearchText />
           )}
-          {/* if the metrics are locked and there are search results */}
           {isMetricsLocked && searchResults && (
             <PatentList
               items={searchResults}
@@ -83,7 +86,6 @@ const Index = () => {
               search={patentQuery}
             />
           )}
-          {/* if loading, populate the spinner */}
           {isLoading && <LoadingSpinner />}
         </div>
       </div>
