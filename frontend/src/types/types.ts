@@ -100,3 +100,11 @@ export enum PatentSearchVal {
     dataAvailable = 2,
 }
 
+export type patentbyID = {
+    publicationNumber: string,
+    title: string,
+    assignee: string,
+    applicationDate: string,
+    status: string,
+    summary: string,
+}

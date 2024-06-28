@@ -43,6 +43,16 @@ def patentRetrievalRoute():
         return jsonify({"message": "No results found."})
     return jsonify({"results": results})
 
+@patentRetrieval.route("/getPatentsByIDs", methods=["POST"])
+def getPatentsByIDs():
+    """Get Patents by ID"""
+    data = request.get_json()
+
+    return (
+        jsonify("test"),
+        200,
+    )  # 200 is the status code for success
+
 
 @patentRetrieval.route("/scrapeGooglePatents", methods=["GET"])
 def scrapeGooglePatents():
