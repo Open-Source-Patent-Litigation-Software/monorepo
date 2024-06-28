@@ -4,7 +4,7 @@ import { Navbar } from "../../_components/navbar/navbar";
 import { Footer } from "../../_components/footer/footer";
 import PatentList from "./components/patentList";
 import { patentsMockData } from "./mockData";
-import "./saved.css";
+import styles from "./saved.module.css";
 
 const SavedPage = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -22,14 +22,14 @@ const SavedPage = () => {
 
   return (
     <>
-      <div className="colored-div">
+      <div className={styles.coloredDiv}>
         <Navbar />
-        <div className="animation-container">
-          <div className="search-container">
-            <h2 className="search-bar-title">Saved{"\n"}Patents</h2>
-            <div className="search-input-wrapper">
+        <div className={styles.animationContainer}>
+          <div className={styles.searchContainer}>
+            <h2 className={styles.searchBarTitle}>Saved{"\n"}Patents</h2>
+            <div className={styles.searchInputWrapper}>
               <textarea
-                className="search-input"
+                className={styles.searchInput}
                 placeholder="Search by title"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

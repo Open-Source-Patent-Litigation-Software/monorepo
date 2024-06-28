@@ -1,18 +1,21 @@
 "use client";
 import React from "react";
-import "../saved.css";
 import Link from "next/link";
+import styles from "../saved.module.css";
+
 const PatentList = ({ patents }: { patents: any[] }) => {
   return (
-    <div className="patent-list">
+    <div className={styles.patentList}>
       {patents.map((patent) => (
-        <div key={patent.patentNum} className="patent-item">
-          <h3 className="patent-title">{patent.search}</h3>
-          <p className="patent-detail">Patent Number: {patent.patentNum}</p>
-          <p className="patent-detail">
+        <div key={patent.patentNum} className={styles.patentItem}>
+          <h3 className={styles.patentTitle}>{patent.search}</h3>
+          <p className={styles.patentDetail}>
+            Patent Number: {patent.patentNum}
+          </p>
+          <p className={styles.patentDetail}>
             Date Saved: {new Date(patent.dateSaved).toLocaleDateString()}
           </p>
-          <p className="patent-detail">
+          <p className={styles.patentDetail}>
             Date Created: {new Date(patent.dateCreated).toLocaleDateString()}
           </p>
           <Link href={`/saved/${patent.patentNum}`}>View Patent</Link>
