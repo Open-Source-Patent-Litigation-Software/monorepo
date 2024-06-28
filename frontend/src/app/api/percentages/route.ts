@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { backendUrl } from '@/types/types';
-import { fetchAuthToken } from '@/utils/fetchAuthToken';
-import { withApiAuthRequired } from '@auth0/nextjs-auth0';
+import { withApiAuthRequired, getAccessToken } from '@auth0/nextjs-auth0';
 
 
 
@@ -13,7 +12,9 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
         }
 
         // Get the access token
-        const accessToken = await fetchAuthToken();
+        const { accessToken } = await getAccessToken({
+            scopes: ['user']
+        });
 
         const metricsURL = new URL(
             `${backendUrl}/llm/extractSpecificPatentMetrics`

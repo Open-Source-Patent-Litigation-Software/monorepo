@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { backendUrl } from '@/types/types';
-import { fetchAuthToken } from '@/utils/fetchAuthToken';
-import { withApiAuthRequired } from '@auth0/nextjs-auth0';
+import { withApiAuthRequired, getAccessToken } from '@auth0/nextjs-auth0';
 
 export const POST = withApiAuthRequired(async function POST(request: NextRequest) {
     try {
         const body = await request.json();
 
         // Get the access token
-        const accessToken = await fetchAuthToken();
+        const { accessToken } = await getAccessToken({
+            scopes: ['user']
+        });
 
         const searchURL = new URL(`${backendUrl}/llm/getSummary`);
 

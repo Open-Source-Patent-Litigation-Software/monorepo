@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { backendUrl } from '@/types/types';
-import { fetchAuthToken } from '@/utils/fetchAuthToken';
 import { withApiAuthRequired, getSession, getAccessToken } from '@auth0/nextjs-auth0';
 
 export const POST = withApiAuthRequired(async function POST(request: NextRequest) {
@@ -14,7 +13,11 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
     }
 
     // Get the access token
-    const token = await fetchAuthToken();
+    // const token = await getAccessToken();
+
+    const { accessToken } = await getAccessToken({
+      scopes: ['user']
+    });
 
     const metricsURL = new URL(`${backendUrl}/llm/obtainMetrics`);
 
@@ -27,7 +30,7 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(formattedSearch),
     });
@@ -43,6 +46,7 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
     return NextResponse.json(metricsData);
   } catch (error) {
     console.log("failed here");
+    console.log(error);
     return NextResponse.json({ error: error }, { status: 500 });
   }
 });
