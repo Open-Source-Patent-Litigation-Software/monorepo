@@ -11,6 +11,7 @@ class Saver(DatabaseCall):
         """Save the patent object to the database."""
         newPatent = SavedPatent(
             user_id=userID,
+            patent_id=patentData.patentInfo.id,
             patent_data=patentData.model_dump(),
         )
         self.createAndCommit([newPatent])
@@ -20,4 +21,14 @@ class Saver(DatabaseCall):
     def queryPatents(self, userID: str):
         """Query the database for all patents saved by the user."""
         patents = self.session.query(SavedPatent).filter_by(user_id=userID).all()
-        return [patent.patent_data for patent in patents]
+        patent_list = []
+        for patent in patents:
+            patent_dict = {
+                "citations": patent.patent_data.get("citations", {}),
+                "patentInfo": patent.patent_data.get("patentInfo", {}),
+                "percentages": patent.patent_data.get("percentages", {}),
+                "search": patent.patent_data.get("search", ""),
+                "summary": patent.patent_data.get("summary", ""),
+            }
+            patent_list.append(patent_dict)
+        return patent_list

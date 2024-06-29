@@ -58,8 +58,3 @@ def fetchPatents():
     except Exception as e:
         logger.error(str(e))
         return jsonify({"error": str(e)}), 400
-
-
-@saved.route("/getPatent", methods=["POST"])
-def getPatent():
-    return jsonify({"error": "not implemented"}), 400

@@ -117,7 +117,7 @@ class Tag(Base):
 class SavedPatent(Base):
     __tablename__ = "saved_patent"
     __table_args__ = (
-        UniqueConstraint("user_id", "organization_id", name="uq_user_org"),
+        UniqueConstraint("user_id", "patent_id", name="uq_user_patent"),
         {"schema": "public"},
     )
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -125,9 +125,8 @@ class SavedPatent(Base):
     organization_id = Column(
         Integer, ForeignKey("public.organization.id"), nullable=True
     )
-    patent_data = Column(
-        JSON, nullable=False
-    )  # Change to String if JSON features are not needed
+    patent_id = Column(String, nullable=False)  # Add this line
+    patent_data = Column(JSON, nullable=False)
     saved_on = Column(DateTime, server_default=func.now(), nullable=False)
 
     user = relationship("RegUser", backref="saved_patents")

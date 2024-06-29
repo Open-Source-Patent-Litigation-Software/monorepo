@@ -3,21 +3,23 @@ import React, { useState, useEffect } from "react";
 import { Navbar } from "../../_components/navbar/navbar";
 import { Footer } from "../../_components/footer/footer";
 import PatentList from "./components/patentList";
-import { patentsMockData } from "./mockData";
 import styles from "./saved.module.css";
+import { useGetSavedPatents } from "@/hooks/useGetSavedPatents";
+import { Patent } from "./types"; // Adjust the import path accordingly
 
-const SavedPage = () => {
+const Page = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [filteredPatents, setFilteredPatents] = useState<any[]>([]);
+  const [filteredPatents, setFilteredPatents] = useState<Patent[]>([]);
+  const { fetchedPatents } = useGetSavedPatents();
 
-  const patents = patentsMockData;
   useEffect(() => {
-    const filteredPatents = patents.filter((patent) =>
-      patent.search.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    setFilteredPatents(filteredPatents);
-  }, [searchQuery, patents]);
+    if (fetchedPatents && fetchedPatents.patents) {
+      const filtered = fetchedPatents.patents.filter((patent) =>
+        patent.search.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredPatents(filtered);
+    }
+  }, [searchQuery, fetchedPatents]);
 
   return (
     <>
@@ -43,4 +45,4 @@ const SavedPage = () => {
   );
 };
 
-export default SavedPage;
+export default Page;
