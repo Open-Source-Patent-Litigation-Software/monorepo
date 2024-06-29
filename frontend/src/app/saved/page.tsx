@@ -11,7 +11,7 @@ const Page = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [filteredPatents, setFilteredPatents] = useState<Patent[]>([]);
   const { fetchedPatents } = useGetSavedPatents();
-
+  console.log(fetchedPatents);
   useEffect(() => {
     if (fetchedPatents && fetchedPatents.patents) {
       const filtered = fetchedPatents.patents.filter((patent) =>

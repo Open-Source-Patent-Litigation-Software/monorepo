@@ -22,7 +22,7 @@ export interface Patent {
     percentages: { [key: string]: number };
     search: string;
     summary: string;
-    dateSaved: string; // Ensure dateSaved is included here
+    dateSaved: string;
 }
 
 export interface FetchedPatents {

@@ -16,9 +16,9 @@ const PatentList = ({ patents }: { patents: Patent[] }) => {
           <p className={styles.patentDetail}>
             Patent Number: {patent.patentInfo.publication_id}
           </p>
-          {/* <p className={styles.patentDetail}>
+          <p className={styles.patentDetail}>
             Date Saved: {new Date(patent.dateSaved).toLocaleDateString()}
-          </p> */}
+          </p>
           <p className={styles.patentDetail}>
             Date Created:{" "}
             {new Date(patent.patentInfo.publication_date).toLocaleDateString()}

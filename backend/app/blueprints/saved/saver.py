@@ -29,6 +29,7 @@ class Saver(DatabaseCall):
                 "percentages": patent.patent_data.get("percentages", {}),
                 "search": patent.patent_data.get("search", ""),
                 "summary": patent.patent_data.get("summary", ""),
+                "dateSaved": patent.saved_on.strftime("%Y-%m-%d %H:%M:%S"),
             }
             patent_list.append(patent_dict)
         return patent_list
