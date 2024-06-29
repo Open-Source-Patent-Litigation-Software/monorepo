@@ -1,6 +1,6 @@
 from enum import Enum
 from dotenv import load_dotenv
-from .saver import Saver
+from app.blueprints.saved.saver import Saver
 import logging
 
 logger = logging.getLogger("__name__")

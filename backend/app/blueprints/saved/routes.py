@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 import logging
 from .schema import PatentData
 from authlib.integrations.flask_oauth2 import ResourceProtector
+from authlib.jose import jwt
 from utils.auth import Auth0JWTBearerTokenValidator
 from pydantic import BaseModel, Field, Json
 from database.factory import DatabaseCallFactory
@@ -17,14 +18,22 @@ require_auth.register_token_validator(validator)
 
 
 @saved.route("/patent", methods=["POST"])
-# @require_auth("user")
+@require_auth("user")
 def patent():
-    # get data from JSON
+    """Save a patent to the database."""
+
+    # Extract the sub (user ID) from the claims
+    ctx = require_auth.acquire_token()
+    userID = ctx.get("sub")
+
+    # Get JSON Body from HTTP request
     data = request.get_json()
 
     try:
         validatedData = PatentData(**data)
         saver = DatabaseCallFactory.getHandler(DatabaseCallFactory.RequestType.SAVER)
+        user = saver.getOrCreateUser(userID)
+        saver.savePatent(user.id, validatedData)
     except Exception as e:
         logger.error(str(e))
         return jsonify({"error": str(e)}), 400
@@ -33,6 +42,22 @@ def patent():
         jsonify({"response": "properly worked", "body": validatedData.model_dump()}),
         200,
     )
+
+
+@saved.route("/fetch_patents", methods=["POST"])
+@require_auth("user")
+def fetchPatents():
+    """Get all saved patents from the database."""
+    try:
+        ctx = require_auth.acquire_token()
+        userID = ctx.get("sub")
+        saver = DatabaseCallFactory.getHandler(DatabaseCallFactory.RequestType.SAVER)
+        user = saver.getOrCreateUser(userID)
+        patents = saver.queryPatents(user.id)
+        return jsonify({"patents": patents}), 200
+    except Exception as e:
+        logger.error(str(e))
+        return jsonify({"error": str(e)}), 400
 
 
 @saved.route("/getPatent", methods=["POST"])

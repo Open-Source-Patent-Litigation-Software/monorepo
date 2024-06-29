@@ -13,6 +13,27 @@ export const useSavePatents = (
   const [saveLoading, setSaveLoading] = useState<boolean>(false);
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const { user, error, isLoading } = useUser();
+  
+  const savePatent = async (patentJSON: any) => {
+    try {
+      const response = await fetch('/api/save_patent', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify( patentJSON ),
+      });
+  
+      if (!response.ok) {
+        console.log(response);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+    } catch (e) {
+      const error = e as Error;
+      console.error(error.message);
+    }
+  };  
 
   const parsePercentages = useCallback(
     (percentages: PercentagesDataType): { [key: string]: any } => {
@@ -57,10 +78,7 @@ export const useSavePatents = (
       percentages: parsePercentages(percentages),
       citations: parseCitations(citations),
     };
-
-    const finalJSON = JSON.stringify(patentJSON);
-
-    // TODO: IMPLEMENT POST REQUEST TO SAVE PATENT DATA
+    await savePatent(patentJSON);
 
     setSaveLoading(false);
     setIsSaved(true);

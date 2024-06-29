@@ -31,13 +31,18 @@ def resetDatabase():
     # Drop all tables
     metadata.drop_all(bind=engine)
 
+
+# resetDatabase() # Uncomment this line to reset the database
+
+
 class RegUser(Base):
     __tablename__ = "reg_user"
     __table_args__ = {"schema": "public"}
-    id = Column(Integer, primary_key=True, autoincrement=True)
+
+    id = Column(String, primary_key=True)  # This will be the Auth0 user ID
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)
-    email = Column(String, nullable=False, unique=True)
+    email = Column(String, nullable=True, unique=True)
     subscription_type = Column(String)
 
 
@@ -54,7 +59,7 @@ class Organization(Base):
 user_organization = Table(
     "user_organization",
     Base.metadata,
-    Column("user_id", Integer, ForeignKey("public.reg_user.id"), primary_key=True),
+    Column("user_id", String, ForeignKey("public.reg_user.id"), primary_key=True),
     Column(
         "organization_id",
         Integer,
@@ -116,7 +121,7 @@ class SavedPatent(Base):
         {"schema": "public"},
     )
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("public.reg_user.id"), nullable=False)
+    user_id = Column(String, ForeignKey("public.reg_user.id"), nullable=False)
     organization_id = Column(
         Integer, ForeignKey("public.organization.id"), nullable=True
     )
@@ -124,6 +129,7 @@ class SavedPatent(Base):
         JSON, nullable=False
     )  # Change to String if JSON features are not needed
     saved_on = Column(DateTime, server_default=func.now(), nullable=False)
+
     user = relationship("RegUser", backref="saved_patents")
     organization = relationship("Organization", backref="saved_patents")
     tags = relationship("Tag", secondary=patent_tag, back_populates="patents")
