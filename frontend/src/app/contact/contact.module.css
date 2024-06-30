@@ -1,0 +1,165 @@
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.snapScrollContainer {
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  width: 100%;
+  background: #E8DFCA;
+}
+
+.divView {
+  display: flex;
+  padding-top: 10%;
+  padding-bottom: 5%;
+  background: #F5EFE6;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 110vh;
+  scroll-snap-align: start;
+  width: 100%;
+}
+
+.formContainer {
+  width: 60%;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #4f6f52;
+  margin-top: -5%;
+  display: flex;
+  flex-direction: column;
+  min-height: 70vh;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.5s ease-in;
+}
+
+.styledForm {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.formTitle {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 10px;
+  font-size: 3rem;
+}
+
+.formDescription {
+  text-align: center;
+  color: #f5efe6;
+  margin-bottom: 10px;
+}
+
+.hr {
+  margin-bottom: 10px;
+}
+
+.formGroupInline {
+  margin-bottom: 15px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.inlineField {
+  display: flex;
+  flex-direction: column;
+  width: 48%;
+}
+
+@media (max-width: 600px) {
+  .inlineField {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+.formGroup {
+  margin-bottom: 15px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #e8dfca;
+}
+
+.input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  width: 100%;
+  height: 150px;
+  box-sizing: border-box;
+}
+
+.button {
+  padding: 10px;
+  font-size: 16px;
+  color: #f5efe6;
+  background-color: #1a4d2e;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #153c24;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalContent {
+  background: #fff;
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.modalContent h2 {
+  margin-bottom: 20px;
+}
+
+.modalContent p {
+  margin-bottom: 30px;
+}
+
+.modalContent button {
+  width: 100%;
+}

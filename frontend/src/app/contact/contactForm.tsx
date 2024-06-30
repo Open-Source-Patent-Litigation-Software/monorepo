@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import "./contact.css";
+import styles from "./contact.module.css";
 
 const ContactForm = () => {
   const apiUrl = process.env.NEXT_PUBLIC_DEV_BACKEND;
@@ -54,16 +54,20 @@ const ContactForm = () => {
 
   return (
     <>
-      <div className="form-container">
-        <h1 className="form-title">Contact The DulanyAI Team</h1>
-        <h3 className="form-description">We will contact you within 24 hours.</h3>
-        <hr className="hr" />
-        <form className="styled-form" onSubmit={handleSubmit}>
-          <div className="form-group-inline">
-            <div className="inline-field">
-              <label className="label" htmlFor="firstName">First Name:</label>
+      <div className={styles.formContainer}>
+        <h1 className={styles.formTitle}>Contact The DulanyAI Team</h1>
+        <h3 className={styles.formDescription}>
+          We will contact you within 24 hours.
+        </h3>
+        <hr className={styles.hr} />
+        <form className={styles.styledForm} onSubmit={handleSubmit}>
+          <div className={styles.formGroupInline}>
+            <div className={styles.inlineField}>
+              <label className={styles.label} htmlFor="firstName">
+                First Name:
+              </label>
               <input
-                className="input"
+                className={styles.input}
                 type="text"
                 id="firstName"
                 name="firstName"
@@ -72,10 +76,12 @@ const ContactForm = () => {
                 required
               />
             </div>
-            <div className="inline-field">
-              <label className="label" htmlFor="lastName">Last Name:</label>
+            <div className={styles.inlineField}>
+              <label className={styles.label} htmlFor="lastName">
+                Last Name:
+              </label>
               <input
-                className="input"
+                className={styles.input}
                 type="text"
                 id="lastName"
                 name="lastName"
@@ -85,10 +91,12 @@ const ContactForm = () => {
               />
             </div>
           </div>
-          <div className="form-group">
-            <label className="label" htmlFor="email">Email:</label>
+          <div className={styles.formGroup}>
+            <label className={styles.label} htmlFor="email">
+              Email:
+            </label>
             <input
-              className="input"
+              className={styles.input}
               type="email"
               id="email"
               name="email"
@@ -97,10 +105,12 @@ const ContactForm = () => {
               required
             />
           </div>
-          <div className="form-group">
-            <label className="label" htmlFor="message">Message:</label>
+          <div className={styles.formGroup}>
+            <label className={styles.label} htmlFor="message">
+              Message:
+            </label>
             <textarea
-              className="textarea"
+              className={styles.textarea}
               id="message"
               name="message"
               value={formData.message}
@@ -108,16 +118,20 @@ const ContactForm = () => {
               required
             ></textarea>
           </div>
-          <button className="button" type="submit">Submit</button>
+          <button className={styles.button} type="submit">
+            Submit
+          </button>
         </form>
       </div>
 
       {isSubmitted && (
-        <div className="modal-overlay">
-          <div className="modal-content">
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
             <h2>Form Submitted</h2>
             <p>Thank you for contacting us! We will get back to you shortly.</p>
-            <button className="button" onClick={closeModal}>Close</button>
+            <button className={styles.button} onClick={closeModal}>
+              Close
+            </button>
           </div>
         </div>
       )}
