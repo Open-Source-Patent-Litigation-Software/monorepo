@@ -1,5 +1,5 @@
-import React from 'react';
-import './button.css';
+import React from "react";
+import styles from "./button.module.css";
 
 interface CustomButtonProps {
   children: React.ReactNode;
@@ -7,10 +7,17 @@ interface CustomButtonProps {
   handleClick: () => void;
 }
 
-const CustomButton: React.FC<CustomButtonProps> = ({ children, loading, handleClick }) => {
+const CustomButton: React.FC<CustomButtonProps> = ({
+  children,
+  loading,
+  handleClick,
+}) => {
   return (
-    <button onClick={handleClick} className={`button ${loading ? 'loading' : ''}`}>
-      {loading ? <div className="spinner" /> : children}
+    <button
+      onClick={handleClick}
+      className={`${styles.button} ${loading ? styles.loading : ""}`}
+    >
+      {loading ? <div className={styles.spinner} /> : children}
     </button>
   );
 };

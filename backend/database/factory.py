@@ -1,7 +1,6 @@
 from enum import Enum
 from dotenv import load_dotenv
-from .auth import Auth
-from .cache import Cache
+from app.blueprints.saved.saver import Saver
 import logging
 
 logger = logging.getLogger("__name__")
@@ -11,24 +10,12 @@ class DatabaseCallFactory:
     load_dotenv()
 
     class RequestType(Enum):
-        AUTH = "AUTH"
-        CACHE = "CACHE"
-        ENTITY = "ENTITY"
-        SEARCH = "SEARCH"
+        SAVER = "SAVER"
 
     @staticmethod
     def getHandler(requestType: "DatabaseCallFactory.RequestType"):
-        # Create a session to be used
-        if requestType == DatabaseCallFactory.RequestType.AUTH:
-            return Auth()
-        elif requestType == DatabaseCallFactory.RequestType.CACHE:
-            return Cache()
-        elif requestType == DatabaseCallFactory.RequestType.ENTITY:
-            # TODO: Implement Entity Handler
-            pass
-        elif requestType == DatabaseCallFactory.RequestType.SEARCH:
-            # TODO: Implement Search Handler
-            pass
+        if requestType == DatabaseCallFactory.RequestType.SAVER:
+            return Saver()
         else:
             logger.error("Database Handler Failed.")
             raise ValueError("Not a valid request")

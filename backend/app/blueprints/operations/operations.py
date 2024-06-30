@@ -1,12 +1,7 @@
 from flask import Blueprint, jsonify, request
-from database.factory import DatabaseCallFactory
 from database.posts import (
     postToList,
     postContactQuery,
-    registerUser,
-    signInUser,
-    postOrganization,
-    retrieveUserInfo,
 )
 
 operations = Blueprint("operations", __name__, template_folder="templates")
@@ -37,69 +32,4 @@ def handleContactQuery():
     email = data["email"]
     message = data["message"]
     response = postContactQuery(firstName, lastName, email, message)
-    return response
-
-
-@operations.route("/signup", methods=["POST"])
-def signup():
-    data = request.get_json()
-    if data is None:
-        return jsonify({"error": "No JSON data provided"}), 400
-
-    # response = registerUser(
-    #     data.get("firstName"),
-    #     data.get("lastName"),
-    #     data.get("email"),
-    #     data.get("phone"),
-    #     data.get("password"),
-    # )
-    authHandler = DatabaseCallFactory.getHandler(DatabaseCallFactory.RequestType.AUTH)
-    response = authHandler.registerUser(
-        data.get("firstName"),
-        data.get("lastName"),
-        data.get("email"),
-        data.get("phone"),
-        data.get("password"),
-    )
-    return response
-
-
-@operations.route("/signin", methods=["POST"])
-def signin():
-    print("/signin called")
-    data = request.get_json()
-    if data is None:
-        return jsonify({"error": "No JSON data provided"}), 400
-    email = data.get("email")
-    password = data.get("password")
-    response = signInUser(email, password)
-    return response
-
-
-@operations.route("/signout", methods=["GET"])
-def signout():
-    return jsonify({"message": "Successfully signed out"})
-
-
-@operations.route("/@me", methods=["GET"])
-def me():
-    print("/@me called")
-    response = retrieveUserInfo()
-    return response
-
-
-@operations.route("/createOrganization", methods=["POST"])
-def createOrganization():
-    data = request.get_json()
-    if data is None:
-        return jsonify({"error": "No JSON data provided"}), 400
-
-    # Extract data from JSON
-    name = data.get("name")
-    phone = data.get("phone")
-    features = data.get("features")
-
-    print(name, phone, features)
-    response = postOrganization(name, phone, features)
-
     return response

@@ -1,23 +1,79 @@
 from flask import Blueprint, jsonify, request
-from .schema import PatentData
 import logging
+from .schema import PatentData
+from authlib.integrations.flask_oauth2 import ResourceProtector
+from authlib.jose import jwt
+from utils.auth import Auth0JWTBearerTokenValidator
+from pydantic import BaseModel, Field, Json
+from database.factory import DatabaseCallFactory
 
 saved = Blueprint("saved", __name__, template_folder="templates")
 logger = logging.getLogger("__name__")
 
+require_auth = ResourceProtector()
+validator = Auth0JWTBearerTokenValidator(
+    "dev-giv3drwd5zd1cqsb.us.auth0.com", "http://localhost:8000"
+)
+require_auth.register_token_validator(validator)
+
 
 @saved.route("/patent", methods=["POST"])
+@require_auth("user")
 def patent():
-    # get data from JSON
+    """Save a patent to the database."""
+
+    # Extract the sub (user ID) from the claims
+    ctx = require_auth.acquire_token()
+    userID = ctx.get("sub")
+
+    # Get JSON Body from HTTP request
     data = request.get_json()
+
     try:
         validatedData = PatentData(**data)
-        logger.info(validatedData)
+        saver = DatabaseCallFactory.getHandler(DatabaseCallFactory.RequestType.SAVER)
+        user = saver.getOrCreateUser(userID)
+        saver.savePatent(user.id, validatedData)
     except Exception as e:
+        logger.error(str(e))
         return jsonify({"error": str(e)}), 400
-    return jsonify({"response": "properly worked"}), 200
+    logger.info(f"Received data: {validatedData}")
+    return (
+        jsonify({"response": "properly worked", "body": validatedData.model_dump()}),
+        200,
+    )
 
 
-@saved.route("/getPatent", methods=["POST"])
-def getPatent():
-    return jsonify({"error": "not implemented"}), 400
+@saved.route("/fetch_patents", methods=["POST"])
+@require_auth("user")
+def fetchPatents():
+    """Get all saved patents from the database."""
+    try:
+        ctx = require_auth.acquire_token()
+        userID = ctx.get("sub")
+        saver = DatabaseCallFactory.getHandler(DatabaseCallFactory.RequestType.SAVER)
+        user = saver.getOrCreateUser(userID)
+        patents = saver.queryPatents(user.id)
+        return jsonify({"patents": patents}), 200
+    except Exception as e:
+        logger.error(str(e))
+        return jsonify({"error": str(e)}), 400
+
+
+@saved.route("/remove_patent", methods=["POST"])
+@require_auth("user")
+def removePatent():
+    """Get all saved patents from the database."""
+    data = request.get_json()
+    patentID = data.get("id")
+    print(patentID)
+    try:
+        ctx = require_auth.acquire_token()
+        userID = ctx.get("sub")
+        saver = DatabaseCallFactory.getHandler(DatabaseCallFactory.RequestType.SAVER)
+        user = saver.getOrCreateUser(userID)
+        saver.deletePatent(user.id, patentID)
+        return jsonify({"Message": "Patent Removed", "patentID": patentID}), 200
+    except Exception as e:
+        logger.error(str(e))
+        return jsonify({"error": str(e)}), 400

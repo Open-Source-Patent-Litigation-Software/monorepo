@@ -32,31 +32,18 @@ def resetDatabase():
     metadata.drop_all(bind=engine)
 
 
-# resetDatabase()
-
-
-class LoginCredential(Base):
-    __tablename__ = "login_credential"
-    __table_args__ = {"schema": "public"}
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    email = Column(String, unique=True, nullable=False)
-    password = Column(String, nullable=False)
-    token = Column(String, nullable=False)
-    login_provider = Column(String, nullable=False)
+# resetDatabase() # Uncomment this line to reset the database
 
 
 class RegUser(Base):
     __tablename__ = "reg_user"
     __table_args__ = {"schema": "public"}
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    first_name = Column(String, nullable=False)
-    last_name = Column(String, nullable=False)
-    phone = Column(String)
-    login_credential_id = Column(
-        Integer, ForeignKey("public.login_credential.id"), nullable=True
-    )
-    subscription_type = Column(String, nullable=True)
-    login_credential = relationship("LoginCredential", backref="users")
+
+    id = Column(String, primary_key=True)  # This will be the Auth0 user ID
+    first_name = Column(String, nullable=True)
+    last_name = Column(String, nullable=True)
+    email = Column(String, nullable=True, unique=True)
+    subscription_type = Column(String)
 
 
 class Organization(Base):
@@ -72,7 +59,7 @@ class Organization(Base):
 user_organization = Table(
     "user_organization",
     Base.metadata,
-    Column("user_id", Integer, ForeignKey("public.reg_user.id"), primary_key=True),
+    Column("user_id", String, ForeignKey("public.reg_user.id"), primary_key=True),
     Column(
         "organization_id",
         Integer,
@@ -112,7 +99,9 @@ class ContactQuery(Base):
 patent_tag = Table(
     "patent_tag",
     Base.metadata,
-    Column("patent_id", Integer, ForeignKey("public.saved_patent.id"), primary_key=True),
+    Column(
+        "patent_id", Integer, ForeignKey("public.saved_patent.id"), primary_key=True
+    ),
     Column("tag_id", Integer, ForeignKey("public.tag.id"), primary_key=True),
     schema="public",
 )
@@ -128,18 +117,18 @@ class Tag(Base):
 class SavedPatent(Base):
     __tablename__ = "saved_patent"
     __table_args__ = (
-        UniqueConstraint("user_id", "organization_id", name="uq_user_org"),
+        UniqueConstraint("user_id", "patent_id", name="uq_user_patent"),
         {"schema": "public"},
     )
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("public.reg_user.id"), nullable=False)
+    user_id = Column(String, ForeignKey("public.reg_user.id"), nullable=False)
     organization_id = Column(
-        Integer, ForeignKey("public.organization.id"), nullable=False
+        Integer, ForeignKey("public.organization.id"), nullable=True
     )
-    patent_data = Column(
-        JSON, nullable=False
-    )  # Change to String if JSON features are not needed
-    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    patent_id = Column(String, nullable=False)  # Add this line
+    patent_data = Column(JSON, nullable=False)
+    saved_on = Column(DateTime, server_default=func.now(), nullable=False)
+
     user = relationship("RegUser", backref="saved_patents")
     organization = relationship("Organization", backref="saved_patents")
     tags = relationship("Tag", secondary=patent_tag, back_populates="patents")
