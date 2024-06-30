@@ -66,7 +66,6 @@ def removePatent():
     """Get all saved patents from the database."""
     data = request.get_json()
     patentID = data.get("id")
-    print(patentID)
     try:
         ctx = require_auth.acquire_token()
         userID = ctx.get("sub")
