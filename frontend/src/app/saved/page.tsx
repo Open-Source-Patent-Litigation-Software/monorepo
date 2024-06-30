@@ -5,21 +5,31 @@ import { Footer } from "../../_components/footer/footer";
 import PatentList from "./components/patentList";
 import styles from "./saved.module.css";
 import { useGetSavedPatents } from "@/hooks/useGetSavedPatents";
-import { Patent } from "./types"; // Adjust the import path accordingly
+import { Patent } from "./types";
 
 const Page = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [filteredPatents, setFilteredPatents] = useState<Patent[]>([]);
+  const [patents, setPatents] = useState<Patent[]>([]);
   const { fetchedPatents } = useGetSavedPatents();
-  console.log(fetchedPatents);
+
   useEffect(() => {
     if (fetchedPatents && fetchedPatents.patents) {
-      const filtered = fetchedPatents.patents.filter((patent) =>
-        patent.search.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredPatents(filtered);
+      setPatents(fetchedPatents.patents);
     }
-  }, [searchQuery, fetchedPatents]);
+  }, [fetchedPatents]);
+
+  const removePatent = (id: string) => {
+    setPatents((prevPatents) => {
+      const updatedPatents = prevPatents.filter(
+        (patent) => patent.patentInfo.id !== id
+      );
+      return updatedPatents;
+    });
+  };
+
+  const filteredPatents = patents.filter((patent) =>
+    patent.search.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <>
@@ -37,7 +47,11 @@ const Page = () => {
               />
             </div>
           </div>
-          <PatentList patents={filteredPatents} />
+          {filteredPatents.length === 0 ? (
+            <div className={styles.noResults}>No saved patents found.</div>
+          ) : (
+            <PatentList patents={filteredPatents} removePatent={removePatent} />
+          )}
         </div>
       </div>
       <Footer />

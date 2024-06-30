@@ -58,3 +58,22 @@ def fetchPatents():
     except Exception as e:
         logger.error(str(e))
         return jsonify({"error": str(e)}), 400
+
+
+@saved.route("/remove_patent", methods=["POST"])
+@require_auth("user")
+def removePatent():
+    """Get all saved patents from the database."""
+    data = request.get_json()
+    patentID = data.get("id")
+    print(patentID)
+    try:
+        ctx = require_auth.acquire_token()
+        userID = ctx.get("sub")
+        saver = DatabaseCallFactory.getHandler(DatabaseCallFactory.RequestType.SAVER)
+        user = saver.getOrCreateUser(userID)
+        saver.deletePatent(user.id, patentID)
+        return jsonify({"Message": "Patent Removed", "patentID": patentID}), 200
+    except Exception as e:
+        logger.error(str(e))
+        return jsonify({"error": str(e)}), 400

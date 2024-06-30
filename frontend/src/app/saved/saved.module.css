@@ -46,6 +46,18 @@
   overflow-y: auto;
 }
 
+.noResults {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 50%;
+  text-align: center;
+  margin: auto;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
 .searchBarTitle {
   margin: 0;
   color: black;
@@ -85,6 +97,28 @@
   color: #555;
   margin: 5px 0;
   font-size: 0.9em;
+}
+
+.removeButton {
+  background-color: #ff4500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+.removeButton:hover {
+  background-color: #ff0000;
+  transform: scale(1.05);
+}
+
+.removeButton:active {
+  transform: scale(0.95);
 }
 
 /* Media query for smaller screens */

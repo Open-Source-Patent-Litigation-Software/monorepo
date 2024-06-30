@@ -1,9 +1,11 @@
 from database.databaseCall import DatabaseCall
 from .schema import PatentData
 from database.models import SavedPatent
+from sqlalchemy.orm.exc import NoResultFound
 
 
 class Saver(DatabaseCall):
+
     def __init__(self):
         super().__init__()
 
@@ -33,3 +35,24 @@ class Saver(DatabaseCall):
             }
             patent_list.append(patent_dict)
         return patent_list
+
+    def deletePatent(self, userID: str, patentID: str):
+        """Delete a patent from the database."""
+        try:
+            patent = (
+                self.session.query(SavedPatent)
+                .filter_by(user_id=userID, patent_id=patentID)
+                .one()
+            )
+
+            self.session.delete(patent)
+            self.session.commit()
+            return True  # Indicate successful deletion
+        except NoResultFound:
+            # If no patent is found with the given userID and patentID
+            return False  # Indicate that no patent was found to delete
+        except Exception as e:
+            # Handle any other exceptions that might occur
+            self.session.rollback()
+            print(f"An error occurred while deleting the patent: {str(e)}")
+            return False  # Indicate that deletion failed
