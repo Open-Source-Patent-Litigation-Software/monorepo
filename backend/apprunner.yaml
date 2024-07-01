@@ -10,6 +10,7 @@ build:
       - echo "Setting up virtual environment"
       - python3 -m venv /tmp/venv
       - . /tmp/venv/bin/activate
+      - python3 -m ensurepip --upgrade
       - pip install --upgrade pip
       - pip install -r requirements.txt
 run:
