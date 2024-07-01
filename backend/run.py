@@ -7,9 +7,6 @@ from flask import Flask, jsonify
 from authlib.integrations.flask_oauth2 import ResourceProtector
 from utils.auth import Auth0JWTBearerTokenValidator
 app = create_app()
-host = os.getenv("HOST")
-port = os.getenv("PORT")
-print(f"Running on {host}:{port}")
 
 require_auth = ResourceProtector()
 validator = Auth0JWTBearerTokenValidator(
