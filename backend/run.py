@@ -1,9 +1,7 @@
 from app import create_app
 from dotenv import load_dotenv
-import os
 from utils.logging.logging import setup_logger
 import logging
-from flask import Flask, jsonify
 from authlib.integrations.flask_oauth2 import ResourceProtector
 from utils.auth import Auth0JWTBearerTokenValidator
 app = create_app()
