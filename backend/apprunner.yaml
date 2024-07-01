@@ -4,7 +4,7 @@ build:
   commands:
     pre-build:
       - echo "Installing system dependencies"
-      - apt-get update && apt-get install -y python3-venv python3-pip
+      # - apt-get update && apt-get install -y python3-venv python3-pip
     build:
       - echo "Setting up virtual environment"
       - python3 -m venv /tmp/venv
