@@ -23,6 +23,6 @@ setup_logger()
 
 logger.info("Started Up")
 
-if __name__ == "__main__":
-    app.run(debug=True, host=host, port=port)
 
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
