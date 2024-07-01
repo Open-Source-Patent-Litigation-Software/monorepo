@@ -35,4 +35,4 @@ class PatentScraper:
             return ""
         if isinstance(results, list):
             return '\n'.join(map(str, results))
-        return response
+        return results

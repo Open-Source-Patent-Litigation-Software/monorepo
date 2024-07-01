@@ -21,7 +21,7 @@ class LlmRequests:
 
     def makeRequest(self, template, validator, args):
         # add some way to determine which model should be used based on the # of tokens
-        model = "gpt-3.5-turbo"
+        model = "gpt-4o"
 
         # log the number of tokens
         self.logger.info(f"This request used about {len(template)/4} tokens")
@@ -52,6 +52,7 @@ class LlmRequests:
             # if there is an error raise an exception -> TODO: we will need to build out a system for thiss
             raise ValueError(f"Failed to parse JSON from completion: {e}")
 
+        self.logger.info(result.usage_metadata)
         # return the parse dictionary
         return parsed_result.dict()
 
