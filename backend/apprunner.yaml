@@ -3,11 +3,12 @@ runtime: python311
 build:
   commands:
     pre-build:
-      - echo "Installing system dependencies"
-      # - apt-get update && apt-get install -y python3-venv python3-pip
+      - echo "Checking Python and pip versions"
+      - python --version
+      - pip --version
     build:
       - echo "Setting up virtual environment"
-      - python3 -m venv /tmp/venv
+      - python -m venv /tmp/venv
       - . /tmp/venv/bin/activate
       - pip install --upgrade pip
       - pip install -r requirements.txt
