@@ -1,5 +1,6 @@
 export const fetchAuthToken = async () => {
     try {
+        console.log("1233-fetching token", String(process.env.AUTH0_CLIENT_ID),)
         const response = await fetch('https://dev-giv3drwd5zd1cqsb.us.auth0.com/oauth/token', {
             method: 'POST',
             headers: {
