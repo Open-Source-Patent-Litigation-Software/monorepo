@@ -5,8 +5,16 @@ build:
     pre-build:
       - echo "Checking Python and pip versions"
       - python3 --version
+      - pip3 --version
     build:
       - echo "Setting up virtual environment"
-      - pip3 install -r requirements.txt
+      - python3 -m venv /tmp/venv
+      - . /tmp/venv/bin/activate
+      - echo "Installing dependencies"
+      - pip install --upgrade pip
+      - pip install -r requirements.txt
+      - echo "Dependencies installed"
 run:
-  command: "gunicorn run:app"
+  command: >
+    . /tmp/venv/bin/activate &&
+    gunicorn run:app
