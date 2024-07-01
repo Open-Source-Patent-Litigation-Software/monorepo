@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/endpoint.js": {
+      "timeout": 60
+    }
+  }
+}
