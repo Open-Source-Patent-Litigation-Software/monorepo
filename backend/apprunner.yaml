@@ -12,7 +12,7 @@ build:
       - pip install --upgrade pip
       - pip install -r requirements.txt
 run:
-  runtime-version: 3.11
+  runtime-version: 3.11.9
   command: ". /tmp/venv/bin/activate && gunicorn run:app"
   network:
     port: 8080
