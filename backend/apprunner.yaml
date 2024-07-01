@@ -13,6 +13,6 @@ build:
       - pip install -r requirements.txt
 run:
   runtime-version: 3.11
-  command: . /tmp/venv/bin/activate && gunicorn run:app
+  command: ". /tmp/venv/bin/activate && gunicorn run:app"
   network:
     port: 8080
