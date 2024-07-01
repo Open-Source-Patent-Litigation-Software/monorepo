@@ -7,9 +7,7 @@ build:
       - python3 --version
     build:
       - echo "Setting up virtual environment"
-      - python3 -m venv /tmp/venv
-      - . /tmp/venv/bin/activate
       - pip3 install --upgrade pip
       - pip3 install -r requirements.txt
 run:
-  command: ". /tmp/venv/bin/activate && gunicorn run:app"
+  command: "gunicorn run:app"
