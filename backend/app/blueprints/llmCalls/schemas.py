@@ -16,16 +16,13 @@ class Quote(BaseModel):
 class CitationsExtraction(BaseModel):
     claims: Optional[List[Quote]]
     abstract: Optional[List[Quote]]
-    description: Optional[List[Quote]]
 
     # checks that at least 1 of the Claims, Abstract or Description Sections are there
     @root_validator(pre=True)
     def check_sections_not_all_empty(cls, values):
         if (
             not values.get("claims") and
-            not values.get("abstract") and
-            not values.get("description")
-        ):
+            not values.get("abstract")        ):
             raise ValueError('At least one of "claims", "abstract", or "description" must not be empty')
         return values
 

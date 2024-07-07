@@ -18,7 +18,7 @@ from app.blueprints.saved.routes import saved
 
 def create_app():
     app = Flask(__name__)
-
+    print("STARTED")
     # Load configuration from environment variables
     app.secret_key = os.getenv(
         "SECRET_KEY"
@@ -39,6 +39,10 @@ def create_app():
     app.register_blueprint(patentRetrieval, url_prefix="/patents")
     app.register_blueprint(operations, url_prefix="/ops")
     app.register_blueprint(saved, url_prefix="/save")
+
+    @app.route("/")
+    def home():
+        return "It works."
 
     # Initialize extensions with app
     bcrypt.init_app(app)
