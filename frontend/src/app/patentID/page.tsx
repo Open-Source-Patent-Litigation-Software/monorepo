@@ -1,9 +1,12 @@
 "use client";
-import React, { useId, useState } from "react";
+import React, { useState } from "react";
 import { Navbar } from "../../components/navbar/navbar";
 import { Footer } from "../../components/footer/footer";
 import { useIDSearch } from "@/hooks/useIDSearch";
+import PatentCard from "./components/patentCard";
 import "../tool/styles.css";
+import "../tool/components/patent/patent.css";
+import { patentbyID } from "@/types/types";
 
 
 const Index = () => {
@@ -39,10 +42,13 @@ const Index = () => {
                             Loading
                         </h1>
                     )}
-                    {!patentsLoading && patentList != null && (
-                        <h1>
-                            Patents List
-                        </h1>
+                    {!patentsLoading && patentList && (
+                        patentList.map((patent: patentbyID) => (
+                            <div className="container">
+                                <PatentCard appDate={patent.applicationDate} assignee={patent.assignee} pubNum={patent.assignee} summary={patent.summary} title={patent.title}/>
+                            </div>
+                            
+                        ))
                     )}
                 </div>
                 <Footer />

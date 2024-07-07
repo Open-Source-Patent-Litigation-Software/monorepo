@@ -48,7 +48,9 @@ def patentRetrievalRoute():
 # @require_auth("user")
 def getPatentsByIDs():
     """Get Patents by ID"""
+    print("this is occuring")
     data = request.get_json()
+    print("data", data)
     try:
         response = PatentRetrievalFactory.getHandler(PatentRetrievalFactory.RequestType.ID, data)
         return jsonify(response), 200

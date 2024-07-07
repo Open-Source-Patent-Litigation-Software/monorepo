@@ -1,19 +1,21 @@
 import { useState } from "react";
 import { patentbyID } from "@/types/types";
 
+
 export const useIDSearch = () => {
     const [patentsLoading, setPatentsLoading] = useState<boolean>(false);
-    const [patentList, setPatentList] = useState<patentbyID>();
+    const [patentList, setPatentList] = useState<patentbyID[]>([]);
 
     const search = async (query: string) => {
         setPatentsLoading(true);
         try {
             // break down the queries into a list of queries
             const ids = query.split('\n');
+            console.log(ids);
 
             // ids = a list of patent numbers
             const formattedSearch = {
-                qeiries: ids,
+                queries: ids,
                 user: "user",
             };
     
