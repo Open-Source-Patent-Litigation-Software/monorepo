@@ -1,14 +1,39 @@
 import { useState, useEffect, useCallback } from "react";
 import { PercentagesDataType } from "@/types/types";
-
+import { PatentItem } from "@/types/types";
+import { useUser } from "@auth0/nextjs-auth0/client";
 export const useSavePatents = (
+  genericInfo: PatentItem,
   search: string,
-  patentNum: string,
   percentages: PercentagesDataType,
-  citations: any // Using 'any' for flexibility with citation data
+  citations: any, // Using 'any' for flexibility with citation data
+  summary: string
 ) => {
+
   const [saveLoading, setSaveLoading] = useState<boolean>(false);
   const [isSaved, setIsSaved] = useState<boolean>(false);
+  const { user, error, isLoading } = useUser();
+  
+  const savePatent = async (patentJSON: any) => {
+    try {
+      const response = await fetch('/api/save_patent', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify( patentJSON ),
+      });
+  
+      if (!response.ok) {
+        console.log(response);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+    } catch (e) {
+      const error = e as Error;
+      console.error(error.message);
+    }
+  };  
 
   const parsePercentages = useCallback(
     (percentages: PercentagesDataType): { [key: string]: any } => {
@@ -47,26 +72,24 @@ export const useSavePatents = (
     setSaveLoading(true);
 
     const patentJSON = {
+      patentInfo: genericInfo,
       search: search,
-      patentNum: patentNum,
+      summary: summary,
       percentages: parsePercentages(percentages),
       citations: parseCitations(citations),
     };
-
-    const finalJSON = JSON.stringify(patentJSON);
-    console.log(finalJSON);
-
-    // TODO: IMPLEMENT POST REQUEST TO SAVE PATENT DATA
+    await savePatent(patentJSON);
 
     setSaveLoading(false);
     setIsSaved(true);
   }, [
+    genericInfo,
     search,
-    patentNum,
     percentages,
     citations,
     parsePercentages,
-    parseCitations,
+    parseCitations,,
+    summary
   ]);
 
   useEffect(() => {

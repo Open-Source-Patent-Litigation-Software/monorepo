@@ -10,7 +10,6 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
         const { accessToken } = await getAccessToken({
             scopes: ['user']
         });
-
         const searchURL = new URL(`${backendUrl}/llm/getSummary`);
 
         const summaryResponse = await fetch(searchURL.toString(), {

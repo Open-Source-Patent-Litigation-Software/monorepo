@@ -14,20 +14,13 @@
       "filename": "logs/application.log",
       "maxBytes": 10000000,
       "backupCount": 3
-    },
-    "queue_handler": {
-      "class": "logging.handlers.QueueHandler",
-      "handlers": [
-        "file_standard"
-      ],
-      "respect_handler_level": true
     }
   },
   "loggers": {
     "root": {
       "level": "INFO",
       "handlers": [
-        "queue_handler"
+        "file_standard"
       ]
     }
   }

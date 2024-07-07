@@ -90,7 +90,6 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
         
         if (!response.ok) {
           console.log(response);
-          console.log("test");
           throw new Error(`HTTP error! status: ${response.status}`);
         }
     
