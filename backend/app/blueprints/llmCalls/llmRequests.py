@@ -10,6 +10,7 @@ from langchain_openai import ChatOpenAI
 import logging
 import os
 from utils.scraping import PatentScraper
+from utils.scraping import extractPatentNum
 
 class LlmRequests:
     def __init__(self):
@@ -20,7 +21,7 @@ class LlmRequests:
 
     def makeRequest(self, template, validator, args):
         # add some way to determine which model should be used based on the # of tokens
-        model = "gpt-3.5-turbo"
+        model = "gpt-4o"
 
         # log the number of tokens
         self.logger.info(f"This request used about {len(template)/4} tokens")
@@ -51,16 +52,24 @@ class LlmRequests:
             # if there is an error raise an exception -> TODO: we will need to build out a system for thiss
             raise ValueError(f"Failed to parse JSON from completion: {e}")
 
+        self.logger.info(result.usage_metadata)
         # return the parse dictionary
         return parsed_result.dict()
 
     # recieves a list of sections to scrape, returns a list of strs -> each str is a concatinated section
     def scrapePatent(self, sections: List[str], url: str) -> List[str]:
         # create the scraping object
-        scraper = PatentScraper(url)
-            
+        pn = extractPatentNum(url)
+        scraper = PatentScraper(pn)
+
+        output = []
+
+        for section in sections:
+            temp = scraper.getSection(section)
+            output.append(temp)
+
         # return the outputted list from scraping
-        return scraper.scrapePatent(sections)
+        return output
         
     @abstractmethod
     def handleRequest(self):

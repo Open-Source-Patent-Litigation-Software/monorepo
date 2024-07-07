@@ -23,6 +23,7 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
     contact: "/contact",
     search: "/search",
     saved: "/saved",
+    patentID: "/patentID",
   };
 
   const handleSignOut = () => {
