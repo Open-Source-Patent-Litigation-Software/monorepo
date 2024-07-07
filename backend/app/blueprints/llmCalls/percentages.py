@@ -38,20 +38,16 @@ class Percentages(LlmRequests):
         The flow will look like this:
         I give you a search query and the 8 functions extracted from it. For example, this is a query and its functions:
         
-            query = "A coffee maker that dispenses both milk and coffee. The coffee can be made either from
-            beans or from pods. To prevent spilling, there is a metal or plastic grate at the bottom.
-            There is an electric screen to control it and alert the user once it's done."
-            
+            query = "A coffee maker that brews coffee as well as milk, has a timer, a temperature sensor, an electronic screen to control it, and a beeper that alerts the user when the product is done."
+
             functions = 
                 [
-                    "Brews hot beverage.",
-                    "Dispenses milk.",
-                    "Can use coffee pods.",
-                    "Can use coffee beans.",
-                    "Has refillable water reservoir.",
-                    "Has grate to prevent spillage.",
-                    "Has electric screen for use.",
-                    "Alerts user when done."
+                    "Brews coffee.",
+                    "Brews milk.",
+                    "Has timer function.",
+                    "Has a temperature sensor.",
+                    "Has an electronic screen for control.",
+                    "Has beeper to alert user when done."
                 ]
 
         Now for this query above many patents will appear as results for what this client is looking for.
@@ -61,26 +57,45 @@ class Percentages(LlmRequests):
 
         The claims section of one of the example patents looks like this:
         claims section:
-            1. A coffee dispenser system, comprising: a coffee brewer unit; a container; a coffee supply channel disposed between the coffee brewer unit and the container to provide a fluid connection between the coffee brewer unit and the container for receiving and holding coffee from the coffee brewer unit; and an outlet channel for coffee which is connected to the container, wherein the coffee supply channel and the outlet channel for coffee both connect to the container at a bottom side of the container, wherein the coffee supply channel that connects to the container extends upwardly inside the container up to a highest level, wherein at said highest level an air relief chamber is provided to release air from the coffee transported through the coffee supply channel, and that from the air relief chamber a coffee mix channel extends downwardly to above and near to the bottom of the container.
-            2. The coffee dispenser system of claim 1, wherein the container comprises heat insulating properties.
-            3. The coffee dispenser system of claim 1, wherein the container comprises a thermos bottle provided with a screw connection to a bottom plate that closes off the thermos bottle.
-            4. The coffee dispenser system of claim 1, wherein the container does not comprise heating facilities.
-            5. The coffee dispenser system of claim 1, wherein the container is provided with an air vent channel which determines a maximum possible level of coffee in the container.
-            6. The coffee dispenser system of claim 1, wherein the dispenser system further comprises a sensor system for measuring a level of coffee in the container.
-            7. The coffee dispenser system of claim 6, wherein the sensor system connects to a control system that drives the coffee brewer unit so as to maintain the level of coffee in the container between a predefined minimum and maximum level.
-        
+            1. A coffee brewing system comprising:
+                a brew chamber that holds a brew solution during a brew cycle and dispenses the brew solution;
+                a water system that is integrated to dispense water into the brew chamber;
+                a content sensing system that measures the brew solution contents added to the brew chamber;
+                a temperature control system with a heating element and a temperature sensor, wherein the heating element of the temperature control system directly heats liquid in the water system;
+                at least one recirculating processing loop with a particle monitor system, wherein the recirculating processing loop circulates brew solution extracted from the brew chamber, wherein the recirculating processing loop comprises a subsection that is thermally coupled to the water system such that the heating element indirectly heats brew solution circulated through the processing loop; and
+                a control system that is communicatively coupled to the content sensing system, the temperature control system and the particle monitor system during a brew cycle, wherein the control system controls a brew cycle based on a selected a specified taste profile.
+            2. The system of claim 1, wherein the specified taste profile is selected from a set of taste profiles with each taste profile associated with a distinct user.
+            3. The system of claim 1, further comprising a user application that collects user feedback on dispensed coffee, wherein the user feedback is used in part to augment a brew process configuration of a second brew cycle of the coffee maker.
+            4. The system of claim 3, wherein the user feedback is used in combination with a selected bean type to determine the brew process configuration used by the control system during the second brew cycle.
+            5. The system of claim 1, further comprising a set of manual controls that define the taste profile settings referenced by the control system.
+            6. The system of claim 1, further comprising a coffee grinding system with a grind outlet positioned to deliver coffee grounds to the brew chamber, wherein the grind size and quantity of produced coffee grounds is controlled by the control system.
+            7. The system of claim 1, wherein the control system includes a calibration mode, wherein the heating effect of the temperature control system is calibrated and accounted for in directing control of the temperature control system.
+            8. The system of claim 1, further comprising a tasting flight system that can be removably added to a brew chamber while the control system operates in a tasting flight mode; wherein the tasting flight system comprises at least a chamber divider segmenting the brew chamber into multiple sub-chambers and a chamber selection system through which the control system can individually control the brew cycle of each sub-chamber.
+            9. A coffee brewing system comprising:
+                a brew chamber that holds a brew solution during a brew cycle and dispenses the brew solution;
+                a water system is integrated to dispense water into the brew chamber;
+                a content sensing system that measures the brew solution contents added to the brew chamber;
+                a temperature control system with a heating element and a temperature sensor;
+                at least one recirculating processing loop with a particle monitor system, wherein the recirculating processing loop circulates brew solution extracted from the brew chamber;
+                a control system that is communicatively coupled to the content sensing system, the temperature control system and the particle monitor system during a brew cycle, wherein the control system controls a brew cycle based on a selected a specified taste profile; and
+                a tasting flight system that can be removably added to a brew chamber while the control system operates in a tasting flight mode, the tasting flight system comprising: a chamber divider segmenting the brew chamber into multiple sub-chambers and a chamber selection system through which the control system can individually control the brew cycle of each sub-chamber.
+            10. The system of claim 9, wherein the specified taste profile is selected from a set of taste profiles with each taste profile associated with a distinct user.
+            11. The system of claim 9, further comprising a user application that collects user feedback on dispensed coffee, wherein the user feedback is used in part to augment a brew process configuration of a second brew cycle of the coffee maker.
+            12. The system of claim 11, wherein the user feedback is used in combination with a selected bean type to determine the brew process configuration used by the control system during the second brew cycle.
+            13. The system of claim 9, further comprising a set of manual controls that define the taste profile settings referenced by the control system.
+            14. The system of claim 9, further comprising a coffee grinding system with a grind outlet positioned to deliver coffee grounds to the brew chamber, wherein the grind size and quantity of produced coffee grounds is controlled by the control system.
+            15. The system of claim 9, wherein the heating element of the temperature control system directly heats liquid in the water system; and wherein the processing loop comprises a subsection that is thermally coupled to the water system such that the heating element indirectly heats brew solution circulated through the processing loop.
+            16. The system of claim 9, wherein the control system includes a calibration mode, wherein the heating effect of the temperature control system is calibrated and accounted for in directing control of the temperature control system.
         In this case, the output should be in the following JSON format:
         ```json
         {{
         "data": {{
-            "Brews hot beverage.": 0.9,
-            "Dispenses milk.": 0.5,
-            "Can use coffee pods.": 0.3,
-            "Can use coffee beans.": 0.4,
-            "Has refillable water reservoir.": 0.8,
-            "Has grate to prevent spillage.": 0.2,
-            "Has electric screen for use.": 0.3,
-            "Alerts user when done.": 0.6
+            "Brews coffee.": 100%,
+            "Brews milk.": 0%,
+            "Has timer function.": 40%,
+            "Has a temperature sensor.": 100%,
+            "Has an electronic screen for control.": 60%,
+            "Has beeper to alert user when done.": 0%
         }},
         }}
         ```

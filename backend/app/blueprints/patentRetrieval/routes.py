@@ -4,6 +4,7 @@ from app.settings import PQ_AI_KEY
 from utils.scraping import PatentScraper
 from authlib.integrations.flask_oauth2 import ResourceProtector
 from utils.auth import Auth0JWTBearerTokenValidator
+from .factory import PatentRetrievalFactory
 
 patentRetrieval = Blueprint("patentRetrieval", __name__, template_folder="templates")
 
@@ -15,7 +16,7 @@ validator = Auth0JWTBearerTokenValidator(
 require_auth.register_token_validator(validator)
 
 @patentRetrieval.route("/makeQuery", methods=["POST"])
-@require_auth(None)
+@require_auth("user")
 def patentRetrievalRoute():
     """Retrieve prior-art documents with text query."""
     data = request.get_json()
@@ -42,6 +43,18 @@ def patentRetrievalRoute():
         return jsonify({"message": "No results found."})
     return jsonify({"results": results})
 
+@patentRetrieval.route("/getPatentsByIDs", methods=["POST"])
+# @require_auth("user")
+def getPatentsByIDs():
+    """Get Patents by ID"""
+    print("this is occuring")
+    data = request.get_json()
+    print("data", data)
+    try:
+        response = PatentRetrievalFactory.getHandler(PatentRetrievalFactory.RequestType.ID, data)
+        return jsonify(response), 200
+    except Exception as e:
+        return jsonify({"error": e}), 400
 
 @patentRetrieval.route("/scrapeGooglePatents", methods=["GET"])
 def scrapeGooglePatents():
