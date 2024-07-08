@@ -24,6 +24,7 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
     search: "/search",
     saved: "/saved",
     patentID: "/patentID",
+    zip: "/zip",
   };
 
   const handleSignOut = () => {
