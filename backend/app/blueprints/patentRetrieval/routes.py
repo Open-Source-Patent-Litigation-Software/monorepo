@@ -1,6 +1,7 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, send_file
 import requests
 from app.settings import PQ_AI_KEY
+import base64
 from utils.scraping import PatentScraper
 from authlib.integrations.flask_oauth2 import ResourceProtector
 from utils.auth import Auth0JWTBearerTokenValidator
@@ -44,12 +45,10 @@ def patentRetrievalRoute():
     return jsonify({"results": results})
 
 @patentRetrieval.route("/getPatentsByIDs", methods=["POST"])
-# @require_auth("user")
+@require_auth("user")
 def getPatentsByIDs():
     """Get Patents by ID"""
-    print("this is occuring")
     data = request.get_json()
-    print("data", data)
     try:
         response = PatentRetrievalFactory.getHandler(PatentRetrievalFactory.RequestType.ID, data)
         return jsonify(response), 200
@@ -66,3 +65,21 @@ def scrapeGooglePatents():
         jsonify({"description": htmlOutput}),
         200,
     )  # 200 is the status code for success
+
+@patentRetrieval.route("/zipPatents", methods=["POST"])
+def zipPatents():
+    """Scrape patent PDFS from google patents, return a zip file of the patents"""
+    data = request.get_json()
+    try:
+        zip_buffer, valid_patents, not_found_patents = PatentRetrievalFactory.getHandler(PatentRetrievalFactory.RequestType.ZIP, data)
+        if valid_patents == False:
+            return jsonify({'error': 'No valid patents found', 'not_found': not_found_patents}), 400
+        base64_zip = base64.b64encode(zip_buffer.getvalue()).decode('utf-8')
+        additional_data = {"message": "Successfully created zip file.", "not_found": not_found_patents}
+
+        return jsonify({
+            "zip_file": base64_zip,
+            "additional_data": additional_data
+        })
+    except Exception as e:
+        return jsonify({"error": e}), 400

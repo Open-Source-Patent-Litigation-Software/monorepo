@@ -9,7 +9,7 @@ app = create_app()
 
 require_auth = ResourceProtector()
 validator = Auth0JWTBearerTokenValidator(
-    "dev-giv3drwd5zd1cqsb.us.auth0.com", "http://localhost:8000"
+    "dev-giv3drwd5zd1cqsb.us.auth0.com", "http://dulany-test"
 )
 require_auth.register_token_validator(validator)
 

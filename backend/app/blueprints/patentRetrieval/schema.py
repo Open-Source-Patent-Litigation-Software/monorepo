@@ -10,3 +10,7 @@ class PatentIDOutput(BaseModel):
     title: str
     assignee: str
     appDate: str
+
+class ZipInput(BaseModel):
+    pns: list[str]
+    user: str
