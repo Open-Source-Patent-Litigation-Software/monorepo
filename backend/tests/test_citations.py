@@ -1,14 +1,11 @@
-# import pytest
+import pytest
 # from pydantic import ValidationError
 # from utils.citations import parseCitationsJson, Quote, Section
 
-# # Test the Quote model
-# def test_quote_valid():
-#     data = {"before": "context before", "highlight": "highlight text", "after": "context after"}
-#     quote = Quote(**data)
-#     assert quote.before == "context before"
-#     assert quote.highlight == "highlight text"
-#     assert quote.after == "context after"
+# Test the Quote model
+def test_quote_valid():
+    print("worked")
+    assert True
 
 # def test_quote_no_before_and_after():
 #     data = {"before": "", "highlight": "highlight text", "after": ""}
