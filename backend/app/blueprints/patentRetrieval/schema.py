@@ -1,4 +1,5 @@
 from langchain_core.pydantic_v1 import BaseModel
+from typing import List, Optional, Dict
 
 class PatentIDInput(BaseModel):
     pn: str
@@ -12,5 +13,5 @@ class PatentIDOutput(BaseModel):
     appDate: str
 
 class ZipInput(BaseModel):
-    pns: list[str]
+    pns: List[str]
     user: str
