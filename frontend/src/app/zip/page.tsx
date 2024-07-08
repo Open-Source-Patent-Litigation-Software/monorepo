@@ -17,7 +17,7 @@ const Index = () => {
     setAdditionalData(null);
     setNotFoundPatents([]);
     try {
-      const response = await fetch('/api/download-patents', {
+      const response = await fetch('/api/zip', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
