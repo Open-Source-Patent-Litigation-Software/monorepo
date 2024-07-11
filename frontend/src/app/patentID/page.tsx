@@ -42,8 +42,8 @@ const Index = () => {
                         </h1>
                     )}
                     {!patentsLoading && patentList && (
-                        patentList.map((patent: patentbyID) => (
-                            <div className="container">
+                        patentList.map((patent: patentbyID, index: number) => (
+                            <div className="container" key={index}>
                                 <PatentCard appDate={patent.applicationDate} assignee={patent.assignee} pubNum={patent.assignee} summary={patent.summary} title={patent.title} />
                             </div>
                         ))
