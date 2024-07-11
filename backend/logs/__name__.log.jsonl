@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {"level": "INFO", "message": "Started Up", "timestamp": "2024-06-27T20:41:43.202542+00:00", "logger": "__name__", "module": "run", "function": "<module>", "line": 24, "thread_name": "MainThread"}
 {"level": "INFO", "message": "Started Up", "timestamp": "2024-06-27T20:42:00.951100+00:00", "logger": "__name__", "module": "run", "function": "<module>", "line": 24, "thread_name": "MainThread"}
 {"level": "INFO", "message": "Started Up", "timestamp": "2024-06-27T20:50:18.875513+00:00", "logger": "__name__", "module": "run", "function": "<module>", "line": 24, "thread_name": "MainThread"}
@@ -633,4 +632,3 @@ Started Up
 {"level": "INFO", "message": "This request used about 1616.75 tokens", "timestamp": "2024-06-30T06:50:31.382121+00:00", "logger": "__name__", "module": "llmRequests", "function": "makeRequest", "line": 26, "thread_name": "MainThread"}
 {"level": "INFO", "message": "HTTP Request: POST https://api.openai.com/v1/chat/completions \"HTTP/1.1 200 OK\"", "timestamp": "2024-06-30T06:50:32.972520+00:00", "logger": "httpx", "module": "_client", "function": "_send_single_request", "line": 1026, "thread_name": "MainThread"}
 {"level": "ERROR", "message": "(psycopg2.OperationalError) SSL connection has been closed unexpectedly\n\n[SQL: SELECT public.reg_user.id AS public_reg_user_id, public.reg_user.first_name AS public_reg_user_first_name, public.reg_user.last_name AS public_reg_user_last_name, public.reg_user.email AS public_reg_user_email, public.reg_user.subscription_type AS public_reg_user_subscription_type \nFROM public.reg_user \nWHERE public.reg_user.id = %(pk_1)s]\n[parameters: {'pk_1': 'google-oauth2|108809862173138748904'}]\n(Background on this error at: https://sqlalche.me/e/20/e3q8)", "timestamp": "2024-06-30T06:50:34.477325+00:00", "logger": "__name__", "module": "routes", "function": "patent", "line": 38, "thread_name": "MainThread"}
->>>>>>> development

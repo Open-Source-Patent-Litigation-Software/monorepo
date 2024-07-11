@@ -17,7 +17,7 @@ class PatentScraper:
     def __init__(self, pn: str):
         self.logger = logging.getLogger("__name__")
 
-        if len(pn) == 0:
+        if not len(pn) == 0:
             self.pn = pn
 
     # takes in patent number, and the field you want (abstract, claims or description)
