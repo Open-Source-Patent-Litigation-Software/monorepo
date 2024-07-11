@@ -8,6 +8,7 @@ class Bulk(LlmRequests):
     def __init__(self, data: dict):
         """Initialize the Bulk class."""
         try:
+            print("bulk". data)
             # Validate the JSON data received from the client
             validatedInput = BulkInput(**data)
 
@@ -84,7 +85,7 @@ class Bulk(LlmRequests):
     def generate_summary(self, claims_abstract):
         """Generate the summary of the patent."""
         template = f"""
-        I am going to give you the claims and abstract section of a patent. I want you to summarize what the patent is and the key features of it in between 400 and 500 words.
+        I am going to give you the claims and abstract section of a patent. I want you to summarize what the patent is and the key features of it in 100 words.
 
         I want you to make sure you include all of the independent claims in the summary. Below are the claims and abstract sections:
 
