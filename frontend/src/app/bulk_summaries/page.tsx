@@ -18,7 +18,7 @@ const Index = () => {
         };
 
         try {
-            const response = await fetch("/api/bulk_summaries", {
+            const response = await fetch("/api/bulk", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

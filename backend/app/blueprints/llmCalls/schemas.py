@@ -126,7 +126,7 @@ class SummaryExtraction(BaseModel):
 
 # Input for bulk summaries
 class BulkInput(BaseModel):
-    patentNumbers: List[str]
+    patent_ids: List[str]
 
 
 # Output for a single summary

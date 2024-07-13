@@ -139,12 +139,11 @@ def getBulkSummaries():
     try:
         # get data from JSON
         data = request.get_json()
-        print(data)
         # get the response from the factory
-        # response = LLMCallFactory.getHandler(LLMCallFactory.RequestType.SUMMARY, data)
+        response = LLMCallFactory.getHandler(LLMCallFactory.RequestType.BULK, data)
 
         # return jsonified response
-        return jsonify({"response": "ROUTE NOT FULLY IMPLEMENTED"}), 200
+        return jsonify(response), 200
     except ValueError as e:
         # Handle validation errors
         logger.error(str(e))

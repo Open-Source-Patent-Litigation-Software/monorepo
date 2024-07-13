@@ -18,9 +18,9 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
             scopes: ['user']
         });
         
-        console.log("body: ", body);
-        const citationsURL = new URL(`${backendUrl}/llm/getBulkSummaries`);
-        const citationsResponse = await fetch(citationsURL.toString(), {
+        console.log("body: ", body); // Works
+        const bulkSummariesURL = new URL(`${backendUrl}/llm/getBulkSummaries`);
+        const bulkSummaryResponse = await fetch(bulkSummariesURL.toString(), {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -30,16 +30,14 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
         });
 
 
-        console.log(citationsResponse);
+        // console.log(citationsResponse);
         
-        if (!citationsResponse.ok) {
-            console.log("failed here");
-            throw new Error(`HTTP error! :( status: ${citationsResponse.status}`);
-        }
+        // if (!citationsResponse.ok) {
+        //     console.log("failed here");
+        //     throw new Error(`HTTP error! :( status: ${citationsResponse.status}`);
+        // }
 
-        const citationsData = await citationsResponse.json();
-
-        return NextResponse.json(citationsData);
+        return NextResponse.json({ message: "Successfully generated summary document"});
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 500 });
     }
