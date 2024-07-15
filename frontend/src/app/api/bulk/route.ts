@@ -28,16 +28,12 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
             },
             body: JSON.stringify(body),
         });
+        if (!bulkSummaryResponse.ok) {
+            throw new Error(`HTTP error! :( status: ${bulkSummaryResponse.status}`);
+        }
+        const bulkSummaryData = await bulkSummaryResponse.json();
 
-
-        // console.log(citationsResponse);
-        
-        // if (!citationsResponse.ok) {
-        //     console.log("failed here");
-        //     throw new Error(`HTTP error! :( status: ${citationsResponse.status}`);
-        // }
-
-        return NextResponse.json({ message: "Successfully generated summary document"});
+        return NextResponse.json(bulkSummaryData);
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 500 });
     }

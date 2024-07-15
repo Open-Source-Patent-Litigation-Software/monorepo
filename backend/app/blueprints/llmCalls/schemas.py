@@ -119,6 +119,9 @@ class SummaryInput(BaseModel):
         return values
 
 
+"""Bulk Summaries"""
+
+
 # validates the output of the model
 class SummaryExtraction(BaseModel):
     summary: str
@@ -130,15 +133,12 @@ class BulkInput(BaseModel):
 
 
 # Output for a single summary
-class PatentResult(BaseModel):
-    patentNumber: str
+class PatentSummary(BaseModel):
+    patent: str
     title: str
-    assignee: str
-    applicationDate: str
-    status: str
+    filing_date: str
     summary: str
 
 
-# Output for bulk summaries
 class BulkExtraction(BaseModel):
-    results: List[PatentResult]
+    summaries: List[PatentSummary]

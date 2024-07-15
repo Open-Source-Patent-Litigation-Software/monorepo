@@ -135,13 +135,12 @@ def bulkSummaries():
 @llmCalls.route("getBulkSummaries", methods=["POST"])
 @require_auth("user")
 def getBulkSummaries():
-    """Route to extract the summar of the patent."""
+    """Route to extract the summary of the patent."""
     try:
         # get data from JSON
         data = request.get_json()
         # get the response from the factory
         response = LLMCallFactory.getHandler(LLMCallFactory.RequestType.BULK, data)
-
         # return jsonified response
         return jsonify(response), 200
     except ValueError as e:

@@ -1,21 +1,57 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Navbar } from "../../_components/navbar/navbar";
 import { Footer } from "../../_components/footer/footer";
 import LoadingSpinner from "../search/components/loading/loadingSpinner";
 import styles from "../search/styles.module.css";
+import { Document, Packer, Paragraph, TextRun } from "docx";
+import { saveAs } from "file-saver";
 
-const Index = () => {
+interface PatentSummary {
+    filing_date: string;
+    patent: string;
+    summary: string;
+    title: string;
+}
+
+const Index: React.FC = () => {
     const [patentQuery, setPatentQuery] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const handleDownload = async () => {
-        setIsLoading(true);
+    const generateDocX = async (bulkSummaries: PatentSummary[]): Promise<void> => {
+        const doc = new Document({
+            sections: [{
+                properties: {},
+                children: bulkSummaries.flatMap((patent) => [
+                    new Paragraph({
+                        children: [new TextRun({ text: "Patent Number: ", bold: true }), new TextRun(patent.patent)],
+                    }),
+                    new Paragraph({
+                        children: [new TextRun({ text: "Title: ", bold: true }), new TextRun(patent.title)],
+                    }),
+                    new Paragraph({
+                        children: [new TextRun({ text: "Filing Date: ", bold: true }), new TextRun(patent.filing_date)],
+                    }),
+                    new Paragraph({
+                        children: [new TextRun({ text: "Summary: ", bold: true }), new TextRun(patent.summary)],
+                    }),
+                    new Paragraph(""),  // Empty paragraph for spacing
+                ]),
+            }],
+        });
 
-        const generateDocX = async () => {
-            console.log("Generating docx");
-        };
+        try {
+            const blob = await Packer.toBlob(doc);
+            saveAs(blob, "patent_summaries.docx");
+            console.log("Document generated and saved");
+        } catch (error) {
+            console.error("Error generating document:", error);
+        }
+    };
+
+    const handleDownload = async (): Promise<void> => {
+        setIsLoading(true);
 
         try {
             const response = await fetch("/api/bulk", {
@@ -29,12 +65,15 @@ const Index = () => {
             });
 
             if (response.ok) {
-                console.log("Successfully generated summary document");
+                const data = await response.json();
+                const bulkSummaries: PatentSummary[] = data.summaries;
+                console.log("API Response:", bulkSummaries);
+                await generateDocX(bulkSummaries);
             } else {
-                console.error("Failed to generate summary document");
+                console.error("Failed to generate summary document, Response status:", response.status);
             }
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Error fetching data:", error);
         } finally {
             setIsLoading(false);
         }
@@ -50,7 +89,7 @@ const Index = () => {
                         <div className={styles.search_input_wrapper}>
                             <textarea
                                 className={styles.search_textarea}
-                                onChange={(e) => setPatentQuery(e.target.value)}
+                                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPatentQuery(e.target.value)}
                                 placeholder="Enter patent IDs, separated by commas."
                             />
                             <button
@@ -58,7 +97,7 @@ const Index = () => {
                                 onClick={handleDownload}
                                 disabled={isLoading}
                             >
-                                {isLoading ? "Downloading..." : "Download PDFs"}
+                                {isLoading ? "Generating..." : "Generate Summaries"}
                             </button>
                         </div>
                     </div>

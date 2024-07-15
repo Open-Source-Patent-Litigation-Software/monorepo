@@ -27,22 +27,28 @@ class Bulk(LlmRequests):
         return response.json()
 
     def generate_summary(self, injection: str):
-        """Generate the summary of the patent."""
         template = f"""
-        I am going to give you a list of a patent and its respespecitve claim, abstract, title. For each patent I want you to summarize what the patent is and the key features of it in 100 words.
+        I am going to give you a list of patents with their respective claims, abstracts, and titles. For each patent, summarize what the patent is about and its key features in 100 words.
 
-        I want you to make sure you include all of the independent claims in the summary. Below are the patents and the respective claims and abstract sections for each one:
+        Make sure to include all of the independent claims in the summary. Below are the patents and their respective claims and abstract sections:
 
         {injection}
 
-        I want you to output your response in JSON format like this:
+        Output your response in JSON format like this:
         ```json
         {{
-            "summary": "your summary goes here"
+            "summaries": [
+                {{
+                    "patent": "patent_number",
+                    "title": "title_text",
+                    "filing_date": "filing_date_text",
+                    "summary": "summary_text"
+                }},
+                ...
+            ]
         }}
         ```
         """
-
         return template
 
     def handleRequest(self):
@@ -57,15 +63,19 @@ class Bulk(LlmRequests):
         patentInjection = ""
         for result in rawResults:
             patent = result["pn"]
+            title = result["title"]
+            filingDate = result["filing_date"]
             claims = result["claims"]
             abstract = result["abstract"]
             patentInjection += (
                 f"Patent Number: {patent}\n"
+                f"Title: {title}\n"
+                f"Filing Date: {filingDate}\n"
                 f"Claims:\n{claims}\n"
                 f"Abstract:\n{abstract}\n\n"
             )
         finalTemplate = self.generate_summary(injection=patentInjection)
-        print("FINAL TEMPLATE", finalTemplate)
-        # abstract, claims = patentInfo["abstract"], patentInfo["claims"]
-        llmResponse = self.makeRequest(finalTemplate, BulkExtraction, {})
+        llmResponse = self.makeRequest(
+            template=finalTemplate, validator=BulkExtraction, args={}
+        )
         return llmResponse
