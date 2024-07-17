@@ -1,40 +1,51 @@
-// app/api/citations/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { backendUrl } from '@/types/types';
 import { withApiAuthRequired, getAccessToken } from '@auth0/nextjs-auth0';
 
-
-
-export const POST = withApiAuthRequired(async function POST(request: NextRequest) {
+export const GET = withApiAuthRequired(async function GET(req: NextRequest) {
     try {
-        const body = await request.json();
+        const { searchParams } = new URL(req.url);
+        const patentIds = JSON.parse(decodeURIComponent(searchParams.get('patent_ids') || '[]'));
 
-        if (!body) {
-            return NextResponse.json({ error: 'patentQuery is required' }, { status: 400 });
-        }
-
-        // Get the access token
         const { accessToken } = await getAccessToken({
             scopes: ['user']
         });
-        
-        console.log("body: ", body); // Works
+
         const bulkSummariesURL = new URL(`${backendUrl}/llm/getBulkSummaries`);
-        const bulkSummaryResponse = await fetch(bulkSummariesURL.toString(), {
+        const response = await fetch(bulkSummariesURL.toString(), {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`,
             },
-            body: JSON.stringify(body),
+            body: JSON.stringify({ patent_ids: patentIds }),
         });
-        if (!bulkSummaryResponse.ok) {
-            throw new Error(`HTTP error! :( status: ${bulkSummaryResponse.status}`);
-        }
-        const bulkSummaryData = await bulkSummaryResponse.json();
 
-        return NextResponse.json(bulkSummaryData);
+        if (!response.ok) {
+            console.log("failed here");
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const reader = response.body?.getReader();
+        const stream = new ReadableStream({
+            async start(controller) {
+                while (true) {
+                    const { done, value } = await reader!.read();
+                    if (done) break;
+                    controller.enqueue(value);
+                }
+                controller.close();
+            },
+        });
+
+        return new Response(stream, {
+            headers: {
+                'Content-Type': 'text/event-stream',
+                'Cache-Control': 'no-cache',
+                'Connection': 'keep-alive',
+            },
+        });
     } catch (error) {
-        return NextResponse.json({ error: error }, { status: 500 });
+        return new Response(JSON.stringify({ error: error }), { status: 500 });
     }
 });

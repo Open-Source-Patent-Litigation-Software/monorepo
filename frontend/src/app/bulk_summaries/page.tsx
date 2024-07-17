@@ -18,6 +18,7 @@ interface PatentSummary {
 const Index: React.FC = () => {
     const [patentQuery, setPatentQuery] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [progress, setProgress] = useState<number>(0);
 
     const generateDocX = async (bulkSummaries: PatentSummary[]): Promise<void> => {
         const doc = new Document({
@@ -52,31 +53,31 @@ const Index: React.FC = () => {
 
     const handleDownload = async (): Promise<void> => {
         setIsLoading(true);
+        setProgress(0);
+        const patentIds = patentQuery.split(",").map((id) => id.trim());
 
-        try {
-            const response = await fetch("/api/bulk", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    patent_ids: patentQuery.split(",").map((id) => id.trim()),
-                }),
-            });
+        const eventSource = new EventSource(`/api/bulk?patent_ids=${encodeURIComponent(JSON.stringify(patentIds))}`);
 
-            if (response.ok) {
-                const data = await response.json();
-                const bulkSummaries: PatentSummary[] = data.summaries;
-                console.log("API Response:", bulkSummaries);
-                await generateDocX(bulkSummaries);
-            } else {
-                console.error("Failed to generate summary document, Response status:", response.status);
-            }
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        } finally {
+        const bulkSummaries: PatentSummary[] = [];
+
+        eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            bulkSummaries.push(data);
+            console.log("Received summary:", bulkSummaries);
+            setProgress(bulkSummaries.length);
+        };
+
+        eventSource.onerror = (error) => {
+            console.error('EventSource failed:', error);
+            eventSource.close();
             setIsLoading(false);
-        }
+        };
+
+        eventSource.addEventListener('close', async () => {
+            eventSource.close();
+            setIsLoading(false);
+            await generateDocX(bulkSummaries);
+        });
     };
 
     return (
@@ -101,7 +102,12 @@ const Index: React.FC = () => {
                             </button>
                         </div>
                     </div>
-                    {isLoading && <LoadingSpinner />}
+                    {isLoading && (
+                        <div>
+                            <LoadingSpinner />
+                            <p>Generating summaries: {progress} completed</p>
+                        </div>
+                    )}
                 </div>
             </div>
             <Footer />
