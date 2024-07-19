@@ -63,6 +63,9 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
         <span className="bolded-detail">Patent Number:</span>{" "}
         {item.publication_id}
       </p>
+      <p className="details">
+        <span className="bolded-detail">Score:</span> {item.score.total}
+      </p>
       <a
         className="patent-link"
         href={item.www_link}
