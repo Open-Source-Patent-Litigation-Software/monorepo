@@ -1,6 +1,7 @@
 from .llmRequests import LlmRequests
 from .schemas import MetricInput, MetricExtraction
 
+
 class Metrics(LlmRequests):
     def __init__(self, data: dict):
         try:
@@ -76,7 +77,6 @@ class Metrics(LlmRequests):
         
         {self.searchQuery}
         """
-
         # these are the invoke args.
         invokeArgs = {"searchQuery": self.searchQuery}
 

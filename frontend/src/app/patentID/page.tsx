@@ -10,15 +10,11 @@ import { patentbyID } from "@/types/types";
 
 const Index = () => {
     const [query, setQuery] = useState<string>("");
-    const {
-        patentsLoading,
-        patentList,
-        search
-    } = useIDSearch();
+    const { patentsLoading, patentList, search } = useIDSearch();
 
     const handleSearch = () => {
         search(query);
-    }
+    };
 
     return (
         <>
@@ -36,21 +32,41 @@ const Index = () => {
                             Search
                         </button>
                     </div>
-                    {patentsLoading && (
-                        <h1>
-                            Loading
-                        </h1>
-                    )}
+                    {patentsLoading && <h1>Loading</h1>}
                     {!patentsLoading && patentList && (
-                        patentList.map((patent: patentbyID) => (
-                            <div className="container">
-                                <PatentCard appDate={patent.applicationDate} assignee={patent.assignee} pubNum={patent.assignee} summary={patent.summary} title={patent.title} />
-                            </div>
-                        ))
+                        <div className={styles.patent_list}>
+                            {patentList.map((patent: patentbyID, index: number) => (
+                                <div className="container" key={index}>
+                                    <PatentCard
+                                        appDate={patent.applicationDate}
+                                        assignee={patent.assignee}
+                                        pubNum={patent.assignee}
+                                        summary={patent.summary}
+                                        title={patent.title}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     )}
                 </div>
-                <Footer />
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%",
+                        width: "50%",
+                        textAlign: "center",
+                        justifyItems: "center",
+                        margin: "auto",
+                        fontSize: "1.5rem",
+                        fontWeight: "bold",
+                    }}
+                >
+                    Generate individual patent summaries by entering patent ID numbers.
+                </div>
             </div>
+            <Footer />
         </>
     );
 };
