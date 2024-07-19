@@ -20,7 +20,6 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
   const routesLoggedIn = {
     about: "/about",
     contact: "/contact",
-    summaries: "/bulk_summaries",
     dashboard: "/dashboard",
   };
 
