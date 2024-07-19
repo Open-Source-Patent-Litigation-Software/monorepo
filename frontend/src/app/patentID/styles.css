@@ -16,6 +16,7 @@
     margin-bottom: 0;
     padding-bottom: 5%;
     animation: fadeIn 1s ease-out;
+    min-height: 110vh;
   }
   
   .patent-box {
