@@ -1,87 +1,131 @@
-# import pytest
-# import requests
-# import requests_mock
-# import re
+import pytest
+import requests
+from unittest.mock import patch, Mock
+from bs4 import BeautifulSoup
+import logging
+import sys
 
-# from utils.scraping import PatentScraper  
+from utils.scraping import extractPatentNum, PatentScraper  # Adjust import as necessary
 
-# def test_patent_scraper_valid_url(requests_mock):
-#     # Mock a valid URL response
-#     url = "http://example.com"
-#     html_content = '''
-#     <html>
-#         <body>
-#             <div class="section1">Section 1 Text</div>
-#             <div class="section2">Section 2 Text</div>
-#         </body>
-#     </html>
-#     '''
-#     requests_mock.get(url, text=html_content)
-    
-#     # Create an instance of PatentScraper
-#     scraper = PatentScraper(url)
-    
-#     # Test the scrapePatent method
-#     sections = ['section1', 'section2']
-#     result = scraper.scrapePatent(sections)
-    
-#     # Verify the scraped data
-#     assert result == ["Section 1 Text", "Section 2 Text"]
+# Test extractPatentNum
+def test_extractPatentNum_valid_url():
+    url = "https://patents.google.com/patent/US1234567A/en"
+    assert extractPatentNum(url) == "US1234567A"
 
-# def test_patent_scraper_invalid_url(requests_mock):
-#     # Mock an invalid URL response
-#     url = "http://invalid-url.com"
-#     requests_mock.get(url, status_code=404)
-    
-#     with pytest.raises(Exception):
-#         PatentScraper(url)
+def test_extractPatentNum_invalid_url():
+    url = "https://patents.google.com/patent/invalid"
+    assert extractPatentNum(url) is None
 
-# def test_patent_scraper_empty_section(requests_mock):
-#     # Mock a valid URL response with no matching sections
-#     url = "http://example.com"
-#     html_content = '''
-#     <html>
-#         <body>
-#             <div class="other-section">Other Section Text</div>
-#         </body>
-#     </html>
-#     '''
-#     requests_mock.get(url, text=html_content)
-    
-#     # Create an instance of PatentScraper
-#     scraper = PatentScraper(url)
-    
-#     # Test the scrapePatent method with a non-existent section
-#     sections = ['section1']
-#     result = scraper.scrapePatent(sections)
-    
-#     # Verify the scraped data
-#     assert result == [""]
+def test_extractPatentNum_no_match():
+    url = "https://patents.google.com/"
+    assert extractPatentNum(url) is None
 
-# def test_patent_scraper_nested_elements(requests_mock):
-#     # Mock a valid URL response with nested elements
-#     url = "http://example.com"
-#     html_content = '''
-#     <html>
-#         <body>
-#             <div class="section1">
-#                 <div class="section1">
-#                     Nested Section 1 Text
-#                 </div>
-#             </div>
-#             <div class="section2">Section 2 Text</div>
-#         </body>
-#     </html>
-#     '''
-#     requests_mock.get(url, text=html_content)
-    
-#     # Create an instance of PatentScraper
-#     scraper = PatentScraper(url)
-    
-#     # Test the scrapePatent method
-#     sections = ['section1', 'section2']
-#     result = scraper.scrapePatent(sections)
-    
-#     # Verify the scraped data
-#     assert result == ["Nested Section 1 Text", "Section 2 Text"]
+# Test PatentScraper.__init__
+def test_patent_scraper_init():
+    scraper = PatentScraper("US1234567A")
+    assert scraper.pn == "US1234567A"
+    assert isinstance(scraper.logger, logging.Logger)
 
+# Test PatentScraper.getSection
+@patch('requests.get')
+def test_getSection_success(mock_get):
+    mock_response = Mock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {'abstract': 'Sample abstract text'}
+    mock_get.return_value = mock_response
+
+    scraper = PatentScraper("US1234567A")
+    result = scraper.getSection('abstract')
+    assert result == 'Sample abstract text'
+
+@patch('requests.get')
+def test_getSection_empty_response(mock_get):
+    mock_response = Mock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {}
+    mock_get.return_value = mock_response
+
+    scraper = PatentScraper("US1234567A")
+    result = scraper.getSection('abstract')
+    assert result == '' or result == None
+
+@patch('requests.get')
+def test_getSection_exception(mock_get):
+    mock_get.side_effect = Exception("API request failed")
+
+    scraper = PatentScraper("US1234567A")
+    result = scraper.getSection('abstract')
+    assert result == ''
+
+# Test PatentScraper.getPDFLink
+@patch('requests.get')
+def test_getPDFLink_success(mock_get):
+    html_content = '''
+    <html>
+        <body>
+            <a class="style-scope patent-result" href="/patent/US1234567A/en">Download PDF</a>
+        </body>
+    </html>
+    '''
+    mock_response = Mock()
+    mock_response.status_code = 200
+    mock_response.content = html_content
+    mock_get.return_value = mock_response
+
+    scraper = PatentScraper("US1234567A")
+    result = scraper.getPDFLink("US1234567A")
+    assert result == "/patent/US1234567A/en"
+
+@patch('requests.get')
+def test_getPDFLink_no_anchor_tag(mock_get):
+    html_content = '''
+    <html>
+        <body>
+        </body>
+    </html>
+    '''
+    mock_response = Mock()
+    mock_response.status_code = 200
+    mock_response.content = html_content
+    mock_get.return_value = mock_response
+
+    scraper = PatentScraper("US1234567A")
+    result = scraper.getPDFLink("US1234567A")
+    assert result is None
+
+@patch('requests.get')
+def test_getPDFLink_failed_request(mock_get):
+    mock_response = Mock()
+    mock_response.status_code = 404
+    mock_get.return_value = mock_response
+
+    scraper = PatentScraper("US1234567A")
+    result = scraper.getPDFLink("US1234567A")
+    assert result is None
+
+# Test PatentScraper.scrapePDF
+@patch('requests.get')
+def test_scrapePDF_success(mock_get):
+    mock_response = Mock()
+    mock_response.status_code = 200
+    mock_response.content = b'PDF content'
+    mock_get.return_value = mock_response
+
+    scraper = PatentScraper("US1234567A")
+    result = scraper.scrapePDF("http://example.com/pdf")
+    assert result == b'PDF content'
+
+@patch('requests.get')
+def test_scrapePDF_failed_download(mock_get):
+    mock_response = Mock()
+    mock_response.status_code = 404
+    mock_get.return_value = mock_response
+
+    scraper = PatentScraper("US1234567A")
+    result = scraper.scrapePDF("http://example.com/pdf")
+    assert result is None
+
+if __name__ == "__main__":
+    logging.basicConfig(stream=sys.stderr)
+    logging.getLogger("Test").setLevel(logging.DEBUG)
+    pytest.main()

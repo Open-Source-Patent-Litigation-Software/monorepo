@@ -17,6 +17,8 @@ jobs:
     - name: Set environment variables
       run: |
         echo "NEON_CONNECTION_STRING=${{ secrets.NEON_CONNECTION_STRING }}" >> $GITHUB_ENV
+        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
+        echo "OPEN_AI_KEY=${{ secrets.OPEN_AI_KEY }}" >> $GITHUB_ENV
 
     - name: Install dependencies
       working-directory: ./backend
