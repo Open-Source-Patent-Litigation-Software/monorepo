@@ -1,0 +1,51 @@
+body.activeModal {
+    overflow-y: hidden;
+  }
+  .btnModal {
+    padding: 10px 20px;
+    display: block;
+    margin: 100px auto 0;
+    font-size: 18px;
+  }
+  .modal, .overlay {
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+    position: fixed;
+  }
+  .overlay {
+    background: rgba(55,55,55,0.6);
+  }
+  .modalContent {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    z-index: 1000;
+    transform: translate(-50%, -50%);
+    line-height: 1.4;
+    background: #F1F1F1;
+    padding: 14px 28px;
+    border-radius: 3px;
+    max-height: 100vw;
+    max-width: 500px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+  }
+  #title {
+    border-bottom: 3px solid #bbb;
+    min-width: 250px;
+    padding-bottom: 6px;
+    margin-bottom: 6px;
+  }
+  .closeModal {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40px' height='40px' viewbox='0 0 40 40'%3E%3Cpath d='M 10,10 L 30,30 M 30,10 L 10,30' stroke='black' stroke-width='4' stroke-linecap='butt' /%3E%3C/svg%3E");
+    background-size: 100%;
+    position: absolute;
+    top: 15px;
+    right: 28px;
+    width: 1.8vw;
+    height: 1.8vw;
+    padding: 7px 7px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
