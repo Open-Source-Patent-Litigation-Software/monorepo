@@ -122,7 +122,7 @@ const Index: React.FC = () => {
                         fontWeight: "bold",
                     }}
                 >
-                    Bulk summaries is a feature to generate summaries for multiple patents at once. Enter the patent IDs separated by commas and click on the "Generate Summaries" button to download the summaries in a Word document.
+                    Bulk summaries is a feature to generate summaries for multiple patents at once. Enter the patent IDs separated by commas and click on the &quot;Generate Summaries&quot; button to download the summaries in a Word document.
                 </div>
             </div>
             <Footer />
