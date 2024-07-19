@@ -6,7 +6,6 @@ import "./patent.css";
 import { PatentProps } from "@/types/types";
 import MetricDropdown from "./components/metricDropdown";
 import { useCitations } from "@/hooks/useCitations";
-import { useFetchPercentages } from "@/hooks/usePercentages";
 import { useSavePatents } from "@/hooks/useSavePatents";
 import { useSummary } from "@/hooks/useSummary";
 import SummaryComponent from "./components/summary";
@@ -19,15 +18,28 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
     handleDropdownChange,
   } = useCitations(item.www_link);
 
-  const { summary, summaryLoading, getSummary } = useSummary(item.www_link);
+  const graphData = {
+    labels: searchMetrics,
+    datasets: [
+        {
+            label: "Differential Score",
+            data: item.score.scores,
+            fill: true,
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            borderColor: "rgb(255, 99, 132)",
+            pointBackgroundColor: "rgb(255, 99, 132)",
+            pointBorderColor: "#fff",
+            pointHoverBackgroundColor: "#fff",
+            pointHoverBorderColor: "rgb(255, 99, 132)",
+        },
+    ],
+}
 
-  const { isAnalyzed, loading, percentagesData, fetchPercentagesHandler } =
-    useFetchPercentages(searchMetrics, search, item.www_link);
+  const { summary, summaryLoading, getSummary } = useSummary(item.www_link);
 
   const { savePatentHandler, saveLoading, isSaved } = useSavePatents(
     item,
     search,
-    percentagesData,
     citationsData,
     summary
   );
@@ -75,10 +87,9 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
       />
 
       <div className="wrapper">
-        {isAnalyzed ? (
           <div className="analyzed-content-wrapper">
             <div className="chart-container">
-              <PatentChart data={percentagesData} />
+              <PatentChart data={graphData} />
             </div>
             <MetricDropdown
               searchMetrics={searchMetrics}
@@ -107,11 +118,6 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
               </CustomButton>
             )}
           </div>
-        ) : (
-          <CustomButton loading={loading} handleClick={fetchPercentagesHandler}>
-            Analyze
-          </CustomButton>
-        )}
       </div>
     </div>
   );
