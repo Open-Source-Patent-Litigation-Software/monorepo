@@ -5,7 +5,6 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 export const useSavePatents = (
   genericInfo: PatentItem,
   search: string,
-  percentages: PercentagesDataType,
   citations: any, // Using 'any' for flexibility with citation data
   summary: string
 ) => {
@@ -75,7 +74,6 @@ export const useSavePatents = (
       patentInfo: genericInfo,
       search: search,
       summary: summary,
-      percentages: parsePercentages(percentages),
       citations: parseCitations(citations),
     };
     await savePatent(patentJSON);
@@ -85,7 +83,6 @@ export const useSavePatents = (
   }, [
     genericInfo,
     search,
-    percentages,
     citations,
     parsePercentages,
     parseCitations,,
