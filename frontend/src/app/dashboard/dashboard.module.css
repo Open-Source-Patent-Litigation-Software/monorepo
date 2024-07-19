@@ -1,0 +1,68 @@
+.dashboardContainer {
+    padding-top: 10vh;
+    display: flex;
+    background-color: #F5EFE6;
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-content: space-evenly;
+    padding-left: 16vw;
+    padding-right: 16vw;
+    flex-wrap: wrap;
+}
+
+#link {
+    text-decoration: none;
+}
+
+.styledCard {
+    margin-left: 1.3vw;
+    margin-right: 1.3vw;
+    width: 18vw;
+    height: 33vh;
+    padding-top: 1vh;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: white;
+    border-top: 8px solid #1A4D2E;
+    color: #153C24;
+    font-size: 1.5rem;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    transition: transform .3s, z-index .3s, margin .3s;
+    position: relative;
+    z-index: 0;
+}
+
+.styledCard a {
+    padding-top: 2vh;
+    text-decoration: none;
+    color: inherit;
+}
+
+.styledCard img.cardImage {
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+    width: 7.5vh;
+    height: auto;
+}
+
+.styledCard:hover {
+    z-index: 1000;
+    transform: scale(1.3);
+    margin-left: 3vw;
+    margin-right: 3vw;
+    box-shadow: 0 4px 8px 0 rgba(95, 132, 99, 0.6), 0 6px 20px 0 rgba(101, 138, 105, 0.6);
+}
+
+.cardDescription {
+    color: #4F6F52;
+    padding-top: .8vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    font-size: 1rem;
+}
