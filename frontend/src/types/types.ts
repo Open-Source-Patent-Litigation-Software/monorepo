@@ -1,5 +1,10 @@
 export const backendUrl = process.env.NEXT_PUBLIC_DEV_BACKEND;
 
+interface DifScore {
+    total: number;
+    scores: number[];
+}
+
 export interface PatentItem {
     abstract: string;
     alias: string;
@@ -11,11 +16,11 @@ export interface PatentItem {
     owner: string;
     publication_date: string;
     publication_id: string;
-    score: number;
     snippet: null | string; // Assuming snippet can be null or string
     title: string;
     type: string;
     www_link: string;
+    score: DifScore;
 }
 
 export interface PatentListProps {

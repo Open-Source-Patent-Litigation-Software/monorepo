@@ -5,21 +5,15 @@ import { withApiAuthRequired, getAccessToken } from '@auth0/nextjs-auth0';
 export const POST = withApiAuthRequired(async function POST(request: NextRequest) {    
     try {
         const body = await request.json();
-        const { metricsString } = body;
 
-        if (!metricsString) {
-            return NextResponse.json({ error: 'metrics are required' }, { status: 400 });
+        if (!body) {
+            return NextResponse.json({ error: 'body required' }, { status: 400 });
         }
 
         // Get the access token
         const { accessToken } = await getAccessToken({
             scopes: ['user']
         });
-
-        const formattedSearch = {
-            metrics: metricsString,
-            user: "user",
-        };
 
         const searchURL = new URL(`${backendUrl}/patents/makeQuery`);
 
@@ -29,7 +23,7 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,
             },
-            body: JSON.stringify(formattedSearch),
+            body: JSON.stringify(body),
         });
 
         if (!searchResponse.ok) {
