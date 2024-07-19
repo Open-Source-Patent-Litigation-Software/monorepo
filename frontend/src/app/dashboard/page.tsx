@@ -34,11 +34,11 @@ const routesLoggedIn = {
     description:
       "Download PDFs for any patent you can imagine, all with one click.",
   },
-  InContextSummary: {
-    route: "/",
+  SummaryDocumentGeneration: {
+    route: "/bulk_summaries",
     imageUrl: "highlighter.svg",
     description:
-      "Summarize patents within the context of your patent analysis needs.",
+      "Generate a full document summary for all the patents you need.",
   },
 };
 

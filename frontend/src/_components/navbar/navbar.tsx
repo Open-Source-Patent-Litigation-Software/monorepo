@@ -17,14 +17,9 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
     about: "/about",
     contact: "/contact",
   };
-  
   const routesLoggedIn = {
     about: "/about",
     contact: "/contact",
-    search: "/search",
-    saved: "/saved",
-    patentID: "/patentID",
-    zip: "/zip",
     summaries: "/bulk_summaries",
     dashboard: "/dashboard",
   };
@@ -42,7 +37,7 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
       <p className="logo-text">
         <Link href="/">DulanyAI</Link>
       </p>
-      {
+      {!user && (
         <ul className="styled-ul">
           {Object.entries(routesLoggedOut).map(([name, path]) => (
             <li className="styled-li" key={name}>
@@ -52,7 +47,18 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
             </li>
           ))}
         </ul>
-      }
+      )}
+      {user && (
+        <ul className="styled-ul">
+          {Object.entries(routesLoggedIn).map(([name, path]) => (
+            <li className="styled-li" key={name}>
+              <Link href={path} passHref>
+                {name.charAt(0).toUpperCase() + name.slice(1)}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
       {user && (
         <p className="auth-link">
           <a onClick={handleSignOut} style={{ cursor: "pointer" }}>
