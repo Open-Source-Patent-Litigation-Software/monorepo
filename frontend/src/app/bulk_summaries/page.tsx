@@ -98,16 +98,31 @@ const Index: React.FC = () => {
                                 onClick={handleDownload}
                                 disabled={isLoading}
                             >
-                                {isLoading ? "Generating..." : "Generate Summaries"}
+                                {isLoading ? "Generating..." : "Generate Document"}
                             </button>
                         </div>
                     </div>
                     {isLoading && (
                         <div>
                             <LoadingSpinner />
-                            <p>Generating summaries: {progress} completed</p>
                         </div>
                     )}
+                </div>
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%",
+                        width: "50%",
+                        textAlign: "center",
+                        justifyItems: "center",
+                        margin: "auto",
+                        fontSize: "1.5rem",
+                        fontWeight: "bold",
+                    }}
+                >
+                    Bulk summaries is a feature to generate summaries for multiple patents at once. Enter the patent IDs separated by commas and click on the "Generate Summaries" button to download the summaries in a Word document.
                 </div>
             </div>
             <Footer />
