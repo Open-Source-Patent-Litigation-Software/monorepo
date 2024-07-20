@@ -28,13 +28,13 @@ class DifScore(BaseModel):
 
 class PatentObject(BaseModel):
     abstract: str
+    title: str
     owner: str
-    pubDate: str
-    patentNum: str
-    patentLink: str
-    totalScore: int
+    publication_date: str
+    publication_id: str
+    www_link: str
     score: DifScore
-    people: list[str]
+    inventors: list[str]
 
 class SearchOutput(BaseModel):
     patents: list[PatentObject]
