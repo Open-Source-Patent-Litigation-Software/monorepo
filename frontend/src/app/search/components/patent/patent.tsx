@@ -16,7 +16,7 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
     citationsData,
     selectedMetric,
     handleDropdownChange,
-  } = useCitations(item.www_link);
+  } = useCitations(item.www_link, searchMetrics);
 
   const graphData = {
     labels: searchMetrics,

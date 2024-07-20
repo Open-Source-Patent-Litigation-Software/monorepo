@@ -20,7 +20,6 @@ require_auth.register_token_validator(validator)
 def obtainMetrics():
     """Route to extract metrics from a given text."""
     try:
-        print('wha is going on')
         # get data from JSON
         data = request.get_json()
 
@@ -31,7 +30,6 @@ def obtainMetrics():
         return jsonify(response), 200
     except ValueError as e:
         # Handle validation errors
-        print("whatttt")
         logger.error(str(e))
         return jsonify({"error": str(e)}), 400
     except Exception as e:
@@ -66,7 +64,7 @@ def extractSpecificPatentMetrics():
 
 
 @llmCalls.route("/getCitation", methods=["POST"])
-@require_auth("user")
+# @require_auth("user")
 def getCitation():
     """Route to extract highlighted text based on metrics for a given patent."""
     try:
@@ -81,6 +79,7 @@ def getCitation():
     except ValueError as e:
         # Handle validation errors
         logger.error(str(e))
+        print(e)
         return jsonify({"error": str(e)}), 400
     except Exception as e:
         # Handle any other unexpected errors
