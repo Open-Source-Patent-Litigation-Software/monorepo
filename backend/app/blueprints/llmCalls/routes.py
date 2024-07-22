@@ -133,7 +133,7 @@ def bulkSummaries():
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
 
 
-@llmCalls.route("getBulkSummaries", methods=["POST"])
+@llmCalls.route("/getBulkSummaries", methods=["POST"])
 @require_auth("user")
 def getBulkSummaries():
     try:
