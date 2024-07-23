@@ -37,15 +37,13 @@ const PatentList: React.FC<PatentListProps> = ({ items, metrics, search, handleT
   const loadingAnimation = {
     background: [
       'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
-      'linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%)',
-      'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)'
+      'linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%)'
     ],
     backgroundSize: '200% 100%',
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: 'linear',
-      repeatType: 'mirror'
+      ease: 'linear'
     }
   };
   

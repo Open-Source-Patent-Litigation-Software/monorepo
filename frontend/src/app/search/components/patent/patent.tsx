@@ -37,17 +37,6 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
         pointHoverBorderColor: "rgb(255, 99, 132)",
       },
     ],
-    options: {
-      scales: {
-        r: {
-            angleLines: {
-                display: false
-            },
-            suggestedMin: 0,
-            suggestedMax: 10
-        }
-      }
-    }
   };
 
   const { summary, summaryLoading, getSummary } = useSummary(item.www_link);
@@ -92,7 +81,18 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
             <div className={styles.modalHeader}>
               <h2 className={styles.modalTitle}>{item.title}</h2>
               <div className={styles.iconContainer}>
-                <FaSave size={35}/>
+                  {isSaved ? (
+                  <div className={styles.savedMessage}>Patent Saved Successfully!</div>
+                ) : (
+                  <CustomButton
+                    loading={saveLoading}
+                    handleClick={async () => {
+                      await savePatentHandler();
+                    }}
+                  >
+                    Save Patent
+                  </CustomButton>
+                )}
                 <span className={styles.modalScore}>{item.score.total}</span>
               </div>
               
@@ -150,26 +150,14 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
             handleDropdownChange={handleDropdownChange}
             />
             {selectedMetric ? (
-            <Citations
-              data={citationsData}
-              metric={selectedMetric || ""}
-              loading={!citationsData[selectedMetric]}
-            />
-          ) : (
-            <div className={styles.noMetricSelected}>No Metric Selected</div>
-          )}
-            {isSaved ? (
-              <div className={styles.savedMessage}>Patent Saved Successfully!</div>
-            ) : (
-              <CustomButton
-                loading={saveLoading}
-                handleClick={async () => {
-                  await savePatentHandler();
-                }}
-              >
-                Save Patent
-              </CustomButton>
-            )}
+              <Citations
+                data={citationsData}
+                metric={selectedMetric || ""}
+                loading={!citationsData[selectedMetric]}
+              />
+              ) : (
+                <></>
+              )}
           </div>
         </Modal>
       )}

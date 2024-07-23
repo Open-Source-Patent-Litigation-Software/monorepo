@@ -22,13 +22,11 @@ class Search:
     # Helper function to create PatentObject
     def __createPatent(self, patent: dict, scores: list[float]) -> PatentObject:
         # Define min and max for the given range
-        min_score = 0.35
-        max_score = 0.65
+        min_score = 0.25
+        max_score = 0.8
         
         # Normalize the scores
-        print("original", scores)
         normalized_scores = [(score - min_score) / (max_score - min_score) for score in scores]
-        print("normalized", normalized_scores)
         
         # Multiply by 10
         int_scores = [int(score * 10) for score in normalized_scores]
@@ -74,20 +72,23 @@ class Search:
         # get the patents from PQAI based on our search
         patents = self.__getPatents()
 
-        patentTexts = []
+        claimsList = []
+        abstractsList = []
 
         # we need to get the abstract + claims sections, we have the abstract already
         for patent in patents:
             scraper = PatentScraper(patent["id"])
             claims = scraper.getSection("claims")
-            patentTexts.append(patent["abstract"] + claims)
+            claimsList.append(claims)
+            abstractsList.append(patent["abstract"])
 
         # split metrics in metrics list
         metricsList = self.metrics.split('\n')
 
         jsonData = {
             "metrics": metricsList,
-            "texts": patentTexts
+            "claims": claimsList,
+            "abstracts": abstractsList
         }
 
         secondRes = requests.post(self.nlpURL, json=jsonData)

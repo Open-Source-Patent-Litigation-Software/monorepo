@@ -112,6 +112,7 @@ export const useFetchMetrics = () => {
         setError(error.message);
         setSearchResults(null);
         setSearchLoading(false);
+        setIsMetricsLocked(false);
       }
   };
 
