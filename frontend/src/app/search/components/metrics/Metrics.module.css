@@ -1,0 +1,230 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .row {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .metric {
+    display: flex;
+    align-items: center;
+    margin: 0 20px 20px 0;
+    position: relative;
+  }
+  
+  .metricBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    border: 2px solid #1a4d2e;
+    border-radius: 15px;
+    background: #e8f5e9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+  
+  .metricBox:hover {
+    transform: translateY(-5px);
+    background: #c8e6c9;
+  }
+  
+  .textarea {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 10px;
+    width: 200px; 
+    height: 100px;
+    resize: none;
+    overflow-wrap: break-word;
+  }
+  
+  .textarea:focus {
+    outline: none;
+    border-color: #1a4d2e;
+    box-shadow: 0 0 5px #1a4d2e;
+  }
+  
+  .metricText {
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    width: 200px;
+    height: 100px;
+    overflow-wrap: break-word;
+    background: #fff;
+    color: #333;
+    font-size: 14px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .buttonGroup {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .editButton, .saveButton, .removeButton {
+    background-color: #1a4d2e;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .editButton:hover, .saveButton:hover {
+    background-color: #388e3c;
+    transform: scale(1.1);
+  }
+  
+  .removeButton:hover {
+    background-color: #d32f2f;
+    transform: scale(1.1);
+  }
+  
+  .addButton, .lockButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1a4d2e;
+    color: white;
+    cursor: pointer;
+    
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s;
+  }
+  
+  .addButton:hover, .lockButton:hover {
+    background-color: #4caf50;
+    color: white;
+    transform: scale(1.05);
+  }
+  
+  .numberInput {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100px;
+    text-align: center;
+    font-size: 16px;
+  }
+  
+  .numberInput:focus {
+    border-color: #007BFF;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+
+
+.inputLabel {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .optionsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .inputContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+.optionsContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.buttonsContainer {
+    display: flex;
+    gap: 30px;
+}
+
+/* Skeleton Loader Styles */
+@keyframes loadingAnimation {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loadingAnimation 1.5s infinite;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+.skeletonText {
+    height: 20px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+.skeletonHeader {
+    height: 40px;
+    width: 400px;
+    margin: 5px 0;
+}
+
+.skeletonButton {
+    height: 40px;
+    width: 100px;
+    margin: 5px;
+}
+
+.skeletonInput {
+    height: 40px;
+    width: 120px;
+    margin: 5px 0;
+}
+
+.skeletonBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.subHeaderContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}

@@ -14,6 +14,7 @@ from app.blueprints.patentRetrieval.routes import patentRetrieval
 from app.blueprints.llmCalls.routes import llmCalls
 from app.blueprints.operations.operations import operations
 from app.blueprints.saved.routes import saved
+from app.blueprints.nlp.routes import nlp
 
 
 def create_app():
@@ -39,7 +40,7 @@ def create_app():
     app.register_blueprint(patentRetrieval, url_prefix="/patents")
     app.register_blueprint(operations, url_prefix="/ops")
     app.register_blueprint(saved, url_prefix="/save")
-
+    app.register_blueprint(nlp, url_prefix="/nlp")
     @app.route("/")
     def home():
         return "It works."

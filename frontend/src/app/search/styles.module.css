@@ -1,20 +1,11 @@
 .colored_div {
   background: #f5efe6;
   padding-top: 5%;
-  min-height: 110vh;
+  min-height: 100vh;
 }
+
 .animation_container {
   animation: fadeIn 1s;
-}
-.search_container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  border-radius: 20px;
-  background: white;
-  margin: 5% 10%;
-  padding: 20px;
 }
 
 .search_bar_title {
@@ -27,36 +18,46 @@
   flex-shrink: 0;
   margin-right: 20px;
 }
-
-.search_input_wrapper {
-  flex-grow: 1;
+/* SearchBar.module.css */
+.search_container {
   display: flex;
-  align-items: stretch;
-  gap: 10px;
+  flex-direction: row;
+  align-items: center;
+  margin: 5%;
+  background-color: #CCCC;
+  position: relative;
+  border: 1px;
+  border-radius: 20px;
+}
+
+.search_container:focus-within {
+  border: 1px solid #8AA76F;
+  box-shadow: 0 0 0 2px #8AA76F;
 }
 
 .search_textarea {
   padding: 10px 20px;
-  border-radius: 20px;
-  margin: 10px 10px 10px 10px;
+  border-radius: 20px 0 0 20px; /* Rounded left corners */
+  background-color: #CCCC;
+  margin: 0; /* Remove margin */
   flex-grow: 1;
   height: 100px;
   resize: none;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: none; /* Remove borders */
+  outline: none; /* Remove default focus outline */
+  box-shadow: none;
 }
 
 .search_button {
-  padding: 10px 20px;
-  background-color: black;
-  margin: 10px 0px 10px 0px;
+  padding: 43px 20px;
+  background-color: #9DC183;
+  box-shadow: none;
   color: white;
   border: none;
-  border-radius: 20px;
+  border-radius: 0 20px 20px 0; /* Rounded right corners */
   cursor: pointer;
   outline: none;
   transition: background-color 0.3s, color 0.3s;
-  align-self: stretch;
   display: flex;
   align-items: center;
   font-weight: bold;
@@ -64,7 +65,7 @@
 }
 
 .search_button:hover {
-  background-color: #333;
+  background-color: #79915E;
   color: #ddd;
 }
 
@@ -112,4 +113,24 @@
   .slider {
     width: 100%;
   }
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px 0px 20px; 
+  text-align: center;
+}
+
+.headerTitle {
+  font-size: 3em;
+  margin: 0;
+}
+
+.searchCard {
+  background: white;
+  border-radius: 20px;
+  padding: 10px;
+  margin: 5%;
 }
