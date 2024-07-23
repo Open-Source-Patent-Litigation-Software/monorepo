@@ -3,6 +3,7 @@ import React from "react";
 import Link from "next/link";
 import styles from "../saved.module.css";
 import { Patent } from "../types";
+import { useRouter } from 'next/navigation'
 
 const IndividualPatent = ({
   patent,
@@ -11,6 +12,9 @@ const IndividualPatent = ({
   patent: Patent;
   removePatent: (id: string) => void;
 }) => {
+
+  const router = useRouter()
+
   const removeHandler = async () => {
     try {
       const response = await fetch("/api/remove_patent", {
@@ -28,6 +32,13 @@ const IndividualPatent = ({
       console.error("Error removing patent:", error);
     }
   };
+
+  const openPatentPage = (e: Any) => {
+    const href = `/saved/${patent.patentInfo.id}`
+    console.log("href:", href)
+    // e.preventDefault()
+    // router.push(href)
+  }
 
   return (
     <div className={styles.patentItem}>
@@ -52,8 +63,11 @@ const IndividualPatent = ({
         <Link href={`/saved/${patent.patentInfo.id}`}>View Patent Data</Link>
       </div> */}
       <div>
-        <button onClick={removeHandler} className={styles.removeButton}>
+        <button onClick={removeHandler} className={`${styles.button} ${styles.remove}`}>
           Remove
+        </button>
+        <button onClick={openPatentPage} className={`${styles.button} ${styles.add}`}>
+          Open Patent {patent.patentInfo.id}
         </button>
       </div>
     </div>

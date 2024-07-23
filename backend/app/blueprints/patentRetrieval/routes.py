@@ -56,7 +56,6 @@ def create_patent_object(patent: dict, scores: list[float]) -> PatentObject:
 @patentRetrieval.route("/makeQuery", methods=["POST"])
 # @require_auth("user")
 def patentRetrievalRoute():
-    print("test")
     """Retrieve prior-art documents with text query."""
     data = request.get_json()
     searchRequest = data["metrics"]
@@ -74,7 +73,6 @@ def patentRetrievalRoute():
         "token": PQ_AI_KEY,
     }
     response = requests.get(url, params=params)
-    print("test")
     if response.status_code != 200:
         return jsonify({"message": "Failed to retrieve data from the external API."}), 500
 
@@ -88,7 +86,6 @@ def patentRetrievalRoute():
         claims = scraper.getSection("claims")
         texts.append(patent["abstract"] + claims)
 
-    print('here')
 
     metricsList = searchRequest.split('\n')
     jsonData = {
@@ -110,7 +107,6 @@ def patentRetrievalRoute():
     sorted_patent_objects = sorted(patent_objects, key=lambda x: x.score.total, reverse=True)
 
     search_output = SearchOutput(patents=sorted_patent_objects)
-    print(search_output)
     return jsonify(search_output.dict()["patents"])
 
 @patentRetrieval.route("/getPatentsByIDs", methods=["POST"])

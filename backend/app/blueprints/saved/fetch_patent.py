@@ -12,7 +12,6 @@ class FetchPatent(DatabaseCall):
     def fetchPatent(self, patentID: str) -> dict | None:
         """Fetch a patent from the database."""
         try:
-            print(f"*** Fetching patent with ID: {patentID}")
             patent = self.session.query(SavedPatent).filter_by(patent_id=patentID).one()
             return patent.patent_data
         except NoResultFound:

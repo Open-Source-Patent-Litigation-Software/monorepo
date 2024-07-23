@@ -18,7 +18,6 @@ from app.blueprints.saved.routes import saved
 
 def create_app():
     app = Flask(__name__)
-    print("STARTED")
     # Load configuration from environment variables
     app.secret_key = os.getenv(
         "SECRET_KEY"
