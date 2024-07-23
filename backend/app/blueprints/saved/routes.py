@@ -78,11 +78,12 @@ def removePatent():
         return jsonify({"error": str(e)}), 400
 
 
-@saved.route("/get_saved_patent", methods=["POST"])
+@saved.route("/fetch_one_patent", methods=["POST"])
 def getSavedPatent():
     """Get all saved patents from the database."""
     data = request.get_json()
-    patentID = data.get("patent_id")
+    patentID = data.get("patent_neon_id")
+    print("patent id: ", patentID)
     try:
         fetcher = DatabaseCallFactory.getHandler(
             DatabaseCallFactory.RequestType.FETCH_PATENT
@@ -93,5 +94,6 @@ def getSavedPatent():
         else:
             return jsonify({"error": "Patent not found"}), 404
     except Exception as e:
+        print("FLASK SERVER FAIL")
         logger.error(str(e))
         return jsonify({"error": str(e)}), 400

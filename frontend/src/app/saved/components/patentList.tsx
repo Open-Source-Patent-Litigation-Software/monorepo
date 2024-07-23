@@ -33,11 +33,11 @@ const IndividualPatent = ({
     }
   };
 
-  const openPatentPage = (e: Any) => {
-    const href = `/saved/${patent.patentInfo.id}`
-    console.log("href:", href)
-    // e.preventDefault()
-    // router.push(href)
+  const openPatentPage = (e: any) => {
+    const href = `/saved/${patent.neon_patent_id}`
+    console.log("patent:", patent)
+    e.preventDefault()
+    router.push(href)
   }
 
   return (
@@ -86,7 +86,7 @@ const PatentList = ({
     <div className={styles.patentList}>
       {patents.map((patent) => (
         <IndividualPatent
-          key={patent.patentInfo.id}
+          key={patent.neon_patent_id}
           patent={patent}
           removePatent={removePatent}
         />
