@@ -16,7 +16,7 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
             scopes: ['user']
         });
 
-        const citationsURL = new URL(`${backendUrl}/llm/getCitation`);
+        const citationsURL = new URL(`${backendUrl}/nlp/getCitations`);
         const citationsResponse = await fetch(citationsURL.toString(), {
             method: "POST",
             headers: {

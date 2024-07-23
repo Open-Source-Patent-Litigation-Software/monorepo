@@ -24,9 +24,13 @@ export interface PatentItem {
 }
 
 export interface PatentListProps {
-    items: PatentItem[];
+    items: PatentItem[] | null;
     metrics: string[];
     search: string;
+    handleTagClick: (index: number) => void;
+    selectedTag: number;
+    unlockMetrics: () => void;
+    loading: boolean;
 }
 
 export interface PatentProps {
@@ -64,6 +68,11 @@ export interface MetricProps {
     removeMetric: (index: number) => void;
     editMetric: (index: number, newMetric: string) => void;
     lockMetrics: () => void;
+    threshold: number;
+    numPatents: number;
+    handleThresholdChange: (value: number) => void;
+    handleNumPatentsChange: (value: number) => void;
+    loading: boolean;
 }
 
 type Dataset = {

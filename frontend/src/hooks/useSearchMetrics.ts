@@ -15,11 +15,12 @@ interface UseFetchMetricsReturn {
   unlockMetrics: () => void;
 }
 
-export const useFetchMetrics = (): UseFetchMetricsReturn => {
+export const useFetchMetrics = () => {
   const [searchResults, setSearchResults] = useState<PatentItem[] | null>(null);
   const [error, setError] = useState<string>("");
   const [metrics, setMetrics] = useState<Metric[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [metricsLoading, setMetricsLoading] = useState<boolean>(false);
+  const [searchLoading, setSearchLoading] = useState<boolean>(false);
   const [isMetricsLocked, setIsMetricsLocked] = useState<boolean>(false);
 
   const addMetric = () => {
@@ -42,7 +43,10 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
   const fetchMetrics = async (patentQuery: string) => {
     try {
       setError("");
-      setIsLoading(true);
+      setMetricsLoading(true);
+      setMetrics([]);
+      setSearchResults(null);
+      setIsMetricsLocked(false);
 
       const response = await fetch('/api/metrics', {
         method: "POST",
@@ -60,11 +64,11 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
       const metricsData = await response.json();
       const metricList: Metric[] = Object.values(metricsData["functions"]);
       setMetrics(metricList);
-      setIsLoading(false);
+      setMetricsLoading(false);
     } catch (e) {
       const error = e as Error;
       setError(error.message);
-      setIsLoading(false);
+      setMetricsLoading(false);
     }
   };  
 
@@ -75,7 +79,7 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
 
   const lockMetricsAndSearch = async (metrics: string[], threshold: number, numPatents: number) => {
     setIsMetricsLocked(true);
-    setIsLoading(true);
+    setSearchLoading(true);
     try {
         setError("");
         const metricsString = metrics.join("\n");
@@ -102,12 +106,12 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
     
         const searchData = await response.json();
         setSearchResults(searchData);
-        setIsLoading(false);
+        setSearchLoading(false);
       } catch (e) {
         const error = e as Error;
         setError(error.message);
         setSearchResults(null);
-        setIsLoading(false);
+        setSearchLoading(false);
       }
   };
 
@@ -116,12 +120,14 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
     error,
     metrics,
     isMetricsLocked,
-    isLoading,
+    metricsLoading,
+    searchLoading,
     fetchMetrics,
     lockMetricsAndSearch,
     addMetric,
     removeMetric,
     editMetric,
-    unlockMetrics
+    unlockMetrics,
+    setSearchResults
   };
 };

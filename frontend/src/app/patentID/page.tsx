@@ -5,7 +5,6 @@ import { Footer } from "../../_components/footer/footer";
 import { useIDSearch } from "@/hooks/useIDSearch";
 import PatentCard from "./components/patentCard";
 import styles from "../search/styles.module.css"; // Updated import
-import "../search/components/patent/patent.css";
 import { patentbyID } from "@/types/types";
 
 const Index = () => {
