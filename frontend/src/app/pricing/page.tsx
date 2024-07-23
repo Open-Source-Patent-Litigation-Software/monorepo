@@ -2,13 +2,13 @@
 import React from "react";
 import { Navbar } from "../../_components/navbar/navbar";
 import { Footer } from "../../_components/footer/footer";
-import "./pricing.css";
+import styles from "./pricing.module.css";
 
 function Index() {
   return (
-    <div className="snap-scroll-container">
+    <div className={styles.snapScrollContainer}>
       <Navbar />
-      <div className="pricing-div">
+      <div className={styles.pricingDiv}>
         <h1
           style={{
             textAlign: "center",
@@ -18,23 +18,23 @@ function Index() {
         >
           Pricing
         </h1>
-        <div className="pricing-container">
-          <div className="pricing-card">
-            <h2 className="plan-name">Individual</h2>
-            <hr className="plan-divider" />
-            <p className="plan-description">Restricted queries</p>
+        <div className={styles.pricingContainer}>
+          <div className={styles.pricingCard}>
+            <h2 className={styles.planName}>Individual</h2>
+            <hr className={styles.planDivider} />
+            <p className={styles.planDescription}>Restricted queries</p>
           </div>
-          <div className="pricing-card">
-            <h2 className="plan-name">Small Team</h2>
-            <hr className="plan-divider" />
-            <p className="plan-description">
+          <div className={styles.pricingCard}>
+            <h2 className={styles.planName}>Small Team</h2>
+            <hr className={styles.planDivider} />
+            <p className={styles.planDescription}>
               Unlimited queries and case storage
             </p>
           </div>
-          <div className="pricing-card">
-            <h2 className="plan-name">Enterprise</h2>
-            <hr className="plan-divider" />
-            <p className="plan-description">Contact us for details</p>
+          <div className={styles.pricingCard}>
+            <h2 className={styles.planName}>Enterprise</h2>
+            <hr className={styles.planDivider} />
+            <p className={styles.planDescription}>Contact us for details</p>
           </div>
         </div>
       </div>

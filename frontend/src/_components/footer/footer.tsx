@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import './footer.css';
+import styles from "./footer.module.css";
 
 interface FooterProps {
   // Define any props here if needed
@@ -8,7 +8,7 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = (props) => {
   return (
-    <footer className="styled-footer">
+    <footer className={styles.styledFooter}>
       <p>© 2024 dulany.ai - All rights reserved.</p>
     </footer>
   );

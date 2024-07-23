@@ -7,6 +7,7 @@ import PopUpModal from "../../_components/popup/popup";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { redirectToTool } from "@/redirects/toolRedirect";
 import Link from "next/link";
+import { Footer } from "../../_components/footer/footer";
 
 const routesLoggedOut = {
   // add any logged out tools here (free trial tool later down the line etc.)
@@ -32,13 +33,13 @@ const routesLoggedIn = {
     route: "/zip",
     imageUrl: "compact-disc.svg",
     description:
-      "Download PDFs for any patent you can imagine, all with one click.",
+      "Download PDFs for as many patents as you need, all with one click.",
   },
-  SummaryDocumentGeneration: {
-    route: "/bulk_summaries",
+  InContextSummary: {
+    route: "/",
     imageUrl: "highlighter.svg",
     description:
-      "Generate a full document summary for all the patents you need.",
+      "Summarize patents within the context of your patent analysis needs.",
   },
 };
 
@@ -68,12 +69,15 @@ const Dashboard: React.FC = () => {
           </div>
         )}
         {!isLoading && !user && (
-          <PopUpModal
-            title="Sign In"
-            error="Use the sign in button in the top right to access our tools!"
-          ></PopUpModal>
+          <div>
+            <PopUpModal
+              title="Sign In"
+              error="Use the sign in button in the top right to access our tools!"
+            ></PopUpModal>
+          </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

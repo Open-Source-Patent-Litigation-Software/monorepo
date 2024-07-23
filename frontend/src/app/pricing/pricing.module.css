@@ -7,14 +7,14 @@
     }
   }
   
-  .snap-scroll-container {
+  .snapScrollContainer {
     overflow-y: scroll; /* Enable vertical scrolling */
     scroll-snap-type: y mandatory; /* Enable snap scrolling on the y-axis */
     width: 100%; /* Ensure it takes up the full width to prevent unexpected behavior */
     background: #E8DFCA;
   }
   
-  .pricing-div {
+  .pricingDiv {
     background: #f5efe6;
     display: flex;
     margin-top: -5%;
@@ -26,7 +26,7 @@
     width: 100%; /* Ensure it takes up the full width */
   }
   
-  .pricing-container {
+  .pricingContainer {
     animation: fadeIn 0.5s ease-in;
     display: flex;
     justify-content: space-around;
@@ -36,7 +36,7 @@
     height: 40vh; /* Take a good portion of the viewport height */
   }
   
-  .pricing-card {
+  .pricingCard {
     width: 30%;
     background-color: #fff;
     border-radius: 15px;
@@ -47,18 +47,18 @@
     flex-direction: column;
   }
   
-  .plan-name {
+  .planName {
     font-size: 24px;
     font-weight: bold;
   }
   
-  .plan-divider {
+  .planDivider {
     border: none;
     border-top: 1px solid #ccc;
     margin: 20px 0;
   }
   
-  .plan-description {
+  .planDescription {
     flex-grow: 1;
   }
   

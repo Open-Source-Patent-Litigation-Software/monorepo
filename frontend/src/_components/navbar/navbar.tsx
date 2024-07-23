@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import "./navbar.css";
+import styles from "./navbar.module.css";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { redirect } from "next/navigation";
 import { redirectToTool } from "@/redirects/toolRedirect";
@@ -32,14 +32,14 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
   };
 
   return (
-    <nav className="styled-nav">
-      <p className="logo-text">
+    <nav className={styles.styledNav}>
+      <p className={styles.logoText}>
         <Link href="/">DulanyAI</Link>
       </p>
       {!user && (
-        <ul className="styled-ul">
+        <ul className={styles.styledUl}>
           {Object.entries(routesLoggedOut).map(([name, path]) => (
-            <li className="styled-li" key={name}>
+            <li className={styles.styledLi} key={name}>
               <Link href={path} passHref>
                 {name.charAt(0).toUpperCase() + name.slice(1)}
               </Link>
@@ -48,9 +48,9 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
         </ul>
       )}
       {user && (
-        <ul className="styled-ul">
+        <ul className={styles.styledUl}>
           {Object.entries(routesLoggedIn).map(([name, path]) => (
-            <li className="styled-li" key={name}>
+            <li className={styles.styledLi} key={name}>
               <Link href={path} passHref>
                 {name.charAt(0).toUpperCase() + name.slice(1)}
               </Link>
@@ -59,14 +59,14 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
         </ul>
       )}
       {user && (
-        <p className="auth-link">
+        <p className={styles.authLink}>
           <a onClick={handleSignOut} style={{ cursor: "pointer" }}>
             Sign Out
           </a>
         </p>
       )}
       {!user && (
-        <p className="auth-link">
+        <p className={styles.authLink}>
           <a onClick={handleSignIn} style={{ cursor: "pointer" }}>
             Sign In
           </a>
