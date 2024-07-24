@@ -17,7 +17,7 @@ class PatentScraper:
     def __init__(self, pn: str):
         self.logger = logging.getLogger("__name__")
 
-        if not len(pn) == 0:
+        if not len(pn) != 0:
             self.pn = pn
 
     # takes in patent number, and the field you want (abstract, claims or description)
@@ -41,7 +41,6 @@ class PatentScraper:
         return results
 
     def getPDFLink(self, pn):
-        print("test")
         url = f'https://patents.google.com/patent/{pn}/en'
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
