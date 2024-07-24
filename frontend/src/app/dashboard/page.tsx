@@ -23,11 +23,6 @@ const routesLoggedIn = {
     imageUrl: "document.svg",
     description: "View your saved patents to revisit your past work.",
   },
-  AggregateSummaries: {
-    route: "/patentID",
-    imageUrl: "open-book.svg",
-    description: "Summarize as many patents as you'd like, all at once.",
-  },
   BulkZipDownload: {
     route: "/zip",
     imageUrl: "compact-disc.svg",

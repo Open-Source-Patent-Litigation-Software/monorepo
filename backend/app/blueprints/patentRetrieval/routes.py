@@ -32,13 +32,24 @@ def zipPatents():
     try:
         zip_buffer, valid_patents, not_found_patents = PatentRetrievalFactory.getHandler(PatentRetrievalFactory.RequestType.ZIP, data)
         if valid_patents == False:
-            return jsonify({'error': 'No valid patents found', 'not_found': not_found_patents}), 400
+            return jsonify({
+                "zip_file": "",
+                "additional_data": {
+                    "message": "Failed to create Zip file.", 
+                    "not_found": not_found_patents
+                }
+            }), 200
         base64_zip = base64.b64encode(zip_buffer.getvalue()).decode('utf-8')
-        additional_data = {"message": "Successfully created zip file.", "not_found": not_found_patents}
+        
 
         return jsonify({
             "zip_file": base64_zip,
-            "additional_data": additional_data
-        })
+            "additional_data": {
+                "message": "Successfully created zip file.", 
+                "not_found": not_found_patents
+            }
+        }), 200
+        
     except Exception as e:
+        print("there was an exception", e)
         return jsonify({"error": e}), 400

@@ -49,5 +49,5 @@ class SearchInput(BaseModel):
 """ ZIP input """
 
 class ZipInput(BaseModel):
-    pns: List[str]
+    pns: list[str]
     user: str
