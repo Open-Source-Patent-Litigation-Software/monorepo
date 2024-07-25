@@ -1,0 +1,27 @@
+.tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 25px;
+    border: 2px solid;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: white;
+    font-size: 16px;
+    white-space: nowrap; /* Ensure the text does not wrap */
+    overflow: hidden; /* Hide any overflow text */
+    text-overflow: ellipsis; /* Add ellipsis if the text overflows */
+}
+  
+  .tag:hover {
+    transform: scale(1.1);
+  }
+  
+  .selected {
+    background: green;
+    color: white;
+  }
+  

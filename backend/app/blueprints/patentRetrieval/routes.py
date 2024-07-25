@@ -1,13 +1,9 @@
-import math
 from flask import Blueprint, request, jsonify, send_file
 import base64
-import requests
 from utils.scraping import PatentScraper
 from authlib.integrations.flask_oauth2 import ResourceProtector
 from utils.auth import Auth0JWTBearerTokenValidator
-from app.settings import PQ_AI_KEY
 from .factory import PatentRetrievalFactory
-from langchain_core.pydantic_v1 import BaseModel
 
 patentRetrieval = Blueprint("patentRetrieval", __name__, template_folder="templates")
 
@@ -18,7 +14,7 @@ validator = Auth0JWTBearerTokenValidator(
 )
 require_auth.register_token_validator(validator)
 
-# Assuming the following classes are defined elsewhere in your code
+
 class DifScore(BaseModel):
     scores: list[int]
     total: int
@@ -120,6 +116,7 @@ def getPatentsByIDs():
     except Exception as e:
         return jsonify({"error": e}), 400
 
+
 @patentRetrieval.route("/scrapeGooglePatents", methods=["GET"])
 def scrapeGooglePatents():
     """Scrape Google Patents for a specific patent's claims."""
@@ -138,13 +135,24 @@ def zipPatents():
     try:
         zip_buffer, valid_patents, not_found_patents = PatentRetrievalFactory.getHandler(PatentRetrievalFactory.RequestType.ZIP, data)
         if valid_patents == False:
-            return jsonify({'error': 'No valid patents found', 'not_found': not_found_patents}), 400
+            return jsonify({
+                "zip_file": "",
+                "additional_data": {
+                    "message": "Failed to create Zip file.", 
+                    "not_found": not_found_patents
+                }
+            }), 200
         base64_zip = base64.b64encode(zip_buffer.getvalue()).decode('utf-8')
-        additional_data = {"message": "Successfully created zip file.", "not_found": not_found_patents}
+        
 
         return jsonify({
             "zip_file": base64_zip,
-            "additional_data": additional_data
-        })
+            "additional_data": {
+                "message": "Successfully created zip file.", 
+                "not_found": not_found_patents
+            }
+        }), 200
+        
     except Exception as e:
+        print("there was an exception", e)
         return jsonify({"error": e}), 400

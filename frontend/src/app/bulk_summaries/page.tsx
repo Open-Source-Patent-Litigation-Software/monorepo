@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { Navbar } from "../../_components/navbar/navbar";
-import { Footer } from "../../_components/footer/footer";
-import LoadingSpinner from "../search/components/loading/loadingSpinner";
-import styles from "../search/styles.module.css";
-import { Document, Packer, Paragraph, TextRun } from "docx";
-import { saveAs } from "file-saver";
+import React, { useState, useEffect } from 'react';
+import { Navbar } from '../../_components/navbar/navbar';
+import { Footer } from '../../_components/footer/footer';
+import styles from '../zip/style.module.css';
+import { Document, Packer, Paragraph, TextRun } from 'docx';
+import { saveAs } from 'file-saver';
+import PatentInput from '@/_components/patentInput/patentInput';
 
 interface PatentSummary {
     filing_date: string;
@@ -16,8 +16,11 @@ interface PatentSummary {
 }
 
 const Index: React.FC = () => {
-    const [patentQuery, setPatentQuery] = useState<string>("");
+    const [patentQuery, setPatentQuery] = useState<string>('');
+    const [patents, setPatents] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [notFoundPatents, setNotFoundPatents] = useState<string[]>([]);
+    const [additionalData, setAdditionalData] = useState<string | null>(null);
     const [progress, setProgress] = useState<number>(0);
 
     const generateDocX = async (bulkSummaries: PatentSummary[]): Promise<void> => {
@@ -26,44 +29,43 @@ const Index: React.FC = () => {
                 properties: {},
                 children: bulkSummaries.flatMap((patent) => [
                     new Paragraph({
-                        children: [new TextRun({ text: "Patent Number: ", bold: true }), new TextRun(patent.patent)],
+                        children: [new TextRun({ text: 'Patent Number: ', bold: true }), new TextRun(patent.patent)],
                     }),
                     new Paragraph({
-                        children: [new TextRun({ text: "Title: ", bold: true }), new TextRun(patent.title)],
+                        children: [new TextRun({ text: 'Title: ', bold: true }), new TextRun(patent.title)],
                     }),
                     new Paragraph({
-                        children: [new TextRun({ text: "Filing Date: ", bold: true }), new TextRun(patent.filing_date)],
+                        children: [new TextRun({ text: 'Filing Date: ', bold: true }), new TextRun(patent.filing_date)],
                     }),
                     new Paragraph({
-                        children: [new TextRun({ text: "Summary: ", bold: true }), new TextRun(patent.summary)],
+                        children: [new TextRun({ text: 'Summary: ', bold: true }), new TextRun(patent.summary)],
                     }),
-                    new Paragraph(""),  // Empty paragraph for spacing
+                    new Paragraph(''),  // Empty paragraph for spacing
                 ]),
             }],
         });
 
         try {
             const blob = await Packer.toBlob(doc);
-            saveAs(blob, "patent_summaries.docx");
-            console.log("Document generated and saved");
+            saveAs(blob, 'patent_summaries.docx');
+            console.log('Document generated and saved');
         } catch (error) {
-            console.error("Error generating document:", error);
+            console.error('Error generating document:', error);
         }
     };
 
     const handleDownload = async (): Promise<void> => {
         setIsLoading(true);
         setProgress(0);
-        const patentIds = patentQuery.split(",").map((id) => id.trim());
 
-        const eventSource = new EventSource(`/api/bulk?patent_ids=${encodeURIComponent(JSON.stringify(patentIds))}`);
+        const eventSource = new EventSource(`/api/bulk?patent_ids=${encodeURIComponent(JSON.stringify(patents))}`);
 
         const bulkSummaries: PatentSummary[] = [];
 
         eventSource.onmessage = (event) => {
             const data = JSON.parse(event.data);
             bulkSummaries.push(data);
-            console.log("Received summary:", bulkSummaries);
+            console.log('Received summary:', bulkSummaries);
             setProgress(bulkSummaries.length);
         };
 
@@ -80,49 +82,58 @@ const Index: React.FC = () => {
         });
     };
 
+    const handleFormSubmit = async () => {
+        const values = patentQuery.split(/[\n,]/).map(value => value.trim()).filter(value => value !== '');
+        setPatents([...values]);
+        setNotFoundPatents([]);
+        setAdditionalData('');
+    };
+
+    const handleRemoveBox = (index: number) => {
+        const values = [...patents];
+        values.splice(index, 1);
+        setPatents(values);
+    };
+
+    const handlePatentChange = (index: number, value: string) => {
+        const values = [...patents];
+        values[index] = value;
+        setPatents(values);
+    };
+
+    const handleInputChange = (value: string) => {
+        setPatentQuery(value);
+    };
+
+    useEffect(() => {
+        if (additionalData) {
+            alert(additionalData);
+        }
+    }, [additionalData]);
+
     return (
         <>
             <div className={styles.colored_div}>
                 <Navbar />
-                <div className={styles.animation_container}>
-                    <div className={styles.search_container}>
-                        <h2 className={styles.search_bar_title}>Bulk{"\n"}Summaries</h2>
-                        <div className={styles.search_input_wrapper}>
-                            <textarea
-                                className={styles.search_textarea}
-                                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPatentQuery(e.target.value)}
-                                placeholder="Enter patent IDs, separated by commas."
-                            />
-                            <button
-                                className={styles.search_button}
-                                onClick={handleDownload}
-                                disabled={isLoading}
-                            >
-                                {isLoading ? "Generating..." : "Generate Document"}
-                            </button>
-                        </div>
-                    </div>
-                    {isLoading && (
-                        <div>
-                            <LoadingSpinner />
-                        </div>
-                    )}
+                <div className={styles.container}>
+                    <h1 className={styles.heading}>Bulk Summary Download</h1>
+                    <PatentInput notFoundPatents={notFoundPatents} handleDownload={handleDownload} handleFormSubmit={handleFormSubmit} handleInputChange={handleInputChange} handlePatentChange={handlePatentChange} handleRemoveBox={handleRemoveBox} patents={patents} loading={isLoading}/>
                 </div>
                 <div
                     style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: "100%",
-                        width: "50%",
-                        textAlign: "center",
-                        justifyItems: "center",
-                        margin: "auto",
-                        fontSize: "1.5rem",
-                        fontWeight: "bold",
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '100%',
+                        width: '50%',
+                        textAlign: 'center',
+                        justifyItems: 'center',
+                        margin: 'auto',
+                        fontSize: '1.5rem',
+                        fontWeight: 'bold',
                     }}
                 >
-                    Bulk summaries is a feature to generate summaries for multiple patents at once. Enter the patent IDs separated by commas and click on the &quot;Generate Summaries&quot; button to download the summaries in a Word document.
+                    Bulk summaries is a feature to generate summaries for multiple patents at once. Enter the patent IDs separated by commas or new lines and click on the &quot;Add Patents&quot; button to download the summaries in a Word document.
                 </div>
             </div>
             <Footer />

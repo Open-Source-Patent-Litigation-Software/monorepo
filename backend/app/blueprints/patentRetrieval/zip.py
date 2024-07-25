@@ -1,4 +1,4 @@
-from .schema import ZipInput
+from utils.schemas import ZipInput
 from utils.scraping import PatentScraper
 import zipfile
 from io import BytesIO

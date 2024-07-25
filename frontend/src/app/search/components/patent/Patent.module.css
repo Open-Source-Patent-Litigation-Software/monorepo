@@ -1,0 +1,275 @@
+.card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin: 10px;
+    width: 400px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+  }
+  
+  .cardHeader {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+  }
+  
+  .score {
+    background-color: #f0ad4e;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  .cardBody {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .cardTitle {
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .cardDetails {
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  .patentLink {
+    color: #0077cc;
+    text-decoration: none;
+    margin-bottom: 5px;
+  }
+  
+  .patentLink:hover {
+    text-decoration: underline;
+  }
+  
+  .modalContent {
+    padding: 20px;
+  }
+  
+  .modalTitle {
+    margin-bottom: 10px;
+  }
+  
+  .modalScore {
+    background-color: #f0ad4e;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 1.2rem;
+  }
+  
+  .abstract {
+    color: #666;
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .expandButton {
+    background: none;
+    border: none;
+    color: #0077cc;
+    cursor: pointer;
+    padding: 0;
+    font-size: 0.9rem;
+    margin-top: 5px;
+  }
+  
+  .details {
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .boldedDetail {
+    font-weight: bold;
+    color: black;
+  }
+  
+  .inventorList {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 10px;
+  }
+  
+  .inventorItem {
+    color: #333;
+  }
+  
+  .savedMessage {
+    color: green;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+.patentsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+}
+
+.patentsListContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin: 5%;
+    width: 100%;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.chard {
+    width: 400px;
+    display: flex;
+    justify-content: center;
+}
+
+.tagsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+.editButton {
+    background-color: #1a4d2e;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.editButton:hover {
+    background-color: #388e3c;
+    transform: scale(1.1);
+}
+
+.metricsContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.editContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    vertical-align: auto;
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loadingAnimation 1.5s infinite;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+@keyframes loadingAnimation {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.skeletonText {
+    height: 20px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+.skeletonButton {
+    height: 40px;
+    width: 100px;
+    margin: 5px;
+}
+
+.skeletonBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.skeletonTag {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    width: 175px;
+    height: 50px;
+    border-radius: 20px;
+    margin: 5px;
+}
+
+.skeletonCard {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    width: 400px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.skeletonCardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.skeletonTitle {
+    width: 60%;
+    height: 20px;
+}
+
+.skeletonScore {
+    width: 20%;
+    height: 20px;
+}
+
+.transitionContainer {
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .fadeIn {
+    opacity: 1;
+  }
+  
+  .fadeOut {
+    opacity: 0;
+  }
+
+.iconContainter {
+    display: flex;
+    justify-content: center;
+    vertical-align: auto;
+}

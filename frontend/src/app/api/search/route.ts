@@ -15,7 +15,7 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
             scopes: ['user']
         });
 
-        const searchURL = new URL(`${backendUrl}/patents/makeQuery`);
+        const searchURL = new URL(`${backendUrl}/nlp/searchPatents`);
 
         const searchResponse = await fetch(searchURL.toString(), {
             method: "POST",

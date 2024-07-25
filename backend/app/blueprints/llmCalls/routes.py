@@ -14,7 +14,6 @@ validator = Auth0JWTBearerTokenValidator(
 )
 require_auth.register_token_validator(validator)
 
-
 @llmCalls.route("/obtainMetrics", methods=["POST"])
 @require_auth("user")
 def obtainMetrics():
@@ -36,7 +35,6 @@ def obtainMetrics():
         # Handle any other unexpected errors
         logger.error(str(e))
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
-
 
 @llmCalls.route("/extractSpecificPatentMetrics", methods=["POST"])
 @require_auth("user")
@@ -62,31 +60,6 @@ def extractSpecificPatentMetrics():
         logger.error(str(e))
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
 
-
-@llmCalls.route("/getCitation", methods=["POST"])
-# @require_auth("user")
-def getCitation():
-    """Route to extract highlighted text based on metrics for a given patent."""
-    try:
-        # get data from JSON
-        data = request.get_json()
-
-        # get the response from the factory
-        response = LLMCallFactory.getHandler(LLMCallFactory.RequestType.CITATIONS, data)
-
-        # return jsonified response
-        return jsonify(response), 200
-    except ValueError as e:
-        # Handle validation errors
-        logger.error(str(e))
-        print(e)
-        return jsonify({"error": str(e)}), 400
-    except Exception as e:
-        # Handle any other unexpected errors
-        logger.error(str(e))
-        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
-
-
 @llmCalls.route("/getSummary", methods=["POST"])
 @require_auth("user")
 def getSummary():
@@ -108,7 +81,6 @@ def getSummary():
         # Handle any other unexpected errors
         logger.error(str(e))
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
-
 
 @llmCalls.route("/getPatent", methods=["POST"])
 @require_auth("user")
