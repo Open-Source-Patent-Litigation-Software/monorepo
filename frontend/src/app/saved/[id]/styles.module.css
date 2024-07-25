@@ -1,0 +1,126 @@
+/* Fade-in animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.coloredDiv {
+  background: #f5efe6;
+  padding-top: 10%;
+  padding-bottom: 5%;
+  min-height: 110vh;
+}
+
+.animationContainer {
+  animation: fadeIn 1s;
+}
+
+.infoPanel {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+  background: white;
+  margin: 0% 10%;
+  padding: 20px;
+}
+
+.patentDetails {
+  text-align: center;
+}
+
+.patentTitle {
+  color: #1A4D2E;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.patentDetail {
+  color: #555;
+  margin: 5px 0;
+  font-size: 0.9em;
+}
+
+.citations, .percentages {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.citation {
+  margin-bottom: 20px;
+}
+
+.citation h5 {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+}
+
+.citation p {
+  margin: 5px 0;
+}
+
+.percentages ul {
+  list-style: none;
+  padding: 0;
+}
+
+.percentages li {
+  margin: 5px 0;
+}
+
+.highlight {
+  background-color: yellow;
+}
+
+.patentItem {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.patentItem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.removeButton {
+  background-color: #ff4500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+.removeButton:hover {
+  background-color: #ff0000;
+  transform: scale(1.05);
+}
+
+.removeButton:active {
+  transform: scale(0.95);
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+  .infoPanel {
+    margin: 5%;
+    padding: 15px;
+  }
+
+  .patentTitle {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+}

@@ -19,7 +19,6 @@ from app.blueprints.nlp.routes import nlp
 
 def create_app():
     app = Flask(__name__)
-    print("STARTED")
     # Load configuration from environment variables
     app.secret_key = os.getenv(
         "SECRET_KEY"
