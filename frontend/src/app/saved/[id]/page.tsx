@@ -98,7 +98,7 @@ const Page = () => {
               ))}
             </ul>
           </div>
-          {/* <div className={styles.citations}>
+          <div className={styles.citations}>
             <h3>Citations</h3>
             {citations && Object.entries(citations).map(([key, value]) => (
               <div key={key} className={styles.citation}>
@@ -120,7 +120,7 @@ const Page = () => {
                 )}
               </div>
             ))}
-          </div> */}
+          </div>
         </div>
       </div>
       <Footer />

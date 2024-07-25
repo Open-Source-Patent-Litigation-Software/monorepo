@@ -59,9 +59,6 @@ const IndividualPatent = ({
       <div>
         <Link href={patent.patentInfo.www_link}>View on Google Patents</Link>
       </div>
-      {/* <div>
-        <Link href={`/saved/${patent.patentInfo.id}`}>View Patent Data</Link>
-      </div> */}
       <div>
         <button onClick={removeHandler} className={`${styles.button} ${styles.remove}`}>
           Remove

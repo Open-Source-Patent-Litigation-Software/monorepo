@@ -33,7 +33,7 @@ const itemVariants = {
 };
 
 // PatentList component definition
-const PatentList: React.FC<PatentListProps> = ({ items, metrics, search, handleTagClick, selectedTag, unlockMetrics, loading}) => {
+const PatentList: React.FC<PatentListProps> = ({ items, metrics, search, handleTagClick, selectedTag, unlockMetrics, loading }) => {
   const loadingAnimation = {
     background: [
       'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
@@ -46,7 +46,7 @@ const PatentList: React.FC<PatentListProps> = ({ items, metrics, search, handleT
       ease: 'linear'
     }
   };
-  
+
   if (loading) {
     return (
       <div>
@@ -77,8 +77,8 @@ const PatentList: React.FC<PatentListProps> = ({ items, metrics, search, handleT
     );
   }
 
-  if(items == null) {
-    return(<>TEST</>);
+  if (items == null) {
+    return (<>Items are null.</>);
   }
 
   return (
@@ -101,13 +101,14 @@ const PatentList: React.FC<PatentListProps> = ({ items, metrics, search, handleT
         </div>
       </div>
       <div className={styles.patentsContainer}>
-          {items.map((item) => (
-              <Patent
-                item={item}
-                searchMetrics={metrics}
-                search={search}
-              />
-          ))}
+        {items.map((item, index) => (
+          <Patent
+            key={index}
+            item={item}
+            searchMetrics={metrics}
+            search={search}
+          />
+        ))}
       </div>
     </div>
   );

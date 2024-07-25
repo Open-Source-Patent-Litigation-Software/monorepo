@@ -49,6 +49,15 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
 
   const [isAbstractExpanded, setIsAbstractExpanded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [dropdownExecuted, setDropdownExecuted] = useState(false);
+
+  const handleSaveClick = async () => {
+    if (!dropdownExecuted) {
+      await handleDropdownChange(undefined, searchMetrics[0]); // Provide a default value if needed
+      setDropdownExecuted(true);
+    }
+    await savePatentHandler();
+  };
 
   return (
     <>
@@ -81,14 +90,12 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
             <div className={styles.modalHeader}>
               <h2 className={styles.modalTitle}>{item.title}</h2>
               <div className={styles.iconContainer}>
-                  {isSaved ? (
+                {isSaved ? (
                   <div className={styles.savedMessage}>Patent Saved Successfully!</div>
                 ) : (
                   <CustomButton
                     loading={saveLoading}
-                    handleClick={async () => {
-                      await savePatentHandler();
-                    }}
+                    handleClick={handleSaveClick}
                   >
                     Save Patent
                   </CustomButton>
@@ -145,9 +152,9 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
               getSummary={getSummary}
             />
             <MetricDropdown
-            searchMetrics={searchMetrics}
-            selectedMetric={selectedMetric}
-            handleDropdownChange={handleDropdownChange}
+              searchMetrics={searchMetrics}
+              selectedMetric={selectedMetric}
+              handleDropdownChange={handleDropdownChange}
             />
             {selectedMetric ? (
               <Citations
@@ -155,9 +162,9 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
                 metric={selectedMetric || ""}
                 loading={!citationsData[selectedMetric]}
               />
-              ) : (
-                <></>
-              )}
+            ) : (
+              <></>
+            )}
           </div>
         </Modal>
       )}
