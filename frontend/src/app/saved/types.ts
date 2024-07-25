@@ -20,6 +20,7 @@ export interface Patent {
     citations: any;
     patentInfo: PatentInfo;
     percentages: { [key: string]: number };
+    neon_patent_id: number;
     search: string;
     summary: string;
     dateSaved: string;

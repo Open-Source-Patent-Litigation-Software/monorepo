@@ -23,6 +23,7 @@ def app():
 def client(app):
     return app.test_client()
 
+
 def test_bulk_summaries_call():
     mock_data = {"patent_ids": ["US20220340893A1", "US11872287B2", "US10729277B2"]}
 

@@ -11,6 +11,7 @@ export const POST = withApiAuthRequired(async function POST(
         const { accessToken } = await getAccessToken({
             scopes: ["user"],
         });
+        console.log("BODY: ", body);
         const searchURL = new URL(`${backendUrl}/save/fetch_patents`);
         const savePatentResponse = await fetch(searchURL.toString(), {
             method: "POST",
