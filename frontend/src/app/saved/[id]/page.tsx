@@ -4,6 +4,30 @@ import React, { useState, useEffect } from "react";
 import { Navbar } from "@/_components/navbar/navbar";
 import { Footer } from "@/_components/footer/footer";
 import styles from "./styles.module.css";
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Radar } from "react-chartjs-2";
+
+ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
+
+const options = {
+  scales: {
+    r: {
+      angleLines: {
+        display: false,
+      },
+      suggestedMin: 0,
+      suggestedMax: 10,
+    },
+  },
+};
 
 interface PatentInfo {
   abstract: string;
@@ -44,6 +68,10 @@ interface Patent {
 
 const Page = () => {
   const [patent, setPatent] = useState<Patent | null>(null);
+  const [chartData, setChartData] = useState<any>({
+    labels: [],
+    datasets: [],
+  });
   const params = useParams();
 
   useEffect(() => {
@@ -61,6 +89,29 @@ const Page = () => {
         const data = await response.json();
         console.log("patent-data:", data);
         setPatent(data.patent);
+
+        const { percentages } = data.patent as { percentages: Percentages };
+        const labels = Object.keys(percentages);
+        const chartDataValues = Object.values(percentages).map((percentage: number) => Math.round(percentage * 10)); // Convert to integer (e.g., 0.3 -> 3)
+
+        const newChartData = {
+          labels: labels,
+          datasets: [
+            {
+              label: "Differential Score",
+              data: chartDataValues,
+              fill: true,
+              backgroundColor: "rgba(255, 99, 132, 0.2)",
+              borderColor: "rgb(255, 99, 132)",
+              pointBackgroundColor: "rgb(255, 99, 132)",
+              pointBorderColor: "#fff",
+              pointHoverBackgroundColor: "#fff",
+              pointHoverBorderColor: "rgb(255, 99, 132)",
+            },
+          ],
+        };
+
+        setChartData(newChartData);
       } catch (error) {
         console.error("Error fetching saved patents:", error);
       }
@@ -92,11 +143,7 @@ const Page = () => {
           </div>
           <div className={styles.percentages}>
             <h3>Feature Percentages</h3>
-            <ul>
-              {percentages && Object.entries(percentages).map(([feature, percentage]) => (
-                <li key={feature}>{feature} --- {(percentage * 100).toFixed(2)}%</li>
-              ))}
-            </ul>
+            {chartData.labels.length > 0 && <Radar data={chartData} options={options} />}
           </div>
           <div className={styles.citations}>
             <h3>Citations</h3>

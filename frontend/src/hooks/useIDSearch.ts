@@ -11,8 +11,6 @@ export const useIDSearch = () => {
         try {
             // break down the queries into a list of queries
             const ids = query.split('\n');
-            console.log(ids);
-
             // ids = a list of patent numbers
             const formattedSearch = {
                 queries: ids,
