@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { Navbar } from "../../_components/navbar/navbar";
 import styles from "./dashboard.module.css";
 import PopUpModal from "../../_components/popup/popup";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { redirectToTool } from "@/redirects/toolRedirect";
 import Link from "next/link";
 
 const routesLoggedOut = {
@@ -50,11 +50,13 @@ const Dashboard: React.FC = () => {
             {Object.entries(routesLoggedIn).map(
               ([name, { route, imageUrl, description }]) => (
                 <Link key={name} href={route} className={styles.styledCard}>
-                  <img
+                  <Image
                     src={imageUrl}
                     alt={name}
                     className={styles.cardImage}
-                  ></img>
+                    width={500}
+                    height={300}
+                  />
                   <div key={name}>{name.replace(/([A-Z])/g, " $1").trim()}</div>
                   <p className={styles.cardDescription}>{description}</p>
                 </Link>

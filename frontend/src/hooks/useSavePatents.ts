@@ -84,7 +84,6 @@ export const useSavePatents = (
     genericInfo,
     search,
     citations,
-    parsePercentages,
     parseCitations,,
     summary
   ]);

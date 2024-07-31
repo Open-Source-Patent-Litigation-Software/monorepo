@@ -10,9 +10,6 @@ import { useSavePatents } from "@/hooks/useSavePatents";
 import { useSummary } from "@/hooks/useSummary";
 import SummaryComponent from "./components/summary";
 import Modal from "./components/modal";
-import Metrics from "../metrics/metrics";
-import { FaSave } from "react-icons/fa";
-import { scales } from "chart.js";
 
 const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
   const {
@@ -68,19 +65,19 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
             <h3 className={styles.cardTitle}>{item.title}</h3>
             <span className={styles.score}>{item.score.total}</span>
           </div>
-          
+
           <p className={styles.cardDetails}>
             <span className={styles.boldedDetail}>Patent Number:</span>{" "}
             <a
-            className={styles.patentLink}
-            href={item.www_link}
-            target="_blank"
-            rel="noopener noreferrer"
+              className={styles.patentLink}
+              href={item.www_link}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               {item.publication_id}
             </a>
           </p>
-          
+
         </div>
       </div>
 
@@ -102,7 +99,7 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
                 )}
                 <span className={styles.modalScore}>{item.score.total}</span>
               </div>
-              
+
             </div>
             <div className={styles.abstract}>
               <span className={styles.boldedDetail}>Abstract: </span>
