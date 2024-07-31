@@ -15,7 +15,14 @@ import {
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
 
-ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
 
 const options = {
   scales: {
@@ -92,7 +99,9 @@ const Page = () => {
 
         const { percentages } = data.patent as { percentages: Percentages };
         const labels = Object.keys(percentages);
-        const chartDataValues = Object.values(percentages).map((percentage: number) => Math.round(percentage * 10)); // Convert to integer (e.g., 0.3 -> 3)
+        const chartDataValues = Object.values(percentages).map(
+          (percentage: number) => Math.round(percentage * 10)
+        ); // Convert to integer (e.g., 0.3 -> 3)
 
         const newChartData = {
           labels: labels,
@@ -120,7 +129,15 @@ const Page = () => {
   }, [params.id]);
 
   if (!patent) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Navbar></Navbar>
+        <div className={styles.loadingContainer}>
+          <div className={styles.loadingAnimation}></div>
+          <p className={styles.loadingText}>Patents Loading</p>
+        </div>
+      </div>
+    );
   }
 
   const { patentInfo, search, citations, percentages } = patent;
@@ -132,41 +149,71 @@ const Page = () => {
         <div className={`${styles.infoPanel} ${styles.animationContainer}`}>
           <div className={styles.patentDetails}>
             <h1 className={styles.patentTitle}>{patentInfo.title}</h1>
-            <p><strong>Inventors:</strong> {patentInfo.inventors.join(', ')}</p>
-            <p><strong>Owner:</strong> {patentInfo.owner}</p>
-            <p><strong>Publication Date:</strong> {new Date(patentInfo.publication_date).toLocaleDateString()}</p>
-            <p><strong>Abstract:</strong> {patentInfo.abstract}</p>
-            <p><strong>Search Term:</strong> {search}</p>
+            <p>
+              <strong>Inventors:</strong> {patentInfo.inventors.join(", ")}
+            </p>
+            <p>
+              <strong>Owner:</strong> {patentInfo.owner}
+            </p>
+            <p>
+              <strong>Publication Date:</strong>{" "}
+              {new Date(patentInfo.publication_date).toLocaleDateString()}
+            </p>
+            <p>
+              <strong>Abstract:</strong> {patentInfo.abstract}
+            </p>
+            <p>
+              <strong>Search Term:</strong> {search}
+            </p>
             <div>
-              <a href={patentInfo.www_link} target="_blank" rel="noopener noreferrer">View on Google Patents</a>
+              <a
+                href={patentInfo.www_link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View on Google Patents
+              </a>
             </div>
           </div>
           <div className={styles.percentages}>
             <h3>Feature Percentages</h3>
-            {chartData.labels.length > 0 && <Radar data={chartData} options={options} />}
+            {chartData.labels.length > 0 && (
+              <Radar data={chartData} options={options} />
+            )}
           </div>
           <div className={styles.citations}>
             <h3>Citations</h3>
-            {citations && Object.entries(citations).map(([key, value]) => (
-              <div key={key} className={styles.citation}>
-                <h5>{key}</h5>
-                {value.abstract && value.abstract.map((item, index) => (
-                  <p key={index}>
-                    <strong>Abstract:</strong> {item.before} <span className={styles.highlight}>{item.highlight}</span> {item.after}
-                  </p>
-                ))}
-                {value.claims && value.claims.map((item, index) => (
-                  <p key={index}>
-                    <strong>Claim:</strong> {item.before} <span className={styles.highlight}>{item.highlight}</span> {item.after}
-                  </p>
-                ))}
-                {value.description && (
-                  <p>
-                    <strong>Description:</strong> {value.description}
-                  </p>
-                )}
-              </div>
-            ))}
+            {citations &&
+              Object.entries(citations).map(([key, value]) => (
+                <div key={key} className={styles.citation}>
+                  <h5>{key}</h5>
+                  {value.abstract &&
+                    value.abstract.map((item, index) => (
+                      <p key={index}>
+                        <strong>Abstract:</strong> {item.before}{" "}
+                        <span className={styles.highlight}>
+                          {item.highlight}
+                        </span>{" "}
+                        {item.after}
+                      </p>
+                    ))}
+                  {value.claims &&
+                    value.claims.map((item, index) => (
+                      <p key={index}>
+                        <strong>Claim:</strong> {item.before}{" "}
+                        <span className={styles.highlight}>
+                          {item.highlight}
+                        </span>{" "}
+                        {item.after}
+                      </p>
+                    ))}
+                  {value.description && (
+                    <p>
+                      <strong>Description:</strong> {value.description}
+                    </p>
+                  )}
+                </div>
+              ))}
           </div>
         </div>
       </div>
