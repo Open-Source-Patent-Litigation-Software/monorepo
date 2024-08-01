@@ -46,13 +46,8 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
 
   const [isAbstractExpanded, setIsAbstractExpanded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [dropdownExecuted, setDropdownExecuted] = useState(false);
 
   const handleSaveClick = async () => {
-    if (!dropdownExecuted) {
-      await handleDropdownChange(undefined, searchMetrics[0]); // Provide a default value if needed
-      setDropdownExecuted(true);
-    }
     await savePatentHandler();
   };
 
@@ -87,16 +82,6 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
             <div className={styles.modalHeader}>
               <h2 className={styles.modalTitle}>{item.title}</h2>
               <div className={styles.iconContainer}>
-                {isSaved ? (
-                  <div className={styles.savedMessage}>Patent Saved Successfully!</div>
-                ) : (
-                  <CustomButton
-                    loading={saveLoading}
-                    handleClick={handleSaveClick}
-                  >
-                    Save Patent
-                  </CustomButton>
-                )}
                 <span className={styles.modalScore}>{item.score.total}</span>
               </div>
 
@@ -142,6 +127,16 @@ const Patent: React.FC<PatentProps> = ({ item, searchMetrics, search }) => {
                   </li>
                 ))}
               </ul>
+            )}
+            {isSaved ? (
+              <div className={styles.savedMessage}>Patent Saved Successfully!</div>
+            ) : (
+              <CustomButton
+                loading={saveLoading}
+                handleClick={handleSaveClick}
+              >
+                Save Patent
+              </CustomButton>
             )}
             <SummaryComponent
               summary={summary}
