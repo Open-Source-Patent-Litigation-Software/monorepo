@@ -26,7 +26,6 @@ class Saver(DatabaseCall):
         patents = self.session.query(SavedPatent).filter_by(user_id=userID).all()
         patent_list = []
         for patent in patents:
-            print(patent.id)
             patent_dict = {
                 "neon_patent_id": patent.id,
                 "citations": patent.patent_data.get("citations", {}),

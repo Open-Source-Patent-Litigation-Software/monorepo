@@ -43,7 +43,7 @@ class PatentData(BaseModel):
     citations: Citations
 
 
-example_patent_data = {
+MOCK_DATA = {
     "patentInfo": {
         "abstract": "A refrigerator appliance having a cold brewed coffee system positioned within a chilled chamber of the refrigerator appliance is provided. In one example aspect, the system includes a housing defining a water reservoir and a coffee reservoir. The water reservoir is in fluid communication with a water supply via an inlet supply conduit. An inlet valve is positioned along the inlet supply conduit and selectively allows water into the water reservoir. The water within the water reservoir drips into the coffee reservoir where the water mixes with coffee materials received therein. Cold brewed coffee is produced within the coffee reservoir and may slowly drip into a coffee container positioned or docked beneath the housing.",
         "inventors": ["Ryan Joseph Thomas"],

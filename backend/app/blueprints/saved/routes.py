@@ -49,12 +49,13 @@ require_auth.register_token_validator(validator)
 
 
 @saved.route("/patent", methods=["POST"])
+@require_auth("user")
 def patent():
     """Save a patent to the database."""
     # TODO: Fix Data Validation
-
+    ctx = require_auth.acquire_token()
     # Extract the sub (user ID) from the claims
-    userID = "google-oauth2|108809862173138748904"
+    userID = ctx["sub"]
     # Get JSON Body from HTTP request
     data = request.get_json()
     try:
