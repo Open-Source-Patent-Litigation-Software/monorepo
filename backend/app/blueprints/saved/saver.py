@@ -9,12 +9,13 @@ class Saver(DatabaseCall):
     def __init__(self):
         super().__init__()
 
-    def savePatent(self, userID: str, patentData: PatentData):
+    def savePatent(self, userID: str, patentData):
         """Save the patent object to the database."""
+        patent_id = patentData["patentInfo"]["publication_id"]
         newPatent = SavedPatent(
             user_id=userID,
-            patent_id=patentData.patentInfo.id,
-            patent_data=patentData.model_dump(),
+            patent_id=patent_id,
+            patent_data=patentData,
         )
         self.createAndCommit([newPatent])
 
@@ -25,7 +26,6 @@ class Saver(DatabaseCall):
         patents = self.session.query(SavedPatent).filter_by(user_id=userID).all()
         patent_list = []
         for patent in patents:
-            print(patent.id)
             patent_dict = {
                 "neon_patent_id": patent.id,
                 "citations": patent.patent_data.get("citations", {}),

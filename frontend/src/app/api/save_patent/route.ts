@@ -6,6 +6,7 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
     try {
         const body = await request.json();
         // Get the access token
+        console.log("#2 body", body);
         const { accessToken } = await getAccessToken({
             scopes: ['user']
         });
