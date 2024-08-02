@@ -17,29 +17,57 @@ validator = Auth0JWTBearerTokenValidator(
 require_auth.register_token_validator(validator)
 
 
+# @saved.route("/patent", methods=["POST"])
+# @require_auth("user")
+# def patent():
+#     """Save a patent to the database."""
+#     # TODO: Fix Data Validation
+
+#     # Extract the sub (user ID) from the claims
+#     ctx = require_auth.acquire_token()
+#     userID = ctx["sub"]
+#     # Get JSON Body from HTTP request
+#     data = request.get_json()
+#     # Validate the data
+#     try:
+#         patent_data = PatentData(**data)
+#     except Exception as e:
+#         logger.error(str(e))
+#         return jsonify({"error": str(e)}), 400
+#     try:
+#         saver = DatabaseCallFactory.getHandler(DatabaseCallFactory.RequestType.SAVER)
+#         user = saver.getOrCreateUser(userID)
+#         saver.savePatent(user.id, data)
+#     except Exception as e:
+#         logger.error(str(e))
+#         return jsonify({"error": str(e)}), 400
+#     logger.info(f"Received data: {data}")
+#     return (
+#         jsonify({"response": "DATA SAVED"}),
+#         200,
+#     )
+
+
 @saved.route("/patent", methods=["POST"])
 @require_auth("user")
 def patent():
     """Save a patent to the database."""
-
-    # Extract the sub (user ID) from the claims
+    # TODO: Fix Data Validation
     ctx = require_auth.acquire_token()
-    userID = ctx.get("sub")
-
+    # Extract the sub (user ID) from the claims
+    userID = ctx["sub"]
     # Get JSON Body from HTTP request
     data = request.get_json()
-
     try:
-        validatedData = PatentData(**data)
         saver = DatabaseCallFactory.getHandler(DatabaseCallFactory.RequestType.SAVER)
         user = saver.getOrCreateUser(userID)
-        saver.savePatent(user.id, validatedData)
+        saver.savePatent(user.id, data)
     except Exception as e:
         logger.error(str(e))
         return jsonify({"error": str(e)}), 400
-    logger.info(f"Received data: {validatedData}")
+    logger.info(f"Received data: {data}")
     return (
-        jsonify({"response": "properly worked", "body": validatedData.model_dump()}),
+        jsonify({"response": "DATA SAVED"}),
         200,
     )
 
