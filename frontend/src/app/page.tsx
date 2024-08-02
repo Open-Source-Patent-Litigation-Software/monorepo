@@ -13,16 +13,13 @@ export default function Home() {
 
   return (
     <>
-      <div className="snap-scroll-container">
+      <div className="snap-scroll-container darkGreenBg">
         <Navbar />
         <div
-          className="div-view custom-padding custom-background"
-          style={
-            {
-              "--custom-padding-top": "10%",
-              "--custom-background-color": "#F5EFE6",
-            } as React.CSSProperties
-          }
+          className="div-view custom-padding"
+          style={{
+            "--custom-padding-top": "10%",
+          } as React.CSSProperties}
         >
           <Summary />
         </div>

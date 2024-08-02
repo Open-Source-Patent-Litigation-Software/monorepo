@@ -1,0 +1,164 @@
+.styledNav {
+  font-size: 18px;
+  position: fixed;
+  overflow: visible;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 80px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #000000;
+  padding: 0 20px;
+  transition: height 0.3s ease;
+}
+
+.navContent {
+  display: flex;
+  align-items: center;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  max-height: 1000px;
+  opacity: 1;
+  overflow: hidden;
+}
+
+.authLink {
+  color: #000000;
+  border-radius: 5px;
+  background-color: white;
+  text-decoration: none;
+  padding: 10px;
+  transition: font-weight 0.3s ease, color 0.3s ease, font-size 0.3s ease;
+}
+
+.authLink:hover {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.authLink:active {
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.authLink a {
+  color: black;
+  text-decoration: none;
+}
+
+.styledUl {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.styledLi {
+  margin: 0 1rem;
+}
+
+.styledLi a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: font-weight 0.3s ease, color 0.3s ease, font-size 0.3s ease;
+}
+
+.styledLi a:hover {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.logoText {
+  color: #ffffff;
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.logoText a {
+  color: inherit;
+  text-decoration: none;
+  transition: font-weight 0.3s ease, color 0.3s ease, font-size 0.3s ease;
+}
+
+.logoText a:hover {
+  color: inherit;
+  text-decoration: none;
+  font-size: 35px;
+}
+
+.menuToggle {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .styledNav {
+    flex-direction: column;
+    height: auto;
+    padding: 20px;
+  }
+
+  .navContent {
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navContent.open {
+    max-height: 1000px;
+    opacity: 1;
+    display: flex;
+  }
+
+  .styledUl {
+    flex-direction: column;
+    width: 100%;
+    padding: 0;
+    margin-right: 3em;
+  }
+
+  .styledLi {
+    margin: 10px 0;
+  }
+
+  .authLink {
+    margin-top: 10px;
+  }
+
+  .menuToggle {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .styledNav {
+    font-size: 16px;
+  }
+
+  .logoText {
+    font-size: 26px;
+  }
+
+  .styledLi a:hover {
+    font-size: 22px;
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  .styledNav {
+    padding: 0 40px;
+  }
+}

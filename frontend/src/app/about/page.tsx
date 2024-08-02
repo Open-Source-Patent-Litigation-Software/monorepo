@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Navbar } from "../../_components/navbar/navbar";
 import { Footer } from "../../_components/footer/footer";
 import styles from "./about.module.css";
@@ -25,6 +25,73 @@ const useFadeIn = () => {
   }, []);
 };
 
+interface TeamMember {
+  name: string;
+  role: string;
+  blurb: string;
+  linkedin: string;
+}
+
+const FlippingCard: React.FC = () => {
+  const teamMembers: TeamMember[] = [
+    {
+      name: "Cole Morehouse",
+      role: "CEO / Product Manager",
+      blurb: "Cole brings a wealth of experience in product management and a vision for revolutionizing IP research. He is currently a senior at the University of Michigan and is planning to pursue a graduate degree in law.",
+      linkedin: "https://www.linkedin.com/in/cole-morehouse-b685b5220/"
+    },
+    {
+      name: "Dev Kunjadia",
+      role: "CTO / Founding Engineer",
+      blurb: "Dev is an engineer with a passion for creating innovative AI solutions for complex problems. He is currently a senior at the University of Michigan studying Computer Science and plans to pursue a career in AI infrastructure.",
+      linkedin: "https://www.linkedin.com/in/dev-kunjadia/"
+    },
+    {
+      name: "Alec Palo",
+      role: "CFO / Founding Engineer",
+      blurb: "Alec combines financial acumen with engineering expertise to drive DulanyAI's growth and sustainability. He is a graduate of the University of Michigan - Ross School of Business and is currently working at Radient Nuclear. ",
+      linkedin: "https://www.linkedin.com/in/apalo/"
+    }
+  ];
+
+  const [currentMember, setCurrentMember] = useState<number>(0);
+  const [isAutoChanging, setIsAutoChanging] = useState<boolean>(true);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isAutoChanging) {
+      interval = setInterval(() => {
+        setCurrentMember((prev) => (prev + 1) % teamMembers.length);
+      }, 3000);
+    }
+    return () => clearInterval(interval);
+  }, [isAutoChanging, teamMembers.length]);
+
+  const handleClick = (): void => {
+    setCurrentMember((prev) => (prev + 1) % teamMembers.length);
+    setIsAutoChanging(false);
+    // Resume auto-changing after 15 seconds of inactivity
+    setTimeout(() => setIsAutoChanging(true), 15000);
+  };
+
+  const member = teamMembers[currentMember];
+
+  return (
+    <div className={styles.cardContainer} onClick={handleClick}>
+      <div className={styles.card}>
+        <div className={`${styles.cardContent} ${isAutoChanging ? styles.fadeInOut : ''}`}>
+          <h2>{member.name}</h2>
+          <p>{member.role}</p>
+          <p>{member.blurb}</p>
+          <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
+            LinkedIn Profile
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 function Index() {
   useFadeIn();
 
@@ -33,7 +100,7 @@ function Index() {
       <Navbar />
       <div className={styles.container}>
         <section
-          className={`${styles.section} ${styles.fullHeight} ${styles.coloredDiv}`}
+          className={`${styles.section} ${styles.fullHeight} ${styles.lightBg}`}
         >
           <h1 className={`${styles.title} ${styles.greenText}`}>
             What is DulanyAI?
@@ -74,8 +141,8 @@ function Index() {
             <div className={styles.feature}>
               <h3 className={styles.featureTitle}>AI Powered Analysis</h3>
               <p className={styles.featureText}>
-                Utilizes advanced AI algorithms to quickly analyze and compare
-                inventions against existing patents to determine patentability.
+                Build with advanced AI algorithms to quickly analyze and compare
+                inventions to determine patentability.
               </p>
             </div>
             <div className={styles.feature}>
@@ -88,27 +155,11 @@ function Index() {
           </div>
         </section>
 
-        <section className={`${styles.section} ${styles.coloredDiv}`}>
-          <h1 className={`${styles.title} ${styles.greenText}`}>
+        <section className={`${styles.section} ${styles.darkGreenBg}`}>
+          <h1 className={`${styles.title} ${styles.whiteText}`}>
             Meet Our Team
           </h1>
-          <div className={styles.teamContainer}>
-            <p className={styles.teamMember}>
-              <a href="https://www.linkedin.com/in/cole-morehouse-b685b5220/">
-                Cole Morehouse - CEO / Product Manager
-              </a>
-            </p>
-            <p className={styles.teamMember}>
-              <a href="https://www.linkedin.com/in/dev-kunjadia/">
-                Dev Kunjadia - CTO / Founding Engineer
-              </a>
-            </p>
-            <p className={styles.teamMember}>
-              <a href="https://www.linkedin.com/in/apalo/">
-                Alec Palo - CFO / Founding Engineer
-              </a>
-            </p>
-          </div>
+          <FlippingCard />
         </section>
       </div>
       <Footer />
