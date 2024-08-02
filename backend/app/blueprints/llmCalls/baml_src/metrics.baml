@@ -42,7 +42,23 @@ test TestBacterialPrompt {
   functions [ExtractPatentMetricsFromQuery]
   args {
     patent_text #"
-      A bacteria that divides rapidly and produces beneficial research chemicals.
+        A bacteria that divides rapidly and produces beneficial research chemicals.
     "#
   }
+}
+
+
+test TestCoffeePrompt {
+  functions [ExtractPatentMetricsFromQuery]
+  args {
+    patent_text #"
+        A machine that dispenses coffee.
+    "#
+  }
+}
+
+generator bamlMetricClient {
+ output_type "python/pydantic"
+ output_dir "../"
+ version "0.52.1"
 }
