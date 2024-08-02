@@ -1,3 +1,10 @@
+/* Common colors
+#f5efe6 - Light Beige
+#1a4d2e - Dark Green
+#4f6f52 - Light Green
+#333 - Dark Text
+#ffffff - White
+*/
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -45,6 +52,28 @@
   font-weight: bold;
   color: #f5efe6;
 }
+.featuresContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+@keyframes colorSweep {
+  0% {
+    opacity: 0;
+    background-position: 200% 0;
+  }
+  50% {
+    opacity: 1;
+    background-position: 100% 0;
+  }
+  100% {
+    opacity: 1;
+    background-position: 0 0;
+  }
+}
 
 .featuresContainer {
   display: flex;
@@ -55,26 +84,97 @@
 }
 
 .feature {
-  flex: 1;
-  min-width: 280px;
-  max-width: 300px;
-  padding: 2rem;
-  background-color: #f5efe6;
-  border-radius: 10px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  width: 12em;
+  height: 320px;
+  background: #ffe9c9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  font-weight: bold;
+  border-radius: 15px;
+  cursor: pointer;
+  padding: 0.75rem;
+  transition: all 0.5s;
+  overflow: hidden;
+}
+
+.feature::before,
+.feature::after {
+  position: absolute;
+  content: "";
+  width: 20%;
+  height: 20%;
+  background-color: #ffeed3;
+  transition: all 0.5s;
+}
+
+.feature::before {
+  top: 0;
+  right: 0;
+  border-radius: 0 15px 0 100%;
+}
+
+.feature::after {
+  bottom: 0;
+  left: 0;
+  border-radius: 0 100% 0 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: normal;
+  color: #1a4d2e;
+  opacity: 0;
+}
+
+.feature:hover::before,
+.feature:hover::after {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+}
+
+.feature:hover::after {
+  opacity: 1;
+  content: attr(data-hover); /* Use the data-hover attribute for hover text */
 }
 
 .featureTitle {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #1a4d2e;
+  position: relative;
+  z-index: 2;
+  font-size: 3rem;
+  transition: opacity 0.5s;
 }
 
 .featureText {
-  font-size: 1.25rem;
-  line-height: 1.5;
-  color: #333;
+  position: absolute;
+  z-index: 2;
+  font-size: 1.2em;
+  opacity: 0;
+  visibility: hidden;
+  background: linear-gradient(120deg, #1d462d, #4f6f52);
+  -webkit-background-clip: text;
+  color: transparent;
+  background-clip: text;
+  background-size: 200% 100%;
+  transition: opacity 0.5s, visibility 0.5s;
+  text-align: center;
+  padding: 1rem;
 }
+
+.feature:hover .featureTitle {
+  opacity: 0;
+}
+
+.feature:hover .featureText {
+  opacity: 1;
+  visibility: visible;
+  animation: colorSweep 1s ease forwards;
+}
+
+
 
 .teamContainer {
   display: flex;
