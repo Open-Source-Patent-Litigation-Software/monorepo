@@ -11,7 +11,6 @@ function ExtractPatentMetricsFromQuery(patent_text: string) -> Metrics {
     Parse the following patent and return a structured representation of the data in the schema below.
 
     Your job is to take a search query and extract 8 functions from it.
-            
 
     Let me give you an example. Let's say the search query is:
         
