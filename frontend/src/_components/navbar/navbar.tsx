@@ -28,11 +28,9 @@ export const Navbar: React.FC<NavigationProps> = (props) => {
 
   const routesLoggedOut = {
     about: "/about",
-    contact: "/contact",
   };
   const routesLoggedIn = {
     about: "/about",
-    contact: "/contact",
     dashboard: "/dashboard",
   };
 

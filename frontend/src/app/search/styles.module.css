@@ -1,5 +1,7 @@
-.colored_div {
-  background: #f5efe6;
+.darkGreenBg {
+  background: linear-gradient(-45deg, #1f4313, #0c2022, #1a4d2e, #051b11);
+  background-size: 500% 500%;
+  animation: gradient 30s ease infinite;
   padding-top: 5%;
   padding-bottom: 5%;
   min-height: 100vh;
@@ -132,6 +134,18 @@
 .searchCard {
   background: white;
   border-radius: 20px;
-  padding: 10px;
+  padding: 2em;
   margin: 5%;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

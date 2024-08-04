@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 import { Navbar } from "../../_components/navbar/navbar";
 import { Footer } from "../../_components/footer/footer";
 import styles from "./about.module.css";
@@ -27,51 +28,60 @@ const useFadeIn = () => {
 
 interface TeamMember {
   name: string;
+  image: string;
   role: string;
   blurb: string;
   linkedin: string;
 }
 
-const FlippingCard: React.FC = () => {
+const TeamCard: React.FC = () => {
   const teamMembers: TeamMember[] = [
     {
       name: "Cole Morehouse",
+      image: "/headshots/cole_headshot.jpeg",
       role: "CEO / Product Manager",
       blurb: "Cole brings a wealth of experience in product management and a vision for revolutionizing IP research. He is currently a senior at the University of Michigan and is planning to pursue a graduate degree in law.",
       linkedin: "https://www.linkedin.com/in/cole-morehouse-b685b5220/"
     },
     {
       name: "Dev Kunjadia",
+      image: "/headshots/dev_headshot.jpeg",
       role: "CTO / Founding Engineer",
       blurb: "Dev is an engineer with a passion for creating innovative AI solutions for complex problems. He is currently a senior at the University of Michigan studying Computer Science and plans to pursue a career in AI infrastructure.",
       linkedin: "https://www.linkedin.com/in/dev-kunjadia/"
     },
     {
       name: "Alec Palo",
+      image: "/headshots/alec_headshot.jpeg",
       role: "CFO / Founding Engineer",
-      blurb: "Alec combines financial acumen with engineering expertise to drive DulanyAI's growth and sustainability. He is a graduate of the University of Michigan - Ross School of Business and is currently working at Radient Nuclear. ",
+      blurb: "Alec combines financial acumen with engineering expertise to drive DulanyAI's growth and sustainability. He is a graduate of the University of Michigan - Ross School of Business and is currently working at Radient Nuclear.",
       linkedin: "https://www.linkedin.com/in/apalo/"
     }
   ];
 
   const [currentMember, setCurrentMember] = useState<number>(0);
-  const [isAutoChanging, setIsAutoChanging] = useState<boolean>(true);
+  const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
+
+  const switchMember = useCallback(() => {
+    if (!isTransitioning) {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentMember((prev) => (prev + 1) % teamMembers.length);
+        setIsTransitioning(false);
+      }, 500); // Half of the transition duration
+    }
+  }, [isTransitioning, teamMembers.length]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isAutoChanging) {
-      interval = setInterval(() => {
-        setCurrentMember((prev) => (prev + 1) % teamMembers.length);
-      }, 3000);
-    }
-    return () => clearInterval(interval);
-  }, [isAutoChanging, teamMembers.length]);
+    const interval = setInterval(() => {
+      switchMember();
+    }, 5000);
 
-  const handleClick = (): void => {
-    setCurrentMember((prev) => (prev + 1) % teamMembers.length);
-    setIsAutoChanging(false);
-    // Resume auto-changing after 15 seconds of inactivity
-    setTimeout(() => setIsAutoChanging(true), 15000);
+    return () => clearInterval(interval);
+  }, [switchMember]);
+
+  const handleClick = () => {
+    switchMember();
   };
 
   const member = teamMembers[currentMember];
@@ -79,12 +89,23 @@ const FlippingCard: React.FC = () => {
   return (
     <div className={styles.cardContainer} onClick={handleClick}>
       <div className={styles.card}>
-        <div className={`${styles.cardContent} ${isAutoChanging ? styles.fadeInOut : ''}`}>
-          <h2>{member.name}</h2>
-          <p>{member.role}</p>
-          <p>{member.blurb}</p>
-          <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
-            LinkedIn Profile
+        <div className={`${styles.cardContent} ${isTransitioning ? styles.fadeOut : styles.fadeIn}`}>
+          <Image
+            src={member.image}
+            alt={member.name}
+            width={150}
+            height={150}
+            className={styles.headshot}
+          />
+          <div className={styles.textContent}>
+            <h2 className={styles.memberName}>{member.name}</h2>
+            <p className={styles.memberRole}>{member.role}</p>
+            <p className={styles.memberBlurb}>{member.blurb}</p>
+          </div>
+          <a className={`${styles.socialContainer} ${styles.containerThree}`} href={member.linkedin} target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 448 512" className={`${styles.socialSvg} ${styles.linkdinSvg}`}>
+              <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"></path>
+            </svg>
           </a>
         </div>
       </div>
@@ -132,7 +153,7 @@ function Index() {
           </h1>
           <div className={styles.featuresContainer}>
             <div className={styles.feature}>
-              <h3 className={styles.featureTitle}>Vectorized Patent Search</h3>
+              <h3 className={styles.featureTitle}>Advanced Patent Search</h3>
               <p className={styles.featureText}>
                 Streamlines patent search process, making it more accessible and
                 user-friendly for inventors and businesses.
@@ -154,12 +175,11 @@ function Index() {
             </div>
           </div>
         </section>
-
         <section className={`${styles.section} ${styles.darkGreenBg}`}>
           <h1 className={`${styles.title} ${styles.whiteText}`}>
             Meet Our Team
           </h1>
-          <FlippingCard />
+          <TeamCard />
         </section>
       </div>
       <Footer />
