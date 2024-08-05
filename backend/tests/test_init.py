@@ -23,12 +23,6 @@ def test_home_route(client):
     assert response.status_code == 200
     assert response.data.decode('utf-8') == "It works."
 
-# def test_blueprints_registered(app):
-#     assert app.blueprints['llmcalls'].url_prefix == '/llm'
-#     assert app.blueprints['patentretrieval'].url_prefix == '/patents'
-#     assert app.blueprints['operations'].url_prefix == '/ops'
-#     assert app.blueprints['saved'].url_prefix == '/save'
-
 def test_cors_configuration(app):
     # Check if CORS is configured correctly in development mode
     if os.getenv("FLASK_ENV") == "development":

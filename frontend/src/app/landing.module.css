@@ -1,0 +1,190 @@
+.mainContainer {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #1b3c11, #173713, #0d2b07, #051b11);
+  background-size: 500% 500%;
+  animation: gradient 30s ease infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section {
+  width: 100%;
+  padding: 5% 10%;
+  text-align: center;
+  animation: fadeIn 1s ease-in;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: transparent; /* Ensure sections have transparent background */
+  color: #ffffff; /* Make all text white */
+}
+.firstSection {
+  height: 100vh; /* Take up the entire viewport height */
+  padding: 0; /* Remove default padding */
+}
+.fullHeight {
+  min-height: 100vh;
+}
+
+.title {
+  font-size: 8rem;
+  margin-bottom: 3rem;
+  color: #ffffff; /* Make title text white */
+}
+
+.landingCaption {
+  font-size: 4rem;
+  margin-bottom: 4rem;
+  margin-top: 3rem;
+}
+
+.subtitle {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+  color: #ffffff; /* Make subtitle text white */
+}
+
+.text {
+  font-size: 2.5em;
+  margin-bottom: 2rem;
+  line-height: 1.75;
+  color: #ffffff; /* Make text white */
+}
+
+.productName {
+  font-weight: bold;
+  color: #ffffff; /* Make product name text white */
+}
+
+/* Demo Button styles */
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.demoButton {
+  color: #000000;
+  border-radius: 15px;
+  background-color: white;
+  text-decoration: none;
+  padding: 15px 30px;
+  font-size: 2em;
+  transition: font-weight 0.3s ease, color 0.3s ease, font-size 0.3s ease;
+  display: inline-block;
+}
+
+.demoButton:hover {
+  font-weight: bold;
+}
+
+.demoButton:active {
+  font-size: 1.8em;
+}
+
+.demoButton a {
+  color: black;
+  text-decoration: none;
+}
+
+.imageContainer {
+  width: 100%;
+  max-width: 1000px;
+  margin: 2rem auto;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.lightBg {
+  background: transparent; /* Ensure this is transparent */
+}
+
+.darkGreenBg {
+  background: transparent; /* Ensure this is transparent */
+}
+
+.blackGround {
+  background: black; /* Ensure this is transparent */
+}
+
+.lightGreenBg {
+  background: transparent; /* Ensure this is transparent */
+}
+
+.sideBySideContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.imageWrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.textWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+}
+
+.divider {
+  width: 80%;
+  height: 2px;
+  background-color: #ffffff; /* Make divider white */
+  margin: 2em auto;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 4rem;
+  }
+  
+  .subtitle {
+    font-size: 3rem;
+  }
+  
+  .text {
+    font-size: 1.8em;
+  }
+  
+  .section {
+    padding: 5% 10%;
+  }
+  
+  .sideBySideContainer {
+    flex-direction: column;
+  }
+  
+  .textWrapper, .imageWrapper {
+    text-align: center;
+    align-items: center;
+  }
+}

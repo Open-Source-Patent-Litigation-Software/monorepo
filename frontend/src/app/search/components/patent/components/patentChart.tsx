@@ -20,8 +20,21 @@ ChartJS.register(
     Legend
 );
 
+const options = {
+    scales: {
+        r: {
+            angleLines: {
+                display: false
+            },
+            suggestedMin: 0,
+            suggestedMax: 10
+        }
+    }
+}
+
 const PatentChart: React.FC<PatentChartProps> = ({ data }) => {
-    return <Radar data={data} />;
+    console.log("PatentChart", data);
+    return <Radar data={data} options={options} />;
 };
 
 export default PatentChart;

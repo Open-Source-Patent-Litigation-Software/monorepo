@@ -3,8 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { backendUrl } from '@/types/types';
 import { withApiAuthRequired, getAccessToken } from '@auth0/nextjs-auth0';
 
-
-
 export const POST = withApiAuthRequired(async function POST(request: NextRequest) {
     try {
         const body = await request.json();
@@ -18,7 +16,7 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
             scopes: ['user']
         });
 
-        const citationsURL = new URL(`${backendUrl}/llm/getCitation`);
+        const citationsURL = new URL(`${backendUrl}/nlp/getCitations`);
         const citationsResponse = await fetch(citationsURL.toString(), {
             method: "POST",
             headers: {

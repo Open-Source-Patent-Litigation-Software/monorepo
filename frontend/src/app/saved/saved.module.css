@@ -11,6 +11,7 @@
 .coloredDiv {
   background: #f5efe6;
   padding-top: 5%;
+  padding-bottom: 5%;
   min-height: 110vh;
 }
 
@@ -99,9 +100,13 @@
   font-size: 0.9em;
 }
 
-.removeButton {
-  background-color: #ff4500;
-  color: white;
+.button {
+  --button-bg-color: #ff4500; /* Default background color */
+  --button-hover-bg-color: #ff0000; /* Default hover background color */
+  --button-color: white; /* Default text color */
+
+  background-color: var(--button-bg-color);
+  color: var(--button-color);
   border: none;
   border-radius: 5px;
   padding: 8px 12px;
@@ -112,14 +117,28 @@
   display: inline-block;
 }
 
-.removeButton:hover {
-  background-color: #ff0000;
+.button:hover {
+  background-color: var(--button-hover-bg-color);
   transform: scale(1.05);
 }
 
-.removeButton:active {
+.button:active {
   transform: scale(0.95);
 }
+
+/* Specific button variations */
+.remove {
+  --button-bg-color: #ff4500;
+  --button-hover-bg-color: #ff0000;
+}
+
+.add {
+  --button-bg-color: #28a745;
+  --button-hover-bg-color: #218838;
+  /* top | right | bottom | left */
+  margin: 5px 0 0 1%;
+}
+
 
 /* Media query for smaller screens */
 @media (max-width: 768px) {

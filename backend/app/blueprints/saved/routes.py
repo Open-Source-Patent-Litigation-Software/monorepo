@@ -17,29 +17,57 @@ validator = Auth0JWTBearerTokenValidator(
 require_auth.register_token_validator(validator)
 
 
+# @saved.route("/patent", methods=["POST"])
+# @require_auth("user")
+# def patent():
+#     """Save a patent to the database."""
+#     # TODO: Fix Data Validation
+
+#     # Extract the sub (user ID) from the claims
+#     ctx = require_auth.acquire_token()
+#     userID = ctx["sub"]
+#     # Get JSON Body from HTTP request
+#     data = request.get_json()
+#     # Validate the data
+#     try:
+#         patent_data = PatentData(**data)
+#     except Exception as e:
+#         logger.error(str(e))
+#         return jsonify({"error": str(e)}), 400
+#     try:
+#         saver = DatabaseCallFactory.getHandler(DatabaseCallFactory.RequestType.SAVER)
+#         user = saver.getOrCreateUser(userID)
+#         saver.savePatent(user.id, data)
+#     except Exception as e:
+#         logger.error(str(e))
+#         return jsonify({"error": str(e)}), 400
+#     logger.info(f"Received data: {data}")
+#     return (
+#         jsonify({"response": "DATA SAVED"}),
+#         200,
+#     )
+
+
 @saved.route("/patent", methods=["POST"])
 @require_auth("user")
 def patent():
     """Save a patent to the database."""
-
-    # Extract the sub (user ID) from the claims
+    # TODO: Fix Data Validation
     ctx = require_auth.acquire_token()
-    userID = ctx.get("sub")
-
+    # Extract the sub (user ID) from the claims
+    userID = ctx["sub"]
     # Get JSON Body from HTTP request
     data = request.get_json()
-
     try:
-        validatedData = PatentData(**data)
         saver = DatabaseCallFactory.getHandler(DatabaseCallFactory.RequestType.SAVER)
         user = saver.getOrCreateUser(userID)
-        saver.savePatent(user.id, validatedData)
+        saver.savePatent(user.id, data)
     except Exception as e:
         logger.error(str(e))
         return jsonify({"error": str(e)}), 400
-    logger.info(f"Received data: {validatedData}")
+    logger.info(f"Received data: {data}")
     return (
-        jsonify({"response": "properly worked", "body": validatedData.model_dump()}),
+        jsonify({"response": "DATA SAVED"}),
         200,
     )
 
@@ -65,7 +93,7 @@ def fetchPatents():
 def removePatent():
     """Get all saved patents from the database."""
     data = request.get_json()
-    patentID = data.get("id")
+    patentID = data.get("patent_id")
     try:
         ctx = require_auth.acquire_token()
         userID = ctx.get("sub")
@@ -74,5 +102,26 @@ def removePatent():
         saver.deletePatent(user.id, patentID)
         return jsonify({"Message": "Patent Removed", "patentID": patentID}), 200
     except Exception as e:
+        logger.error(str(e))
+        return jsonify({"error": str(e)}), 400
+
+
+@saved.route("/fetch_one_patent", methods=["POST"])
+def getSavedPatent():
+    """Get all saved patents from the database."""
+    data = request.get_json()
+    patentID = data.get("patent_neon_id")
+    print("patent id: ", patentID)
+    try:
+        fetcher = DatabaseCallFactory.getHandler(
+            DatabaseCallFactory.RequestType.FETCH_PATENT
+        )
+        patent = fetcher.fetchPatent(patentID)
+        if patent:
+            return jsonify({"patent": patent}), 200
+        else:
+            return jsonify({"error": "Patent not found"}), 404
+    except Exception as e:
+        print("FLASK SERVER FAIL")
         logger.error(str(e))
         return jsonify({"error": str(e)}), 400

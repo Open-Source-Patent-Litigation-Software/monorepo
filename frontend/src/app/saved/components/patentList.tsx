@@ -3,6 +3,7 @@ import React from "react";
 import Link from "next/link";
 import styles from "../saved.module.css";
 import { Patent } from "../types";
+import { useRouter } from 'next/navigation'
 
 const IndividualPatent = ({
   patent,
@@ -11,6 +12,9 @@ const IndividualPatent = ({
   patent: Patent;
   removePatent: (id: string) => void;
 }) => {
+
+  const router = useRouter()
+
   const removeHandler = async () => {
     try {
       const response = await fetch("/api/remove_patent", {
@@ -28,6 +32,13 @@ const IndividualPatent = ({
       console.error("Error removing patent:", error);
     }
   };
+
+  const openPatentPage = (e: any) => {
+    const href = `/saved/${patent.neon_patent_id}`
+    console.log("patent:", patent)
+    e.preventDefault()
+    router.push(href)
+  }
 
   return (
     <div className={styles.patentItem}>
@@ -48,12 +59,12 @@ const IndividualPatent = ({
       <div>
         <Link href={patent.patentInfo.www_link}>View on Google Patents</Link>
       </div>
-      {/* <div>
-        <Link href={`/saved/${patent.patentInfo.id}`}>View Patent Data</Link>
-      </div> */}
       <div>
-        <button onClick={removeHandler} className={styles.removeButton}>
+        <button onClick={removeHandler} className={`${styles.button} ${styles.remove}`}>
           Remove
+        </button>
+        <button onClick={openPatentPage} className={`${styles.button} ${styles.add}`}>
+          Open Patent {patent.patentInfo.id}
         </button>
       </div>
     </div>
@@ -72,7 +83,7 @@ const PatentList = ({
     <div className={styles.patentList}>
       {patents.map((patent) => (
         <IndividualPatent
-          key={patent.patentInfo.id}
+          key={patent.neon_patent_id}
           patent={patent}
           removePatent={removePatent}
         />

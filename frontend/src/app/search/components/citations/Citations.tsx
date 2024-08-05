@@ -28,7 +28,22 @@ const Citations: React.FC<CitationsProps> = ({ data, metric, loading }) => {
   };
 
   if (loading) {
-    return <div className={styles.loading}>Loading citations...</div>;
+    return (
+      <div className={styles.skeletonContainer}>
+        <div className={`${styles.skeleton} ${styles.skeletonTitle}`}></div>
+        <div className={styles.skeletonSection}>
+          <div className={`${styles.skeleton} ${styles.skeletonSectionTitle}`}></div>
+          <div className={`${styles.skeleton} ${styles.skeletonParagraph} ${styles.wide}`}></div>
+          <div className={`${styles.skeleton} ${styles.skeletonParagraph} ${styles.medium}`}></div>
+          <div className={`${styles.skeleton} ${styles.skeletonParagraph} ${styles.narrow}`}></div>
+        </div>
+        <div className={styles.skeletonSection}>
+          <div className={`${styles.skeleton} ${styles.skeletonSectionTitle}`}></div>
+          <div className={`${styles.skeleton} ${styles.skeletonParagraph} ${styles.medium}`}></div>
+          <div className={`${styles.skeleton} ${styles.skeletonParagraph} ${styles.wide}`}></div>
+        </div>
+      </div>
+    );
   }
 
   if (!data || !data[metric]) {

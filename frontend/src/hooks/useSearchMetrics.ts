@@ -8,18 +8,19 @@ interface UseFetchMetricsReturn {
   isMetricsLocked: boolean;
   isLoading: boolean;
   fetchMetrics: (patentQuery: string) => Promise<void>;
-  lockMetricsAndSearch: (metrics: string[]) => Promise<void>;
+  lockMetricsAndSearch: (metrics: string[], threshold: number, numPatents: number) => Promise<void>;
   addMetric: () => void;
   removeMetric: (index: number) => void;
   editMetric: (index: number, newValue: string) => void;
   unlockMetrics: () => void;
 }
 
-export const useFetchMetrics = (): UseFetchMetricsReturn => {
+export const useFetchMetrics = () => {
   const [searchResults, setSearchResults] = useState<PatentItem[] | null>(null);
   const [error, setError] = useState<string>("");
   const [metrics, setMetrics] = useState<Metric[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [metricsLoading, setMetricsLoading] = useState<boolean>(false);
+  const [searchLoading, setSearchLoading] = useState<boolean>(false);
   const [isMetricsLocked, setIsMetricsLocked] = useState<boolean>(false);
 
   const addMetric = () => {
@@ -42,7 +43,10 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
   const fetchMetrics = async (patentQuery: string) => {
     try {
       setError("");
-      setIsLoading(true);
+      setMetricsLoading(true);
+      setMetrics([]);
+      setSearchResults(null);
+      setIsMetricsLocked(false);
 
       const response = await fetch('/api/metrics', {
         method: "POST",
@@ -60,11 +64,11 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
       const metricsData = await response.json();
       const metricList: Metric[] = Object.values(metricsData["functions"]);
       setMetrics(metricList);
-      setIsLoading(false);
+      setMetricsLoading(false);
     } catch (e) {
       const error = e as Error;
       setError(error.message);
-      setIsLoading(false);
+      setMetricsLoading(false);
     }
   };  
 
@@ -73,19 +77,26 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
     setSearchResults(null);
   }
 
-  const lockMetricsAndSearch = async (metrics: string[]) => {
+  const lockMetricsAndSearch = async (metrics: string[], threshold: number, numPatents: number) => {
     setIsMetricsLocked(true);
-    setIsLoading(true);
+    setSearchLoading(true);
     try {
         setError("");
         const metricsString = metrics.join("\n");
+
+        const formattedSearch = {
+          metrics: metricsString,
+          threshold: threshold,
+          numPatents: numPatents,
+          user: "user",
+        };
 
         const response = await fetch('/api/search', {
           method: "POST",
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ metricsString }),
+          body: JSON.stringify(formattedSearch),
         });
         
         if (!response.ok) {
@@ -94,13 +105,14 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
         }
     
         const searchData = await response.json();
-        setSearchResults(searchData.results);
-        setIsLoading(false);
+        setSearchResults(searchData);
+        setSearchLoading(false);
       } catch (e) {
         const error = e as Error;
         setError(error.message);
         setSearchResults(null);
-        setIsLoading(false);
+        setSearchLoading(false);
+        setIsMetricsLocked(false);
       }
   };
 
@@ -109,12 +121,14 @@ export const useFetchMetrics = (): UseFetchMetricsReturn => {
     error,
     metrics,
     isMetricsLocked,
-    isLoading,
+    metricsLoading,
+    searchLoading,
     fetchMetrics,
     lockMetricsAndSearch,
     addMetric,
     removeMetric,
     editMetric,
-    unlockMetrics
+    unlockMetrics,
+    setSearchResults
   };
 };

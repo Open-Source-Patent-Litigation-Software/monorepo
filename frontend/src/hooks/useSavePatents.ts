@@ -5,7 +5,6 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 export const useSavePatents = (
   genericInfo: PatentItem,
   search: string,
-  percentages: PercentagesDataType,
   citations: any, // Using 'any' for flexibility with citation data
   summary: string
 ) => {
@@ -16,6 +15,7 @@ export const useSavePatents = (
   
   const savePatent = async (patentJSON: any) => {
     try {
+      console.log("#1 patentJSON", patentJSON);
       const response = await fetch('/api/save_patent', {
         method: "POST",
         headers: {
@@ -34,21 +34,6 @@ export const useSavePatents = (
       console.error(error.message);
     }
   };  
-
-  const parsePercentages = useCallback(
-    (percentages: PercentagesDataType): { [key: string]: any } => {
-      const percentagesJSON: { [key: string]: any } = {};
-      const metricPercentages = percentages.datasets[0].data;
-      const metricLabels = percentages.labels;
-
-      metricLabels.forEach((label, index) => {
-        percentagesJSON[label] = metricPercentages[index];
-      });
-
-      return percentagesJSON;
-    },
-    []
-  );
 
   const parseCitations = useCallback(
     (citations: any): { [key: string]: any } => {
@@ -75,7 +60,6 @@ export const useSavePatents = (
       patentInfo: genericInfo,
       search: search,
       summary: summary,
-      percentages: parsePercentages(percentages),
       citations: parseCitations(citations),
     };
     await savePatent(patentJSON);
@@ -85,9 +69,7 @@ export const useSavePatents = (
   }, [
     genericInfo,
     search,
-    percentages,
     citations,
-    parsePercentages,
     parseCitations,,
     summary
   ]);
