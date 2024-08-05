@@ -48,7 +48,7 @@ def extractSpecificPatentMetrics():
         response = LLMCallFactory.getHandler(
             LLMCallFactory.RequestType.PERCENTAGES, data
         )
-
+        # test
         # return jsonified response
         return jsonify(response), 200
     except ValueError as e:
