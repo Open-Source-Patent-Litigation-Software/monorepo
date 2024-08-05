@@ -18,6 +18,7 @@ class Search:
         self.numPatents = validatedInput.numPatents
         self.nlpURL = os.environ.get("NLP_URL") + "/api/rankScores"
         self.pqai = "https://api.projectpq.ai/search/102"
+        self.nlpHeader = {"key": os.environ.get("NLP_KEY")}
 
     # Helper function to create PatentObject
     def __createPatent(self, patent: dict, scores: list[float]) -> PatentObject:
@@ -91,7 +92,7 @@ class Search:
             "abstracts": abstractsList
         }
 
-        secondRes = requests.post(self.nlpURL, json=jsonData)
+        secondRes = requests.post(self.nlpURL, json=jsonData, headers=self.nlpHeader)
         if secondRes.status_code != 200:
             return jsonify({"message": "Failed to retrieve data from the backend API."}), 500
 
