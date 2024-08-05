@@ -32,3 +32,8 @@ class Metrics(BaseModel):
     
     
     sentences: List[Optional[str]]
+
+class Summaries(BaseModel):
+    
+    
+    summary: Optional[str] = None

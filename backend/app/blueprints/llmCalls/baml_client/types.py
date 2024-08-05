@@ -23,3 +23,8 @@ class Metrics(BaseModel):
     
     
     sentences: List[str]
+
+class Summaries(BaseModel):
+    
+    
+    summary: str

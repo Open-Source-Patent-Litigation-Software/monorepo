@@ -81,6 +81,30 @@ class BamlSyncClient:
       mdl = create_model("ExtractPatentMetricsFromQueryReturnType", inner=(types.Metrics, ...))
       return coerce(mdl, raw.parsed())
     
+    def WordDocSummaries(
+        self,
+        patent_text: str,
+        baml_options: BamlCallOptions = {},
+    ) -> types.Summaries:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      raw = self.__runtime.call_function_sync(
+        "WordDocSummaries",
+        {
+          "patent_text": patent_text,
+        },
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+      mdl = create_model("WordDocSummariesReturnType", inner=(types.Summaries, ...))
+      return coerce(mdl, raw.parsed())
+    
 
 
 
@@ -120,6 +144,39 @@ class BamlStreamClient:
       partial_mdl = create_model("ExtractPatentMetricsFromQueryPartialReturnType", inner=(partial_types.Metrics, ...))
 
       return baml_py.BamlSyncStream[partial_types.Metrics, types.Metrics](
+        raw,
+        lambda x: coerce(partial_mdl, x),
+        lambda x: coerce(mdl, x),
+        self.__ctx_manager.get(),
+      )
+    
+    def WordDocSummaries(
+        self,
+        patent_text: str,
+        baml_options: BamlCallOptions = {},
+    ) -> baml_py.BamlSyncStream[partial_types.Summaries, types.Summaries]:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      raw = self.__runtime.stream_function_sync(
+        "WordDocSummaries",
+        {
+          "patent_text": patent_text,
+        },
+        None,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+
+      mdl = create_model("WordDocSummariesReturnType", inner=(types.Summaries, ...))
+      partial_mdl = create_model("WordDocSummariesPartialReturnType", inner=(partial_types.Summaries, ...))
+
+      return baml_py.BamlSyncStream[partial_types.Summaries, types.Summaries](
         raw,
         lambda x: coerce(partial_mdl, x),
         lambda x: coerce(mdl, x),
