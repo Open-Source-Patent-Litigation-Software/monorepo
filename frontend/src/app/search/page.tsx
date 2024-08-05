@@ -72,8 +72,8 @@ const Index = () => {
   }
 
   const handleTagClick = (index: number) => {
-    if(searchResults != null) {
-      if(selectedTag == index) {
+    if (searchResults != null) {
+      if (selectedTag == index) {
         setSelectedTag(-1);
         setSearchResults(sortPatentItems(searchResults));
       } else {
@@ -88,7 +88,7 @@ const Index = () => {
 
   return (
     <>
-      <div className={styles.colored_div}>
+      <div className={styles.darkGreenBg}>
         <Navbar />
         <div className={styles.animation_container}>
           <div className={styles.searchCard}>
