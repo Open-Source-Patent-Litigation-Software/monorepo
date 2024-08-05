@@ -36,4 +36,7 @@ class Metrics(BaseModel):
 class Summaries(BaseModel):
     
     
+    patent: Optional[str] = None
+    title: Optional[str] = None
+    filing_date: Optional[str] = None
     summary: Optional[str] = None

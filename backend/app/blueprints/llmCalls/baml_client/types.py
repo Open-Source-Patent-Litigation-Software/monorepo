@@ -27,4 +27,7 @@ class Metrics(BaseModel):
 class Summaries(BaseModel):
     
     
+    patent: str
+    title: str
+    filing_date: str
     summary: str

@@ -1,5 +1,8 @@
 // Data Models
 class Summaries {
+  patent string @description("This field should be the patent number.")
+  title string @description("This field should be the title of the patent.")
+  filing_date string @description("This field should be the filing date of the patent.")
   summary string @description("This field should just be a summary of the patent.")
 }
 function WordDocSummaries(patent_text: string) -> Summaries {
@@ -8,8 +11,9 @@ function WordDocSummaries(patent_text: string) -> Summaries {
 
   // BAML prompts use Jinja syntax
   prompt #"
-    I am going to give you a patent abstract and claims section. Your job is to take the patent abstract and claims section and extract a summary from it..
+        I am going to give you a list of patents with their respective claims, abstracts, and titles. For each patent, summarize what the patent is about and its key features in 100 words.
 
+        Make sure to include all of the independent claims in the summary. Below are the patents and their respective claims and abstract sections:
     Search Query Text:
     ---
     {{ patent_text }}
@@ -25,8 +29,9 @@ test TestCoffeBrewingPatent {
   functions [WordDocSummaries]
   args {
     patent_text #"
-      Abstract
+    Abstract
     The coffee maker for brewing powder coffee contained in a cartridge comprises a brewing chamber adapted to receive the cartridge, at least one punching member for punching the cartridge and a pump for feeding brewing water into the brewing chamber. In order to avoid that the prepared coffee shows froth at its surface, the coffee maker comprises means for restricting the amount of water fed by the pump into the brewing chamber per unit of time. This means ensures that the brewing water flows through the cartridge essentially unpressurized.
+    Claims
     1. be used for brewing the coffee machine of containing in the coffee powder of material package, it comprises: the beverage making cavity that is suitable for holding described coffee powder material package; At least one is used for dashing wears the device of described coffee powder material package; With heat is brewed water and infeeds pump in the described beverage making cavity; It is characterized in that, also comprise the device that brews the water yield that infeeds in the restricted unit time optionally in the described beverage making cavity, this device make brew water flow through to not supercharging basically the described coffee powder material package that is arranged in described beverage making cavity with produce non-foam coffee, perhaps make brew water under high pressure flow through be arranged in described beverage making cavity described coffee powder material package to produce espresso.
     2. according to the coffee machine of claim 1, it is characterized in that: be used for limiting the water yield that brews that infeeds described beverage making cavity in the described device restricted unit time that brews the water yield and be no more than per hour 12 liters.
     3. according to the coffee machine of claim 1, it is characterized in that: be provided with and be used for dashing at least two punching parts wearing material package bottom and material package lid, be used for utilizing described pump to dash by described punching part before being conducted to material package and wear the described bottom of described material package and the device of described lid brewing water thereby be provided with.
