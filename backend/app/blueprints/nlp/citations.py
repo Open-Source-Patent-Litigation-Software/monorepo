@@ -16,6 +16,8 @@ class Citations:
 
         self.sections = ["claims", "abstract", "description"]
         self.nlpURL = os.environ.get("NLP_URL") + "/api/citation"
+        self.nlpHeader = {"key": os.environ.get("NLP_KEY")}
+
     
     def __scrapePatent(self, sections: List[str], url: str) -> List[str]:
         # create the scraping object
@@ -43,7 +45,7 @@ class Citations:
             "description": scrapedData[2]
         }
 
-        response = requests.post(self.nlpURL, json=jsonData)
+        response = requests.post(self.nlpURL, json=jsonData, headers=self.nlpHeader)
 
         # implement error hanlding!
         data = response.json().get("data")
