@@ -21,7 +21,6 @@ const Index: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [notFoundPatents, setNotFoundPatents] = useState<string[]>([]);
     const [additionalData, setAdditionalData] = useState<string | null>(null);
-    const [progress, setProgress] = useState<number>(0);
 
     const generateDocX = async (bulkSummaries: PatentSummary[]): Promise<void> => {
         const doc = new Document({
@@ -56,30 +55,26 @@ const Index: React.FC = () => {
 
     const handleDownload = async (): Promise<void> => {
         setIsLoading(true);
-        setProgress(0);
 
-        const eventSource = new EventSource(`/api/bulk?patent_ids=${encodeURIComponent(JSON.stringify(patents))}`);
+        try {
+            const response = await fetch(`/api/bulk?patent_ids=${encodeURIComponent(JSON.stringify(patents))}`);
 
-        const bulkSummaries: PatentSummary[] = [];
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
-        eventSource.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            bulkSummaries.push(data);
-            console.log('Received summary:', bulkSummaries);
-            setProgress(bulkSummaries.length);
-        };
+            const data = await response.json();
 
-        eventSource.onerror = (error) => {
-            console.error('EventSource failed:', error);
-            eventSource.close();
+            if (data.summaries && Array.isArray(data.summaries)) {
+                await generateDocX(data.summaries);
+            } else {
+                console.error('Unexpected response format:', data);
+            }
+        } catch (error) {
+            console.error('Error fetching summaries:', error);
+        } finally {
             setIsLoading(false);
-        };
-
-        eventSource.addEventListener('close', async () => {
-            eventSource.close();
-            setIsLoading(false);
-            await generateDocX(bulkSummaries);
-        });
+        }
     };
 
     const handleFormSubmit = async () => {
@@ -117,7 +112,16 @@ const Index: React.FC = () => {
                 <Navbar />
                 <div className={styles.container}>
                     <h1 className={styles.heading}>Bulk Summary Download</h1>
-                    <PatentInput notFoundPatents={notFoundPatents} handleDownload={handleDownload} handleFormSubmit={handleFormSubmit} handleInputChange={handleInputChange} handlePatentChange={handlePatentChange} handleRemoveBox={handleRemoveBox} patents={patents} loading={isLoading}/>
+                    <PatentInput
+                        notFoundPatents={notFoundPatents}
+                        handleDownload={handleDownload}
+                        handleFormSubmit={handleFormSubmit}
+                        handleInputChange={handleInputChange}
+                        handlePatentChange={handlePatentChange}
+                        handleRemoveBox={handleRemoveBox}
+                        patents={patents}
+                        loading={isLoading}
+                    />
                 </div>
                 <div
                     style={{

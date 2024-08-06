@@ -54,5 +54,5 @@ class Bulk(LlmRequests):
                 f"Claims:\n{claims}\n"
                 f"Abstract:\n{abstract}\n\n"
             )
-        LLM_Response = self.baml_generate_summaries(injection=patentInjection)
-        return LLM_Response
+        bamlResponse = self.baml_generate_summaries(injection=patentInjection)
+        return bamlResponse
