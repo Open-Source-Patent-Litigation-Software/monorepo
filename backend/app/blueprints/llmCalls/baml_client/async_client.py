@@ -87,7 +87,7 @@ class BamlAsyncClient:
         self,
         patent_text: str,
         baml_options: BamlCallOptions = {},
-    ) -> types.Summaries:
+    ) -> types.SummariesPayload:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb
@@ -104,7 +104,7 @@ class BamlAsyncClient:
         tb,
         __cr__,
       )
-      mdl = create_model("WordDocSummariesReturnType", inner=(types.Summaries, ...))
+      mdl = create_model("WordDocSummariesReturnType", inner=(types.SummariesPayload, ...))
       return coerce(mdl, raw.parsed())
     
 
@@ -155,7 +155,7 @@ class BamlStreamClient:
         self,
         patent_text: str,
         baml_options: BamlCallOptions = {},
-    ) -> baml_py.BamlStream[partial_types.Summaries, types.Summaries]:
+    ) -> baml_py.BamlStream[partial_types.SummariesPayload, types.SummariesPayload]:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb
@@ -174,10 +174,10 @@ class BamlStreamClient:
         __cr__,
       )
 
-      mdl = create_model("WordDocSummariesReturnType", inner=(types.Summaries, ...))
-      partial_mdl = create_model("WordDocSummariesPartialReturnType", inner=(partial_types.Summaries, ...))
+      mdl = create_model("WordDocSummariesReturnType", inner=(types.SummariesPayload, ...))
+      partial_mdl = create_model("WordDocSummariesPartialReturnType", inner=(partial_types.SummariesPayload, ...))
 
-      return baml_py.BamlStream[partial_types.Summaries, types.Summaries](
+      return baml_py.BamlStream[partial_types.SummariesPayload, types.SummariesPayload](
         raw,
         lambda x: coerce(partial_mdl, x),
         lambda x: coerce(mdl, x),

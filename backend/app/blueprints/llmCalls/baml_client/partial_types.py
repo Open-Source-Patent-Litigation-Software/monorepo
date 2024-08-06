@@ -33,7 +33,12 @@ class Metrics(BaseModel):
     
     sentences: List[Optional[str]]
 
-class Summaries(BaseModel):
+class SummariesPayload(BaseModel):
+    
+    
+    summaries: List["Summary"]
+
+class Summary(BaseModel):
     
     
     patent: Optional[str] = None

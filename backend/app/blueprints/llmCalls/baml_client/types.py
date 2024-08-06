@@ -24,7 +24,12 @@ class Metrics(BaseModel):
     
     sentences: List[str]
 
-class Summaries(BaseModel):
+class SummariesPayload(BaseModel):
+    
+    
+    summaries: List["Summary"]
+
+class Summary(BaseModel):
     
     
     patent: str
