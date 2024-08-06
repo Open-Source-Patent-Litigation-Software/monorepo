@@ -31,7 +31,6 @@ class Bulk(LlmRequests):
         summaries = bamlClient.WordDocSummaries(injection)
         return summaries
 
-
     def handleRequest(self):
         """Handle the request."""
 
@@ -55,11 +54,5 @@ class Bulk(LlmRequests):
                 f"Claims:\n{claims}\n"
                 f"Abstract:\n{abstract}\n\n"
             )
-        test_response = self.baml_generate_summaries(injection=patentInjection)
-        print(type(test_response))
-        print("TEST_RESPONSE: ", test_response)
-        finalTemplate = self.generate_summary(injection=patentInjection)
-        llmResponse = self.makeRequest(
-            template=finalTemplate, validator=BulkExtraction, args={}
-        )
-        return llmResponse
+        LLM_Response = self.baml_generate_summaries(injection=patentInjection)
+        return LLM_Response
