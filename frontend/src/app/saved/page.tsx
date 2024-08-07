@@ -52,7 +52,7 @@ const Page = () => {
           ) : (
             <PatentList patents={filteredPatents} removePatent={removePatent} />
           )}
-        </div>
+        </div>xp
       </div>
       <Footer />
     </>

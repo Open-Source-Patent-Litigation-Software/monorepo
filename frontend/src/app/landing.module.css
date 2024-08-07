@@ -1,7 +1,7 @@
 .mainContainer {
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(-45deg, #1b3c11, #173713, #0d2b07, #051b11);
+  background: linear-gradient(-45deg, #1f4313, #0c2022, #1a4d2e, #051b11);
   background-size: 500% 500%;
   animation: gradient 30s ease infinite;
   display: flex;
