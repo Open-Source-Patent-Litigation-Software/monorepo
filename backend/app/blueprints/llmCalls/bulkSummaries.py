@@ -34,7 +34,7 @@ class Bulk(LlmRequests):
     def handleRequest(self):
         """Handle the request."""
 
-        # Query the PQ AI API for the patent information
+        # Query the PQ AI API for the patent inform ation
         rawResults = []
         for patentNumber in self.patentNumbers:
             rawResults.append(self.query_pq_ai(patentNumber))
