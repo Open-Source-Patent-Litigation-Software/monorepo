@@ -2,5 +2,6 @@
     "files.associations": {
         "*.pl": "prolog",
         "set": "cpp"
-    }
+    },
+    "baml.cliPath":"/Users/devk/Developer/EasyIP/backend/env/bin/baml-cli",
 }
