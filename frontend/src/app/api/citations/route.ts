@@ -26,11 +26,8 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
             body: JSON.stringify(body),
         });
 
-
-        console.log(citationsResponse);
         
         if (!citationsResponse.ok) {
-            console.log("failed here");
             throw new Error(`HTTP error! :( status: ${citationsResponse.status}`);
         }
 

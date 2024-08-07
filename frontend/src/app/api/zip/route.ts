@@ -25,13 +25,11 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
         });
 
         if (!response.ok) {
-            console.log(response);
             return NextResponse.json({ message: 'Error fetching PDF links' }, { status: response.status });
         }
 
         const { zip_file, additional_data } = await response.json();
         if (zip_file === "") {
-            console.log("none found");
             return NextResponse.json({ message: 'No valid patents found', not_found: additional_data.not_found }, { status: 200 });
         }
 

@@ -15,7 +15,6 @@ export const useSavePatents = (
   
   const savePatent = async (patentJSON: any) => {
     try {
-      console.log("#1 patentJSON", patentJSON);
       const response = await fetch('/api/save_patent', {
         method: "POST",
         headers: {
@@ -25,7 +24,6 @@ export const useSavePatents = (
       });
   
       if (!response.ok) {
-        console.log(response);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 

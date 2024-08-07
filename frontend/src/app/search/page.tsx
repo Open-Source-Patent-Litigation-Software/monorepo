@@ -83,9 +83,6 @@ const Index = () => {
     }
   };
 
-  console.log("search loading: ", searchLoading);
-  console.log("metrics lock", isMetricsLocked);
-
   return (
     <>
       <div className={styles.darkGreenBg}>

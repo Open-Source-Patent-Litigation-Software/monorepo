@@ -18,7 +18,6 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
     const IDSearchURL = new URL(`${backendUrl}/patents/getPatentsByIDs`);
 
     try {
-        console.log("IDSearchURL:", IDSearchURL.toString());
 
         const responses = await Promise.all(
             queries.map(async (query: string) => {

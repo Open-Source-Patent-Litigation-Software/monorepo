@@ -47,7 +47,6 @@ const Index: React.FC = () => {
         try {
             const blob = await Packer.toBlob(doc);
             saveAs(blob, 'patent_summaries.docx');
-            console.log('Document generated and saved');
         } catch (error) {
             console.error('Error generating document:', error);
         }

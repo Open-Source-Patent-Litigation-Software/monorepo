@@ -57,7 +57,6 @@ export const useFetchMetrics = () => {
       });
   
       if (!response.ok) {
-        console.log(response);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
   
@@ -100,7 +99,6 @@ export const useFetchMetrics = () => {
         });
         
         if (!response.ok) {
-          console.log(response);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
     

@@ -22,7 +22,6 @@ export const GET = withApiAuthRequired(async function GET(req: NextRequest) {
         });
 
         if (!response.ok) {
-            console.log("failed here");
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 

@@ -89,7 +89,6 @@ const Page: React.FC = () => {
           }),
         });
         const data = await response.json();
-        console.log("patent-data:", data);
         setPatent(data.patent);
 
         const scores = data.patent.patentInfo.score.scores;
@@ -135,6 +134,12 @@ const Page: React.FC = () => {
           <div className={styles.patentDetails}>
             <h1 className={styles.patentTitle}>{patentInfo.title}</h1>
             <p>
+              <strong>Your Search:</strong> &quot;{search}&quot;
+            </p>
+            <p>
+              <strong>Publication ID:</strong> {patentInfo.publication_id}
+            </p>
+            <p>
               <strong>Inventors:</strong> {patentInfo.inventors.join(", ")}
             </p>
             <p>
@@ -146,9 +151,6 @@ const Page: React.FC = () => {
             </p>
             <p>
               <strong>Abstract:</strong> {patentInfo.abstract}
-            </p>
-            <p>
-              <strong>Search Term:</strong> {search}
             </p>
             <div>
               <a

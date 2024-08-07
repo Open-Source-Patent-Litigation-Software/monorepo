@@ -42,7 +42,6 @@ export const fetchCitation = async (
 
         // Parse the JSON response from the API
         const citationData = await citationResponse.json();
-        console.log(citationData);
         // Cache the fetched citation data
         // Update the citation data state with the newly fetched data
         setCitationsData(citationData);

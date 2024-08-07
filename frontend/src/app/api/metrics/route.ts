@@ -37,7 +37,6 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
 
 
     if (!metricsResponse.ok) {
-      console.log(metricsResponse);
       throw new Error(`HTTP error! :( status: ${metricsResponse.status}`);
     }
 

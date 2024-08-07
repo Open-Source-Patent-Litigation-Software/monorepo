@@ -33,7 +33,6 @@ const options = {
 }
 
 const PatentChart: React.FC<PatentChartProps> = ({ data }) => {
-    console.log("PatentChart", data);
     return <Radar data={data} options={options} />;
 };
 

@@ -14,9 +14,7 @@ export const fetchAuthToken = async () => {
             }),
         });
     
-        if (!response.ok) {
-            console.log("error");
-            
+        if (!response.ok) {            
             throw new Error(`HTTP error! status: ${response.status}`);
         }
     

@@ -35,7 +35,6 @@ const IndividualPatent = ({
 
   const openPatentPage = (e: any) => {
     const href = `/saved/${patent.neon_patent_id}`
-    console.log("patent:", patent)
     e.preventDefault()
     router.push(href)
   }

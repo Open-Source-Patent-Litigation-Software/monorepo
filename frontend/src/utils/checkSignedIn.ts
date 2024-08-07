@@ -27,7 +27,6 @@ export default function CheckSignedIn(): void {
                 }
 
                 const data: User = await response.json();
-                console.log(data);
             } catch (error) {
                 console.error("Error checking sign in:", error);
             }
