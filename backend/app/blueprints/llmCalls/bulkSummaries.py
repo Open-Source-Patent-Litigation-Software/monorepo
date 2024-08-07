@@ -1,8 +1,9 @@
 from .llmRequests import LlmRequests
 from .schemas import BulkInput, BulkExtraction
 import requests
-from bs4 import BeautifulSoup
 from app.settings import PQ_AI_KEY
+from .baml_client.sync_client import b as bamlClient
+from .baml_client.types import SummariesPayload
 
 
 class Bulk(LlmRequests):
@@ -26,30 +27,9 @@ class Bulk(LlmRequests):
         response = requests.get(url, params=params)
         return response.json()
 
-    def generate_summary(self, injection: str):
-        template = f"""
-        I am going to give you a list of patents with their respective claims, abstracts, and titles. For each patent, summarize what the patent is about and its key features in 100 words.
-
-        Make sure to include all of the independent claims in the summary. Below are the patents and their respective claims and abstract sections:
-
-        {injection}
-
-        Output your response in JSON format like this:
-        ```json
-        {{
-            "summaries": [
-                {{
-                    "patent": "patent_number",
-                    "title": "title_text",
-                    "filing_date": "filing_date_text",
-                    "summary": "summary_text"
-                }},
-                ...
-            ]
-        }}
-        ```
-        """
-        return template
+    def baml_generate_summaries(self, injection: str) -> SummariesPayload:
+        summaries = bamlClient.WordDocSummaries(injection)
+        return summaries
 
     def handleRequest(self):
         """Handle the request."""
@@ -74,8 +54,5 @@ class Bulk(LlmRequests):
                 f"Claims:\n{claims}\n"
                 f"Abstract:\n{abstract}\n\n"
             )
-        finalTemplate = self.generate_summary(injection=patentInjection)
-        llmResponse = self.makeRequest(
-            template=finalTemplate, validator=BulkExtraction, args={}
-        )
-        return llmResponse
+        bamlResponse = self.baml_generate_summaries(injection=patentInjection)
+        return bamlResponse
