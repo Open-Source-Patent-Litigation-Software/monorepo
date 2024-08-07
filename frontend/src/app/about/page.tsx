@@ -40,23 +40,26 @@ const TeamCard: React.FC = () => {
       name: "Cole Morehouse",
       image: "/headshots/cole_headshot.jpeg",
       role: "CEO / Product Manager",
-      blurb: "Cole brings a wealth of experience in product management and a vision for revolutionizing IP research. He is currently a senior at the University of Michigan and is planning to pursue a graduate degree in law.",
-      linkedin: "https://www.linkedin.com/in/cole-morehouse-b685b5220/"
+      blurb:
+        "Cole brings a wealth of experience in product management and a vision for revolutionizing IP research. He is currently a senior at the University of Michigan and is planning to pursue a graduate degree in law.",
+      linkedin: "https://www.linkedin.com/in/cole-morehouse-b685b5220/",
     },
     {
       name: "Dev Kunjadia",
       image: "/headshots/dev_headshot.jpeg",
       role: "CTO / Founding Engineer",
-      blurb: "Dev is an engineer with a passion for creating innovative AI solutions for complex problems. He is currently a senior at the University of Michigan studying Computer Science and plans to pursue a career in AI infrastructure.",
-      linkedin: "https://www.linkedin.com/in/dev-kunjadia/"
+      blurb:
+        "Dev is an engineer with a passion for creating innovative AI solutions for complex problems. He is currently a senior at the University of Michigan studying Computer Science and plans to pursue a career in AI infrastructure.",
+      linkedin: "https://www.linkedin.com/in/dev-kunjadia/",
     },
     {
       name: "Alec Palo",
       image: "/headshots/alec_headshot.jpeg",
       role: "CFO / Founding Engineer",
-      blurb: "Alec combines financial acumen with engineering expertise to drive DulanyAI's growth and sustainability. He is a graduate of the University of Michigan - Ross School of Business and is currently working at Radient Nuclear.",
-      linkedin: "https://www.linkedin.com/in/apalo/"
-    }
+      blurb:
+        "Alec combines financial acumen with engineering expertise to drive DulanyAI's growth and sustainability. He is a graduate of the University of Michigan - Ross School of Business and is currently working at Radient Nuclear.",
+      linkedin: "https://www.linkedin.com/in/apalo/",
+    },
   ];
 
   const [currentMember, setCurrentMember] = useState<number>(0);
@@ -89,7 +92,11 @@ const TeamCard: React.FC = () => {
   return (
     <div className={styles.cardContainer} onClick={handleClick}>
       <div className={styles.card}>
-        <div className={`${styles.cardContent} ${isTransitioning ? styles.fadeOut : styles.fadeIn}`}>
+        <div
+          className={`${styles.cardContent} ${
+            isTransitioning ? styles.fadeOut : styles.fadeIn
+          }`}
+        >
           <Image
             src={member.image}
             alt={member.name}
@@ -102,8 +109,16 @@ const TeamCard: React.FC = () => {
             <p className={styles.memberRole}>{member.role}</p>
             <p className={styles.memberBlurb}>{member.blurb}</p>
           </div>
-          <a className={`${styles.socialContainer} ${styles.containerThree}`} href={member.linkedin} target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 448 512" className={`${styles.socialSvg} ${styles.linkdinSvg}`}>
+          <a
+            className={`${styles.socialContainer} ${styles.containerThree}`}
+            href={member.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg
+              viewBox="0 0 448 512"
+              className={`${styles.socialSvg} ${styles.linkdinSvg}`}
+            >
               <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"></path>
             </svg>
           </a>
@@ -127,9 +142,9 @@ function Index() {
             What is DulanyAI?
           </h1>
           <p className={`${styles.text} ${styles.darkText}`}>
-            DulanyAI is a platform that makes researching intellectual property
-            easy by providing tools and resources to help you understand the
-            process of protecting your intellectual property.
+            DulanyAI is a platform designed to simplify the research process for
+            intellectual property by offering tools and resources that guide you
+            through the steps of protecting your innovations.
           </p>
         </section>
 

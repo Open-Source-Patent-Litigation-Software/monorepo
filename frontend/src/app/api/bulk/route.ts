@@ -26,23 +26,14 @@ export const GET = withApiAuthRequired(async function GET(req: NextRequest) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const reader = response.body?.getReader();
-        const stream = new ReadableStream({
-            async start(controller) {
-                while (true) {
-                    const { done, value } = await reader!.read();
-                    if (done) break;
-                    controller.enqueue(value);
-                }
-                controller.close();
-            },
-        });
+        // Parse the JSON response
+        const data = await response.json();
 
-        return new Response(stream, {
+        // Return the JSON data
+        return new Response(JSON.stringify(data), {
             headers: {
-                'Content-Type': 'text/event-stream',
+                'Content-Type': 'application/json',
                 'Cache-Control': 'no-cache',
-                'Connection': 'keep-alive',
             },
         });
     } catch (error) {

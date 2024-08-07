@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, Response, stream_with_context
+from flask import Blueprint, jsonify, request, Response
 from .factory import LLMCallFactory
 import logging
 from authlib.integrations.flask_oauth2 import ResourceProtector
@@ -13,6 +13,7 @@ validator = Auth0JWTBearerTokenValidator(
     "dev-giv3drwd5zd1cqsb.us.auth0.com", "http://localhost:8000"
 )
 require_auth.register_token_validator(validator)
+
 
 @llmCalls.route("/obtainMetrics", methods=["POST"])
 @require_auth("user")
@@ -35,6 +36,7 @@ def obtainMetrics():
         # Handle any other unexpected errors
         logger.error(str(e))
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
+
 
 @llmCalls.route("/extractSpecificPatentMetrics", methods=["POST"])
 @require_auth("user")
@@ -60,6 +62,7 @@ def extractSpecificPatentMetrics():
         logger.error(str(e))
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
 
+
 @llmCalls.route("/getSummary", methods=["POST"])
 @require_auth("user")
 def getSummary():
@@ -81,6 +84,7 @@ def getSummary():
         # Handle any other unexpected errors
         logger.error(str(e))
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
+
 
 @llmCalls.route("/getPatent", methods=["POST"])
 @require_auth("user")
@@ -111,27 +115,12 @@ def getBulkSummaries():
     try:
         data = request.get_json()
 
-        def generate():
-            response = LLMCallFactory.getHandler(LLMCallFactory.RequestType.BULK, data)
+        response = LLMCallFactory.getHandler(
+            LLMCallFactory.RequestType.BULK, data
+        ).model_dump_json()
 
-            # Check if response is a dictionary and has a 'summaries' key
-            if isinstance(response, dict) and "summaries" in response:
-                summaries = response["summaries"]
-                # If summaries is a list, yield each item separately
-                if isinstance(summaries, list):
-                    for item in summaries:
-                        yield f"data: {json.dumps(item)}\n\n"
-                else:
-                    # If it's not a list, yield the entire summaries object
-                    yield f"data: {json.dumps(summaries)}\n\n"
-            else:
-                # If response is not in expected format, yield it as is
-                yield f"data: {json.dumps(response)}\n\n"
-
-            # Send a 'close' event to signal the end of the stream
-            yield "event: close\ndata: Stream finished\n\n"
-
-        return Response(stream_with_context(generate()), mimetype="text/event-stream")
+        # Check if response is a dictionary and has a 'summaries' key
+        return response, 200
     except ValueError as e:
         logger.error(str(e))
         return jsonify({"error": str(e)}), 400

@@ -83,6 +83,30 @@ class BamlAsyncClient:
       mdl = create_model("ExtractPatentMetricsFromQueryReturnType", inner=(types.Metrics, ...))
       return coerce(mdl, raw.parsed())
     
+    async def WordDocSummaries(
+        self,
+        patent_text: str,
+        baml_options: BamlCallOptions = {},
+    ) -> types.SummariesPayload:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      raw = await self.__runtime.call_function(
+        "WordDocSummaries",
+        {
+          "patent_text": patent_text,
+        },
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+      mdl = create_model("WordDocSummariesReturnType", inner=(types.SummariesPayload, ...))
+      return coerce(mdl, raw.parsed())
+    
 
 
 class BamlStreamClient:
@@ -121,6 +145,39 @@ class BamlStreamClient:
       partial_mdl = create_model("ExtractPatentMetricsFromQueryPartialReturnType", inner=(partial_types.Metrics, ...))
 
       return baml_py.BamlStream[partial_types.Metrics, types.Metrics](
+        raw,
+        lambda x: coerce(partial_mdl, x),
+        lambda x: coerce(mdl, x),
+        self.__ctx_manager.get(),
+      )
+    
+    def WordDocSummaries(
+        self,
+        patent_text: str,
+        baml_options: BamlCallOptions = {},
+    ) -> baml_py.BamlStream[partial_types.SummariesPayload, types.SummariesPayload]:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      raw = self.__runtime.stream_function(
+        "WordDocSummaries",
+        {
+          "patent_text": patent_text,
+        },
+        None,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+
+      mdl = create_model("WordDocSummariesReturnType", inner=(types.SummariesPayload, ...))
+      partial_mdl = create_model("WordDocSummariesPartialReturnType", inner=(partial_types.SummariesPayload, ...))
+
+      return baml_py.BamlStream[partial_types.SummariesPayload, types.SummariesPayload](
         raw,
         lambda x: coerce(partial_mdl, x),
         lambda x: coerce(mdl, x),

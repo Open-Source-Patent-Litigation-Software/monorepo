@@ -32,3 +32,16 @@ class Metrics(BaseModel):
     
     
     sentences: List[Optional[str]]
+
+class SummariesPayload(BaseModel):
+    
+    
+    summaries: List["Summary"]
+
+class Summary(BaseModel):
+    
+    
+    patent: Optional[str] = None
+    title: Optional[str] = None
+    filing_date: Optional[str] = None
+    summary: Optional[str] = None

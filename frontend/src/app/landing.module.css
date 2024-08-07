@@ -36,13 +36,13 @@
 }
 
 .title {
-  font-size: 8rem;
+  font-size: 7rem;
   margin-bottom: 3rem;
   color: #ffffff; /* Make title text white */
 }
 
 .landingCaption {
-  font-size: 4rem;
+  font-size: 3rem;
   margin-bottom: 4rem;
   margin-top: 3rem;
 }
@@ -70,7 +70,8 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-top: 2rem;
+  margin-top: 1.9rem;
+  margin-bottom: 1.8rem;
 }
 
 .demoButton {
@@ -164,13 +165,17 @@
 
 @media (max-width: 768px) {
   .title {
-    font-size: 4rem;
+    font-size: 3.5rem;
   }
   
   .subtitle {
-    font-size: 3rem;
+    font-size: 2.3rem;
   }
-  
+
+  .landingCaption {
+    font-size: 2.3rem
+  }
+
   .text {
     font-size: 1.8em;
   }
@@ -187,4 +192,45 @@
     text-align: center;
     align-items: center;
   }
+}
+
+@media (max-height: 768px) {
+  .title {
+    padding-top: 155px;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .landingCaption {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    margin-top: .5rem;
+  }
+  
+  .subtitle {
+    font-size: 2rem;
+  }
+  
+  .text {
+    font-size: 1.4em;
+  }
+  
+  .section {
+    padding: 10% 10%;
+  }
+  
+  .sideBySideContainer {
+    flex-direction: column;
+  }
+  
+  .textWrapper, .imageWrapper {
+    text-align: center;
+    align-items: center;
+  }
+
+  .demoButton {
+    padding: 10px 20px;
+    font-size: 1.6em;
+  }
+
 }

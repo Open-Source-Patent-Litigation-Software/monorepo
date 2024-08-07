@@ -55,9 +55,3 @@ test TestCoffeePrompt {
     "#
   }
 }
-
-generator bamlMetricClient {
- output_type "python/pydantic"
- output_dir "../"
- version "0.52.1"
-}
