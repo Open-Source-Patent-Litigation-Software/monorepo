@@ -218,6 +218,10 @@
   .section {
     padding: 10% 10%;
   }
+
+  .firstSection {
+    height: fit-content;
+  }
   
   .sideBySideContainer {
     flex-direction: column;
