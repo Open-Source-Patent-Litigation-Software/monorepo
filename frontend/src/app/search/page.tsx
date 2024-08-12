@@ -11,8 +11,12 @@ import useMetricSearchStateStore from "@/stores/useMetricStore";
 import styles from "./styles.module.css";
 import { useFetchMetrics } from "@/hooks/useSearchMetrics";
 import { PatentItem } from "@/types/types";
+import PopUpModal from "../../_components/popup/popup";
 
-function sortPatentItems(items: PatentItem[], scoreIndex?: number): PatentItem[] {
+function sortPatentItems(
+  items: PatentItem[],
+  scoreIndex?: number
+): PatentItem[] {
   if (scoreIndex !== undefined) {
     // Sort by individual score at the given index
     return items.sort((a, b) => {
@@ -44,7 +48,7 @@ const Index = () => {
     removeMetric,
     editMetric,
     unlockMetrics,
-    setSearchResults
+    setSearchResults,
   } = useFetchMetrics();
 
   const handleFetchMetrics = () => {
@@ -55,9 +59,11 @@ const Index = () => {
     lockMetricsAndSearch(metrics, threshold, numSearches);
   };
 
+  const [showModal, setShowModal] = useState(false);
+
   useEffect(() => {
     if (error) {
-      alert(error);
+      setShowModal(true);
     }
   }, [error]);
 
@@ -65,11 +71,11 @@ const Index = () => {
 
   const handleThresholdChange = (value: number) => {
     setThreshold(value);
-  }
+  };
 
   const handleNumPatentsChange = (value: number) => {
     setNumSearches(value);
-  }
+  };
 
   const handleTagClick = (index: number) => {
     if (searchResults != null) {
@@ -88,14 +94,19 @@ const Index = () => {
 
   return (
     <>
+      {showModal && (
+        <PopUpModal
+          title="Error!"
+          error={error || "An unexpected error occured. Please try again later"}
+          onClose={() => setShowModal(false)}
+        />
+      )}
       <div className={styles.darkGreenBg}>
         <Navbar />
         <div className={styles.animation_container}>
           <div className={styles.searchCard}>
             <div className={styles.headerContainer}>
-              <h1 className={styles.headerTitle}>
-                Search for Patents
-              </h1>
+              <h1 className={styles.headerTitle}>Search for Patents</h1>
             </div>
             <div className={styles.search_container}>
               <textarea
@@ -152,15 +163,18 @@ const Index = () => {
               )}
             </AnimatePresence>
             <AnimatePresence>
-              {!searchResults && metrics.length === 0 && !searchLoading && !metricsLoading && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <SearchText />
-                </motion.div>
-              )}
+              {!searchResults &&
+                metrics.length === 0 &&
+                !searchLoading &&
+                !metricsLoading && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <SearchText />
+                  </motion.div>
+                )}
             </AnimatePresence>
           </div>
         </div>

@@ -6,13 +6,17 @@ import styles from "./popup.module.css";
 interface PopUpProps {
   title: string;
   error: string;
+  onClose: () => void;
 }
 
-const PopUpModal: React.FC<PopUpProps> = ({ title, error }) => {
+const PopUpModal: React.FC<PopUpProps> = ({ title, error, onClose }) => {
   const [modal, setModal] = useState(true);
 
   const toggleModal = () => {
     setModal(!modal);
+    if (modal) {
+      onClose();
+    }
   };
 
   useEffect(() => {

@@ -34,8 +34,8 @@
 }
 
 .search_container:focus-within {
-  border: 1px solid #8AA76F;
-  box-shadow: 0 0 0 2px #8AA76F;
+  border: 1px solid #1f4313;
+  box-shadow: 0 0 0 2px #1f4313;
 }
 
 .search_textarea {
@@ -53,7 +53,7 @@
 
 .search_button {
   padding: 43px 20px;
-  background-color: #9DC183;
+  background-color: #153C24;
   box-shadow: none;
   color: white;
   border: none;
@@ -68,8 +68,7 @@
 }
 
 .search_button:hover {
-  background-color: #79915E;
-  color: #ddd;
+  background-color: #4F6F52;
 }
 
 /* Slider Styles */

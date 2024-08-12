@@ -25,7 +25,7 @@ body.activeModal {
     line-height: 1.4;
     background: #F1F1F1;
     padding: 14px 28px;
-    border-radius: 3px;
+    border-radius: 20px;
     max-height: 100vw;
     max-width: 500px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
