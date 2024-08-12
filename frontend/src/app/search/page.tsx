@@ -97,7 +97,9 @@ const Index = () => {
       {showModal && (
         <PopUpModal
           title="Error!"
-          error={error || "An unexpected error occured. Please try again later"}
+          error={
+            error || "An unexpected error occured. Please try again later."
+          }
           onClose={() => setShowModal(false)}
         />
       )}
