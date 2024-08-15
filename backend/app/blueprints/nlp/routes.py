@@ -38,7 +38,7 @@ def getCitations():
 
 
 @nlp.route("/searchPatents", methods=["POST"])
-# @require_auth("user")
+@require_auth("user")
 def patentRetrievalRoute():
     """Retrieve prior-art documents with text query."""
     try:

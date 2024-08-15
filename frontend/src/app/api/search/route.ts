@@ -31,7 +31,6 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
         }
 
         const DynamoIdList = await searchResponse.json();
-        console.log(DynamoIdList);
         return NextResponse.json(DynamoIdList);
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 500 });

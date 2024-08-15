@@ -22,6 +22,7 @@ export const useFetchMetrics = () => {
   const [metricsLoading, setMetricsLoading] = useState<boolean>(false);
   const [searchLoading, setSearchLoading] = useState<boolean>(false);
   const [isMetricsLocked, setIsMetricsLocked] = useState<boolean>(false);
+  const [dynamoInstanceIds, setDynamoInstanceIds] = useState<string[]>([]);
 
   const addMetric = () => {
     if (metrics.length >= 10 || isMetricsLocked) return;
@@ -104,8 +105,9 @@ export const useFetchMetrics = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
     
-        const searchData = await response.json();
-        setSearchResults(searchData);
+        const dynamoInstanceIds = await response.json();
+        console.log(dynamoInstanceIds);
+        setDynamoInstanceIds(dynamoInstanceIds)
         setSearchLoading(false);
       } catch (e) {
         const error = e as Error;
@@ -123,12 +125,13 @@ export const useFetchMetrics = () => {
     isMetricsLocked,
     metricsLoading,
     searchLoading,
+    dynamoInstanceIds,
     fetchMetrics,
     lockMetricsAndSearch,
     addMetric,
     removeMetric,
     editMetric,
     unlockMetrics,
-    setSearchResults
+    setSearchResults,
   };
 };
