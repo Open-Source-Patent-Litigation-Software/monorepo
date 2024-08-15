@@ -23,7 +23,7 @@ def getCitations():
         data = request.get_json()
 
         # get the response from the factory
-        response = NLPFactory.getHandler(NLPFactory.RequestType.CITATIONS, data)
+        response = NLPFactory.getHandler(NLPFactory.RequestType.CITATIONS, data)  # type: ignore
 
         # return jsonified response
         return jsonify(response), 200
@@ -60,7 +60,7 @@ def patentRetrievalRoute():
         searchPopulator.start()
 
         # return jsonified response
-        response = {"dynamoInstanceIds": dynamoInstanceIds}
+        response = {"dynamoInstanceIds": dynamoInstanceIds, "user": data["user"]}
         return jsonify(response), 200
     except ValueError as e:
         # Handle validation errors
@@ -70,26 +70,3 @@ def patentRetrievalRoute():
         # Handle any other unexpected errors
         logger.error(str(e))
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
-
-
-# @nlp.route("/searchPatents", methods=["POST"])
-# @require_auth("user")
-# def patentRetrievalRoute():
-#     """Retrieve prior-art documents with text query."""
-#     try:
-#         # get data from JSON
-#         data = request.get_json()
-
-#         # get the response from the factory
-#         response = NLPFactory.getHandler(NLPFactory.RequestType.SEARCH, data)
-
-#         # return jsonified response
-#         return jsonify(response), 200
-#     except ValueError as e:
-#         # Handle validation errors
-#         logger.error(str(e))
-#         return jsonify({"error": str(e)}), 400
-#     except Exception as e:
-#         # Handle any other unexpected errors
-#         logger.error(str(e))
-#         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
