@@ -30,9 +30,9 @@ export const POST = withApiAuthRequired(async function POST(request: NextRequest
             throw new Error(`HTTP error! :( status: ${searchResponse.status}`);
         }
 
-        const searchData = await searchResponse.json();
-
-        return NextResponse.json(searchData);
+        const DynamoIdList = await searchResponse.json();
+        console.log(DynamoIdList);
+        return NextResponse.json(DynamoIdList);
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 500 });
     }

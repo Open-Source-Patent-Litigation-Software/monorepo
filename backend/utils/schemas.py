@@ -4,6 +4,7 @@ from langchain_core.pydantic_v1 import BaseModel, Field, root_validator, validat
 
 """ Citations """
 
+
 class CitationsInput(BaseModel):
     patentURL: str
     metrics: list[str]
@@ -20,13 +21,18 @@ class CitationsInput(BaseModel):
             raise ValueError("None of the strings can be empty")
         return values
 
+
 """ Patent Searching """
+
 
 class DifScore(BaseModel):
     scores: list[int]
     total: int
 
+
 class PatentObject(BaseModel):
+    user: str
+    instance_id: str
     abstract: str
     title: str
     owner: str
@@ -35,6 +41,7 @@ class PatentObject(BaseModel):
     www_link: str
     score: DifScore
     inventors: list[str]
+
 
 class SearchOutput(BaseModel):
     patents: list[PatentObject]
@@ -45,8 +52,11 @@ class SearchInput(BaseModel):
     user: str
     threshold: int
     numPatents: int
+    dynamoInstanceIds: list[str]
+
 
 """ ZIP input """
+
 
 class ZipInput(BaseModel):
     pns: list[str]
