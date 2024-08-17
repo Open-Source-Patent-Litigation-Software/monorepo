@@ -1,5 +1,3 @@
-// File: hooks/useSearchMetrics.ts
-
 import { useState, useEffect, useCallback } from 'react';
 import { Metric, PatentItem } from "@/types/types";
 
@@ -11,7 +9,7 @@ export const useFetchMetrics = () => {
   const [searchLoading, setSearchLoading] = useState<boolean>(false);
   const [isMetricsLocked, setIsMetricsLocked] = useState<boolean>(false);
   const [dynamoInstanceIds, setDynamoInstanceIds] = useState<string[]>([]);
-  const [pollingInterval, setPollingInterval] = useState<NodeJS.Timeout | null>(null);
+  const [isPolling, setIsPolling] = useState<boolean>(false);
 
   const addMetric = () => {
     if (metrics.length >= 10 || isMetricsLocked) return;
@@ -64,19 +62,21 @@ export const useFetchMetrics = () => {
   const unlockMetrics = () => {
     setIsMetricsLocked(false);
     setSearchResults(null);
+    setDynamoInstanceIds([]);
+    setIsPolling(false);
   }
 
   const fetchPatentInstances = useCallback(async () => {
     if (dynamoInstanceIds.length === 0) return;
 
     try {
-      const response = await fetch('/api/getPatentInstance', {
+      console.log("Polling for search results...");
+      const response = await fetch('/api/searchPolling', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user: "google-oauth2|108809862173138748904",
           instance_ids: dynamoInstanceIds
         }),
       });
@@ -85,44 +85,54 @@ export const useFetchMetrics = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      const responseBody = await response.json();
+      console.log("Polling Data:", responseBody);
       
-      if (data.Response && data.Response.length > 0) {
-        setSearchResults(data.Response);
+      if (responseBody.data !== null) {
+        setSearchResults(responseBody.data);
         setSearchLoading(false);
-        // Stop polling once we have results
-        if (pollingInterval) {
-          clearInterval(pollingInterval);
-          setPollingInterval(null);
-        }
+        setIsPolling(false);
       }
     } catch (e) {
       const error = e as Error;
       setError(error.message);
+      setIsPolling(false);
     }
-  }, [dynamoInstanceIds, pollingInterval]);
+  }, [dynamoInstanceIds]);
 
   useEffect(() => {
-    if (dynamoInstanceIds.length > 0 && !pollingInterval) {
-      const interval = setInterval(fetchPatentInstances, 5000); // Poll every 5 seconds
-      setPollingInterval(interval);
-  
+    console.log("dynamoInstanceIds changed:", dynamoInstanceIds);
+    if (dynamoInstanceIds.length > 0 && !isPolling) {
+      console.log("Starting polling");
+      setIsPolling(true);
+    }
+  }, [dynamoInstanceIds]);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | null = null;
+    let timeoutId: NodeJS.Timeout | null = null;
+
+    if (isPolling) {
+      console.log("Setting up polling interval");
+      intervalId = setInterval(fetchPatentInstances, 5000); // Poll every 5 seconds
+
       // Set a timeout to stop polling after 2 minutes
-      const timeoutId = setTimeout(() => {
-        clearInterval(interval);
-        setPollingInterval(null);
+      timeoutId = setTimeout(() => {
+        if (intervalId) clearInterval(intervalId);
+        setIsPolling(false);
         setSearchLoading(false);
         setError("Polling timed out after 2 minutes. Please try again.");
       }, 120000); // 2 minutes in milliseconds
-  
-      return () => {
-        clearInterval(interval);
-        clearTimeout(timeoutId);
-      };
     }
-  }, [dynamoInstanceIds, fetchPatentInstances, pollingInterval]);
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [isPolling, fetchPatentInstances]);
 
   const lockMetricsAndSearch = async (metrics: string[], threshold: number, numPatents: number) => {
+    console.log("lockMetricsAndSearch called");
     setIsMetricsLocked(true);
     setSearchLoading(true);
     try {
@@ -149,13 +159,16 @@ export const useFetchMetrics = () => {
       }
   
       const data = await response.json();
-      console.log("dynamoInstanceIds:", data);
+      console.log("Search API response:", data);
+      console.log("dynamoInstanceIds:", data.dynamoInstanceIds);
       setDynamoInstanceIds(data.dynamoInstanceIds);
     } catch (e) {
       const error = e as Error;
+      console.error("Error in lockMetricsAndSearch:", error);
       setError(error.message);
       setSearchResults(null);
       setIsMetricsLocked(false);
+      setSearchLoading(false);
     }
   };
 

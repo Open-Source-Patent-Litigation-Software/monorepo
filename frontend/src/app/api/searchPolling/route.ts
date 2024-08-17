@@ -5,7 +5,7 @@ import { withApiAuthRequired, getAccessToken } from '@auth0/nextjs-auth0';
 export const POST = withApiAuthRequired(async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-
+        console.log("Search Polling Bodys", body);
         // Get the access token
         const { accessToken } = await getAccessToken({
             scopes: ['user']

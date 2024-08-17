@@ -6,7 +6,7 @@ import requests
 from flask import Blueprint, request, jsonify, send_file
 from authlib.integrations.flask_oauth2 import ResourceProtector
 from pydantic import BaseModel
-
+import logging
 from utils.scraping import PatentScraper
 from utils.auth import Auth0JWTBearerTokenValidator
 from .factory import PatentRetrievalFactory
@@ -19,6 +19,7 @@ validator = Auth0JWTBearerTokenValidator(
     "dev-giv3drwd5zd1cqsb.us.auth0.com", "http://localhost:8000"
 )
 require_auth.register_token_validator(validator)
+logger = logging.getLogger("__name__")
 
 
 class DifScore(BaseModel):
@@ -193,12 +194,12 @@ def zipPatents():
 
 
 @patentRetrieval.route("/getPatentInstance", methods=["POST"])
-# @require_auth("user")
+@require_auth("user")
 def getPatentInstance():
     """Get Patents by (user, instance_ids) from DynamoDB"""
     data = request.get_json()
-
-    user = data["user"]  # Partition Key
+    ctx = require_auth.acquire_token()
+    user = ctx["sub"]
     instance_ids = data["instance_ids"]  # Sort Key
 
     dynamo = Dynamo()  # Initialize DynamoDB client
@@ -213,15 +214,13 @@ def getPatentInstance():
                 patents.append(patentInfo)  # Append each patent to the list
             else:
                 return (
-                    jsonify(
-                        {
-                            "error": "Patents have not been uploaded yet or error in request."
-                        }
-                    ),
-                    500,
+                    jsonify({"response": "error", "data": None}),
+                    200,
                 )
 
-        response = {"Response": patents}
+        response = {"response": "success", "data": patents}
         return jsonify(response), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        print("there was an exception", e)
+        logger.error("there was an exception", e)
+        return jsonify({"response": "error", "error": e}), 500
