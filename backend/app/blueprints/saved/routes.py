@@ -111,7 +111,6 @@ def getSavedPatent():
     """Get all saved patents from the database."""
     data = request.get_json()
     patentID = data.get("patent_neon_id")
-    print("patent id: ", patentID)
     try:
         fetcher = DatabaseCallFactory.getHandler(
             DatabaseCallFactory.RequestType.FETCH_PATENT

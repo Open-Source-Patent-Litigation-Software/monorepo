@@ -1,3 +1,5 @@
+// File: pages/index.tsx
+
 "use client";
 import React, { useState, useEffect } from "react";
 import { Navbar } from "../../_components/navbar/navbar";
@@ -82,9 +84,6 @@ const Index = () => {
       }
     }
   };
-
-  console.log("search loading: ", searchLoading);
-  console.log("metrics lock", isMetricsLocked);
 
   return (
     <>
