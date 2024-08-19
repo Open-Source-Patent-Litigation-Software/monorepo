@@ -1,5 +1,6 @@
 // File: pages/index.tsx
 
+
 "use client";
 import React, { useState, useEffect } from "react";
 import { Navbar } from "../../_components/navbar/navbar";
@@ -7,7 +8,7 @@ import { Footer } from "../../_components/footer/footer";
 import Metrics from "./components/metrics/metrics";
 import PatentList from "./components/patent/patentList";
 import SearchText from "./components/search/searchText";
-import LoadingSpinner from "./components/loading/loadingSpinner";
+import Typewriter from 'typewriter-effect';
 import { motion, AnimatePresence } from "framer-motion";
 import useMetricSearchStateStore from "@/stores/useMetricStore";
 import styles from "./styles.module.css";
@@ -109,6 +110,17 @@ const Index = () => {
                 Search
               </button>
             </div>
+            {searchLoading && (
+              <div className={styles.loading_text}>
+                <Typewriter
+                  options={{
+                    strings: ['Analyzing your search...', 'This may take a few minutes...'],
+                    autoStart: true,
+                    loop: true,
+                  }}
+                />
+              </div>
+            )}
             <AnimatePresence>
               {!isMetricsLocked && (metricsLoading || metrics.length > 0) && (
                 <motion.div
@@ -152,13 +164,16 @@ const Index = () => {
             </AnimatePresence>
             <AnimatePresence>
               {!searchResults && metrics.length === 0 && !searchLoading && !metricsLoading && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <SearchText />
-                </motion.div>
+                <>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <SearchText />
+                  </motion.div>
+                </>
+
               )}
             </AnimatePresence>
           </div>

@@ -20,7 +20,7 @@ const PatentInput: React.FC<PatentInputProps> = ({ handleDownload, notFoundPaten
 
     return (
         <div>
-            <SearchBar onInput={handleInputChange} handleButtonClick={handleFormSubmit} placeholder='Input Patent Numbers, each one on a different line.' />
+            <SearchBar onInput={handleInputChange} handleButtonClick={handleFormSubmit} placeholder='Input Patent Numbers, each one seperated by comma.' buttonText={"Lock In"} />
             <div className={styles.boxContainer}>
                 {patents.map((patentNumber, index) => (
                     <div key={index} className={styles.inputBox}>

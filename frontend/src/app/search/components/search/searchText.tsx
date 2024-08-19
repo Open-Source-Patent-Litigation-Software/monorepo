@@ -1,5 +1,5 @@
 const SearchText = () => {
-    return(
+    return (
         <div
             style={{
                 display: "flex",
@@ -14,14 +14,8 @@ const SearchText = () => {
                 fontWeight: "bold",
             }}
         >
-            What makes a good search? A good search query is around 500
+            What makes a good search? <br /><br />A good search query is around 500
             words and details all the key inventive features of your idea.
-            <br />
-            <br />
-            We break your search into many categories so we can properly
-            analyze it. How does the search work? We use three specialized
-            artificial intelligence models to break down your search query
-            into categories and then analyze the patent landscape.
         </div>
     );
 }

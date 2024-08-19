@@ -138,6 +138,13 @@
   margin: 5%;
 }
 
+.loading_text {
+  display: flex;
+  font-size: 1.5em;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+}
 @keyframes gradient {
   0% {
     background-position: 0% 50%;

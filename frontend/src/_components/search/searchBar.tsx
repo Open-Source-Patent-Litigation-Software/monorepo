@@ -7,7 +7,7 @@ interface SearchBarProps {
     onInput: (value: string) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onInput, handleButtonClick, placeholder }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onInput, handleButtonClick, placeholder, buttonText }) => {
     return (
         <div className={styles.search_container}>
             <textarea
@@ -19,7 +19,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onInput, handleButtonClick, place
                 className={styles.search_button}
                 onClick={handleButtonClick}
             >
-                Search
+                {buttonText}
             </button>
         </div>
     );
